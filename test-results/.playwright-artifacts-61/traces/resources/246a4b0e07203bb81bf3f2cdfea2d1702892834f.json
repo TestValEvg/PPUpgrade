@@ -1,0 +1,1 @@
+{"query":"query GetTokenTypes {\n  tokenTypeFieldses(\n    where: { tokenType: { published: { equals: true } } }\n    orderBy: [{\n       order: {\n        sort: asc\n       }\n    }]\n  ) {\n    id\n    name\n    order\n    tokenType {\n      id\n    }\n  }\n}\n","variables":{}}

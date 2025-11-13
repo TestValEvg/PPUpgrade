@@ -1,0 +1,1 @@
+{"query":"query GetAllMethods {\n  methodFieldses(\n    where: { published: { equals: true } }\n    orderBy: [{\n       order: {\n        sort: asc\n       }\n    }]\n  ) {\n    id\n    name\n    order\n    method {\n      id\n    }\n  }\n}\n","variables":{}}
