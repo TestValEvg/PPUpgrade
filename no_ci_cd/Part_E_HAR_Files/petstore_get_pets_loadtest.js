@@ -35,7 +35,7 @@ export default function () {
         try {
           JSON.parse(r.body);
           return true;
-        } catch {
+        } catch (e) {
           return false;
         }
       },
