@@ -1,1 +1,0 @@
-{"query":"query GetAllJurisdictions {\n  locationFieldses(\n    orderBy: [{\n       order: {\n        sort: asc\n       }\n    }]\n  ) {\n    id\n    isoCountryCode\n    name\n    publishedDate\n    order\n    isEEA\n    location {\n      id\n    }\n  }\n}\n","variables":{}}

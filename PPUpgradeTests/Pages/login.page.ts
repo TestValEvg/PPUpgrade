@@ -10,7 +10,7 @@ export class LoginPage {
     }
 
     async navigate() {
-        await this.page.goto('https://platform.test-simmons.com/');
+        await this.page.goto('https://platform.qa-simmons.com/');
     }
 
     async login() {

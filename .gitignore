@@ -114,3 +114,4 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+no_ci_cd/Part_E_HAR_Files/*.json

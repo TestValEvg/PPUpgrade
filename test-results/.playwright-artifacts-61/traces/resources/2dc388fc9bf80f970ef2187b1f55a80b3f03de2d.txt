@@ -1,3 +1,0 @@
-{}
-{"type":"client_report"}
-{"timestamp":1763036676.935,"discarded_events":[{"reason":"sample_rate","category":"transaction","quantity":1}]}

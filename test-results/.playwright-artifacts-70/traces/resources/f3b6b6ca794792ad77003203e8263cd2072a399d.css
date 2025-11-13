@@ -1,6 +1,0 @@
-.s-question[data-v-7473d617] { display: flex; flex-direction: column; align-items: center; padding: 2rem 1rem; text-align: center; }
-.s-question__icon[data-v-7473d617] { font-size: 14rem; margin-bottom: 1rem; }
-.s-question__text[data-v-7473d617] { font-size: 2rem; font-weight: 300; }
-.s-question__empty[data-v-7473d617] { padding: 2rem; text-align: center; }
-.fade-enter-active[data-v-7473d617], .fade-leave-active[data-v-7473d617] { transition: opacity 0.3s; }
-.fade-enter-from[data-v-7473d617], .fade-leave-to[data-v-7473d617] { opacity: 0; }

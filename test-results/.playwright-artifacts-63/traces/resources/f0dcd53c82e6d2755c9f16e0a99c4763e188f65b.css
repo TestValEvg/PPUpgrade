@@ -1,6 +1,0 @@
-.s-popover[data-v-ef661c92] { background-position-x: ; background-position-y: ; background-repeat: ; background-attachment: ; background-image: ; background-size: ; background-origin: ; background-clip: ; background-color: var(--c-grey-100); border: 1px solid var(--c-black-30); box-shadow: var(--shadow-1); display: flex; height: auto; justify-content: center; overflow: hidden auto; padding: 0.25rem 0.5rem; position: absolute; top: 100%; z-index: var(--z-index-popover); }
-.s-popover--borderless[data-v-ef661c92] { border-color: transparent; }
-.s-popover__content[data-v-ef661c92] { border: 0px; font: inherit; margin: 0px; max-height: 500px; max-width: 640px; padding: 0px; position: relative; vertical-align: baseline; width: 100%; }
-.s-popover--left[data-v-ef661c92] { left: 0px; }
-.s-popover--right[data-v-ef661c92] { right: 0px; }
-.popover[data-v-ef661c92] { width: var(--v24696184); }
