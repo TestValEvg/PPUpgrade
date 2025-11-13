@@ -34,7 +34,7 @@ jobs:
         run: npx playwright install --with-deps ${{ matrix.browser }}
       
       - name: Run Playwright tests
-        run: npx playwright test --project=${{ matrix.browser }} --workers=1 --retries=1 --ignore=**/visual.spec.ts
+        run: npx playwright test --project=${{ matrix.browser }} --workers=1 --retries=1 --ignore=**/visual.spec.ts --ignore=**/accessibility.spec.ts
         env:
           CI: 'true'
           TEST_EMAIL: ${{ secrets.TEST_EMAIL }}

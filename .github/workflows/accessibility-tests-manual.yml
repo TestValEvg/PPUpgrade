@@ -1,0 +1,75 @@
+name: Accessibility Tests (Manual)
+
+on:
+  workflow_dispatch:
+    inputs:
+      wcag_level:
+        description: 'WCAG Compliance Level'
+        required: true
+        default: 'AA'
+        type: choice
+        options:
+          - A
+          - AA
+          - AAA
+
+jobs:
+  accessibility-tests:
+    name: Accessibility - ${{ matrix.browser }} (WCAG ${{ inputs.wcag_level }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps ${{ matrix.browser }}
+      
+      - name: Run Accessibility Tests
+        run: npx playwright test accessibility.spec.ts --project=${{ matrix.browser }} --workers=1
+        env:
+          CI: 'true'
+          TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
+          TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+          WCAG_LEVEL: ${{ inputs.wcag_level }}
+      
+      - name: Generate Accessibility Report
+        if: always()
+        run: |
+          echo "# Accessibility Test Report - WCAG ${{ inputs.wcag_level }}" > accessibility-summary.md
+          echo "Browser: ${{ matrix.browser }}" >> accessibility-summary.md
+          echo "Date: $(date)" >> accessibility-summary.md
+      
+      - name: Upload accessibility report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: accessibility-report-${{ matrix.browser }}-wcag${{ inputs.wcag_level }}
+          path: |
+            playwright-report/
+            accessibility-report.html
+            ACCESSIBILITY_TEST_REPORT.md
+          retention-days: 30
+      
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: accessibility-test-results-${{ matrix.browser }}
+          path: test-results/
+          retention-days: 30
