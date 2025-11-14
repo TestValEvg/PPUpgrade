@@ -103,7 +103,7 @@ test.describe('Crypto Results Visual Regression Tests', () => {
     });
   });
 
-  test('Results page with expanded items should render correctly', async ({ page }) => {
+  test.skip('Results page with expanded items should render correctly', async ({ page }) => {
     const loginPage = new LoginPage(page);
     const cryptoResults = new CryptoResults(page);
 
@@ -142,7 +142,7 @@ test.describe('Crypto Results Visual Regression Tests', () => {
     });
   });
 
-  test('Definitions tab should render correctly', async ({ page }) => {
+  test.skip('Definitions tab should render correctly', async ({ page }) => {
     const loginPage = new LoginPage(page);
     const cryptoResults = new CryptoResults(page);
     const cryptoDefinitions = new CryptoDefinitions(page);

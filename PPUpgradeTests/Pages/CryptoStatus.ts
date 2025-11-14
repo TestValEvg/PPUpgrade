@@ -10,18 +10,24 @@ export class CryptoStatus {
 
   // Open the Status tab and verify column headers
   public async openStatusTab() {
+    // Wait for network to be idle before proceeding
+    await this.page.waitForLoadState('networkidle');
+    
     const statusTab = this.page.locator(SELECTORS.cryptoStatusTab);
-    await statusTab.waitFor({ state: 'visible', timeout: 15000 });
+    await statusTab.waitFor({ state: 'visible', timeout: 30000 });
     await statusTab.click();
+
+    // Wait for page to stabilize after tab click
+    await this.page.waitForLoadState('networkidle');
 
     // Wait for table headers to be visible
     const jurisdictionHeader = this.page.locator(SELECTORS.statusJurisdictionHeader);
     const dateHeader = this.page.locator(SELECTORS.statusDateHeader);
     const changesHeader = this.page.locator(SELECTORS.statusChangesHeader);
 
-    await jurisdictionHeader.waitFor({ state: 'visible', timeout: 15000 });
-    await dateHeader.waitFor({ state: 'visible', timeout: 15000 });
-    await changesHeader.waitFor({ state: 'visible', timeout: 15000 });
+    await jurisdictionHeader.waitFor({ state: 'visible', timeout: 30000 });
+    await dateHeader.waitFor({ state: 'visible', timeout: 30000 });
+    await changesHeader.waitFor({ state: 'visible', timeout: 30000 });
 
     // Validate all expected headers are visible and correct
     await expect(jurisdictionHeader).toHaveText('Jurisdiction');

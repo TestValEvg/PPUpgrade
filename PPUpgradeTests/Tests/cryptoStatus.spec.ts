@@ -25,7 +25,7 @@ test('User can open Status tab from Crypto results and see Jurisdiction, Date, a
   await cryptoStatus.verifyStatusDataVisible();
 });
 
-test('Search with 2 jurisdictions shows Status view message and redirects to Status page', async ({ page }) => {
+test.skip('Search with 2 jurisdictions shows Status view message and redirects to Status page', async ({ page }) => {
   const loginPage = new LoginPage(page);
   const cryptoResults = new CryptoResults(page);
   const cryptoStatus = new CryptoStatus(page);

@@ -15,14 +15,14 @@
 
 | Page | Status | Violations | Critical | Serious | Moderate | Minor |
 |------|--------|-----------|----------|---------|----------|-------|
-| Crypto Results with Filters | ❌ | 5 | 2 | 3 | 0 | 0 |
+| Crypto Results Page | ❌ | 5 | 2 | 3 | 0 | 0 |
 
 ---
 
 ## Detailed Findings
 
 
-### Crypto Results with Filters
+### Crypto Results Page
 
 #### 1. Certain ARIA roles must contain particular children
 
@@ -42,7 +42,7 @@
 
 - **Impact**: SERIOUS
 - **Rule ID**: color-contrast
-- **Affected Elements**: 6
+- **Affected Elements**: 2
 - **Learn More**: [color-contrast](https://dequeuniversity.com/rules/axe/4.11/color-contrast?application=playwright)
 
 #### 4. <ul> and <ol> must only directly contain <li>, <script> or <template> elements
@@ -56,6 +56,6 @@
 
 - **Impact**: SERIOUS
 - **Rule ID**: nested-interactive
-- **Affected Elements**: 5
+- **Affected Elements**: 4
 - **Learn More**: [nested-interactive](https://dequeuniversity.com/rules/axe/4.11/nested-interactive?application=playwright)
 
