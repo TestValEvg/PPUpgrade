@@ -61,7 +61,8 @@ test.describe('HAR Advanced Tests - API Validation', () => {
     
     // Invalid request (non-existent pet ID)
     response = await page.goto('https://petstore.swagger.io/v2/pet/99999999999');
-    expect(response?.status()).toMatch(/^(200|404)$/); // May be 404
+    const status = response?.status();
+    expect([200, 404]).toContain(status); // May be 404
   });
 
   test('HAR: Store and inventory API calls', async ({ page }) => {

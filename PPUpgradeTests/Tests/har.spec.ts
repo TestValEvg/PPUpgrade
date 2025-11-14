@@ -36,11 +36,12 @@ test.describe('HAR File Testing - Petstore API', () => {
     
     // Test GET pet by ID
     response = await page.goto('https://petstore.swagger.io/v2/pet/1');
-    expect(response?.status()).toMatch(/^(200|404)$/); // May be 404 if pet doesn't exist
+    const status = response?.status();
+    expect([200, 404]).toContain(status); // May be 404 if pet doesn't exist
   });
 
   test('HAR: Replay mocked responses offline', async ({ page }) => {
-    const harFile = path.join(harDir, 'petstore-offline-mock.har');
+    const harFile = path.join(harDir, 'petstore-get-pets.har'); // Use existing HAR file
 
     // Use replay mode - will use HAR if exists
     await page.routeFromHAR(harFile, {
@@ -54,11 +55,12 @@ test.describe('HAR File Testing - Petstore API', () => {
       });
       
       if (response) {
-        expect(response.status()).toMatch(/^[2-5]\d{2}$/);
+        const status = response.status();
+        expect([200, 404]).toContain(status);
       }
     } catch (e) {
       // Expected if HAR doesn't exist and no internet
-      console.log('Offline mode - no HAR file yet');
+      console.log('Offline mode - using HAR file or skipping');
     }
   });
 
