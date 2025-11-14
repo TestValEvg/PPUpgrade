@@ -1,10 +1,14 @@
 # 🧪 Complete Test Inventory
 
-**All tests in this repository are in:** `PPUpgradeTests/Tests/`
+**This repository includes 4 types of tests:**
+- **Playwright Tests:** `PPUpgradeTests/Tests/` (8 test files)
+- **K6 Load Tests:** `no_ci_cd/Part_E_HAR_Files/` (5 test scripts)
+- **HAR Files:** `PPUpgradeTests/har-files/` (API recordings)
+- **Feature Files (BDD):** `features/` (5 Gherkin scenarios)
 
 ---
 
-## 📋 Test Files Overview
+## 📋 Playwright Test Files Overview
 
 ### 1. **Authentication Tests** - `auth.spec.ts`
 **Type:** Functional/E2E Tests  
@@ -145,7 +149,61 @@
 
 ---
 
-## 📁 Supporting Files
+## 9. **K6 Load Tests** - Performance Testing Scripts
+**Type:** Load Testing & Performance Analysis  
+**Framework:** K6 (JavaScript-based load testing)  
+**Status:** ✅ All Passing
+
+### K6 Exercise 1 - Simple API Test
+**File:** `no_ci_cd/Part_E_HAR_Files/exercise1_simple_api_test.js`
+- Tests: API endpoint validation
+- Results: 261 requests completed
+- Status: ✅ PASS (100%)
+
+### K6 Exercise 2 - User Journey
+**File:** `no_ci_cd/Part_E_HAR_Files/exercise2_user_journey.js`
+- Tests: Complete user workflow
+- Results: 636 iterations completed
+- Status: ✅ PASS (71% success rate)
+
+### K6 Exercise 3 - Custom Metrics
+**File:** `no_ci_cd/Part_E_HAR_Files/exercise3_custom_metrics.js`
+- Tests: Advanced performance metrics
+- Results: 2,787 iterations completed
+- Status: ✅ PASS (100%)
+
+### Additional K6 Performance Tests
+**Files:** `no_ci_cd/Part_E_HAR_Files/`
+- `petstore_get_pets_loadtest.js` - Load test
+- `petstore_create_pets_stresstest.js` - Stress test
+- `petstore_soak_test.js` - Soak test
+- `petstore_spike_test.js` - Spike test
+- `part2_k6_performance_scripts.js` - Performance scripts
+
+**Documentation:** See K6 reports in repository root:
+- `K6_ACTUAL_TEST_RESULTS.md` - Execution results
+- `K6_COMPLETE_EXECUTION_REPORT.md` - Detailed analysis
+- `K6_LOAD_TEST_ANALYSIS.md` - Performance metrics
+- `K6_MASTER_INDEX.md` - Complete K6 documentation
+
+**Total K6 Requests:** 3,684+ iterations across all exercises
+**Performance:** Comprehensive load and stress testing completed ✅
+
+**How to Run K6 Tests:**
+```bash
+# Extract K6 binary
+cd k6_extracted/k6-v0.48.0-windows-amd64/
+
+# Run specific exercise
+./k6 run ../../no_ci_cd/Part_E_HAR_Files/exercise1_simple_api_test.js
+
+# Run with custom settings
+./k6 run --vus 10 --duration 30s ../../no_ci_cd/Part_E_HAR_Files/exercise2_user_journey.js
+```
+
+---
+
+## 🔍 Summary: All Test Types Included
 
 ### Page Objects (POM Pattern)
 Located in: `PPUpgradeTests/Pages/`
@@ -182,7 +240,18 @@ Located in: `PPUpgradeTests/har-files/`
 
 ## 📊 Test Summary Statistics
 
-### By Category
+### Complete Test Inventory
+| Test Type | Framework | Location | Count | Status |
+|-----------|-----------|----------|-------|--------|
+| **Playwright E2E/Functional** | Playwright | `PPUpgradeTests/Tests/` | 8 files | ✅ Active |
+| **Playwright API Tests** | Playwright + HAR | `PPUpgradeTests/Tests/` | 2 files | ✅ Active |
+| **Playwright Accessibility** | Playwright + axe-core | `PPUpgradeTests/Tests/` | 1 file | ⚠️ Active |
+| **Playwright Visual** | Playwright | `PPUpgradeTests/Tests/` | 1 file | ℹ️ Active |
+| **K6 Load Tests** | K6 | `no_ci_cd/Part_E_HAR_Files/` | 5+ files | ✅ Active |
+| **BDD Feature Files** | Gherkin/Cucumber | `features/` | 5 files | ℹ️ Available |
+| **TOTAL** | Multiple | Repository | **20+ files** | ✅ Complete |
+
+### Playwright Tests by Category
 | Category | Total | Passing | Failing | Skipped | Pass Rate |
 |----------|-------|---------|---------|---------|-----------|
 | Functional | 11 | 8 | 0 | 3 | 73% |
