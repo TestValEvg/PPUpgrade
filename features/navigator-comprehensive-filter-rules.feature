@@ -110,6 +110,10 @@ Feature: Navigator Comprehensive Filter Rules
 
   # ============================================================
   # Section 3: General Service Suppression Rules (Work Item 108651)
+  # 
+  # IMPORTANT: When General service is suppressed, ALL associated activities
+  # and subactivities under General are also suppressed from results.
+  # This is a cascading suppression rule.
   # ============================================================
 
   @general-suppression @banking-suppresses
@@ -120,6 +124,7 @@ Feature: Navigator Comprehensive Filter Rules
     Then the results should display in the Licensing Restrictions section
     And "Banking" should appear as a service category heading
     And "General" should NOT appear as a service category heading
+    And all activities and subactivities under "General" should also be suppressed
 
   @general-suppression @corporate-finance-suppresses
   Scenario: General is suppressed when Corporate Finance is selected
@@ -129,6 +134,7 @@ Feature: Navigator Comprehensive Filter Rules
     Then the results should display in the Licensing Restrictions section
     And "Corporate Finance" should appear as a service category heading
     And "General" should NOT appear as a service category heading
+    And all activities and subactivities under "General" should also be suppressed
 
   @general-suppression @lending-suppresses
   Scenario: General is suppressed when Lending is selected
@@ -138,6 +144,7 @@ Feature: Navigator Comprehensive Filter Rules
     Then the results should display in the Licensing Restrictions section
     And "Lending" should appear as a service category heading
     And "General" should NOT appear as a service category heading
+    And all activities and subactivities under "General" should also be suppressed
 
   @general-suppression @multiple-suppressors
   Scenario: General is suppressed when multiple suppressing services are selected
@@ -151,6 +158,7 @@ Feature: Navigator Comprehensive Filter Rules
     And "Corporate Finance" should appear as a service category heading
     And "Lending" should appear as a service category heading
     And "General" should NOT appear as a service category heading
+    And all activities and subactivities under "General" should also be suppressed
 
   @general-suppression @derivatives-shows-general
   Scenario: General is NOT suppressed when only Derivatives & FX is selected
@@ -160,6 +168,7 @@ Feature: Navigator Comprehensive Filter Rules
     Then the results should display in the Licensing Restrictions section
     And "Derivatives & FX" should appear as a service category heading
     And "General" SHOULD appear as a service category heading
+    And all activities and subactivities under "General" should be visible
     And both service categories should be visible
 
   @general-suppression @mixed-services
@@ -172,6 +181,7 @@ Feature: Navigator Comprehensive Filter Rules
     And "Banking" should appear as a service category heading
     And "Derivatives & FX" should appear as a service category heading
     And "General" should NOT appear as a service category heading
+    And all activities and subactivities under "General" should also be suppressed
     And the suppression rule takes precedence over display rules
 
   # ============================================================
