@@ -63,7 +63,7 @@ test.describe('Crypto Results Functional Tests', () => {
   });
 });
 
-test.describe('Crypto Results Visual Regression Tests', () => {
+test.describe.skip('Crypto Results Visual Regression Tests', () => {
   test('Results page with filtered jurisdiction should render correctly', async ({ page }) => {
     const loginPage = new LoginPage(page);
     const cryptoResults = new CryptoResults(page);

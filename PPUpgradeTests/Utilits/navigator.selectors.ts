@@ -22,4 +22,7 @@ export const NAVIGATOR_SELECTORS = {
     resultsContainer: 'div[role="tabpanel"]',
     collapseSection: '[data-trigger="collapse"]',
     serviceHeading: 'h4',
+    
+    // Print button
+    printButton: 'button:has(svg.s-icon--print)',
 };

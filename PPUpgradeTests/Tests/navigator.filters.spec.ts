@@ -50,8 +50,8 @@ test.describe('Navigator Filters - Validation Rules', () => {
         // Select only Jurisdiction - button should still be disabled
         const jurisdictionText = page.getByText('Jurisdiction', { exact: true });
         await jurisdictionText.click();
-        await page.getByPlaceholder('Search items').fill('Argentina');
-        await page.getByRole('button', { name: 'Argentina Argentina' }).click();
+        await page.getByPlaceholder('Search items').fill('Austria');
+        await page.getByRole('button', { name: 'Austria Austria' }).click();
         await page.keyboard.press('Escape');
         await page.waitForTimeout(500);
 
