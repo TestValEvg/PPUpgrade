@@ -105,4 +105,43 @@ test.describe('Navigator Print Tests', () => {
         // Verify disclaimer message appears in print dialog
         await navigatorPrint.verifyFilterMessageVisible();
     });
+
+    test('Print button disabled before search and enabled after search', async ({ page, browserName }) => {
+        test.skip(browserName !== 'chromium', 'This test only runs on Chromium');
+        
+        const loginPage = new LoginPage(page);
+        const navigatorPrint = new NavigatorPrint(page);
+        
+        // Login
+        await loginPage.navigate();
+        await loginPage.login();
+        await expect(await loginPage.isLoginSuccessful()).toBeTruthy();
+
+        // Navigate to Navigator page
+        await navigatorPrint.navigateToNavigator();
+
+        // Verify Print/Export button is disabled before search
+        await navigatorPrint.verifyPrintButtonDisabled();
+
+        // Select Jurisdiction: Argentina
+        await navigatorPrint.selectJurisdiction('Argentina');
+
+        // Select Service: Corporate Finance
+        await navigatorPrint.selectService('Corporate Finance');
+
+        // Perform a search
+        await navigatorPrint.clickSearch();
+
+        // Wait for results to appear
+        await navigatorPrint.waitForResults();
+
+        // Click Expand All button
+        await navigatorPrint.clickExpandAll();
+
+        // Click Search again after expanding
+        await navigatorPrint.clickSearch();
+
+        // Verify Print/Export button becomes enabled after search
+        await navigatorPrint.verifyPrintButtonEnabled();
+    });
 });
