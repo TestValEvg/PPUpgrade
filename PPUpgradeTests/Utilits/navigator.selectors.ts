@@ -19,10 +19,12 @@ export const NAVIGATOR_SELECTORS = {
     contentSpan: 'span.content',
     
     // Results section
-    resultsContainer: 'div[role="tabpanel"]',
+    resultsContainer: '.s-card__content',
     collapseSection: '[data-trigger="collapse"]',
     serviceHeading: 'h4',
     
-    // Print button
-    printButton: 'button:has(svg.s-icon--print)',
+    // Print button - multiple selectors to try
+    printButton: 'button[aria-label*="print" i]',
+    printButtonAlt: 'button:has-text("Print")',
+    printButtonIcon: 'button svg[class*="print"]',
 };

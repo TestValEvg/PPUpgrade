@@ -56,10 +56,53 @@ test.describe('Navigator Print Tests', () => {
         // Wait for results to appear
         await navigatorPrint.waitForResults();
 
+        // Click Expand All button to enable print
+        await navigatorPrint.clickExpandAll();
+
+        // Click Search again after expanding
+        await navigatorPrint.clickSearch();
+
         // Click print button
         await navigatorPrint.clickPrintButton();
 
-        // Give time for print dialog to appear
-        await page.waitForTimeout(1000);
+        // Verify Print to PDF button is visible in print dialog
+        await navigatorPrint.verifyPrintToPDFButton();
+    });
+
+    test('Disclaimer message appears if not all filters selected', async ({ page }) => {
+        const loginPage = new LoginPage(page);
+        const navigatorPrint = new NavigatorPrint(page);
+        
+        // Login
+        await loginPage.navigate();
+        await loginPage.login();
+        await expect(await loginPage.isLoginSuccessful()).toBeTruthy();
+
+        // Navigate to Navigator page
+        await navigatorPrint.navigateToNavigator();
+
+        // Select Jurisdiction: Argentina
+        await navigatorPrint.selectJurisdiction('Argentina');
+
+        // Select Service: Corporate Finance
+        await navigatorPrint.selectService('Corporate Finance');
+
+        // Click Search button
+        await navigatorPrint.clickSearch();
+
+        // Wait for results to appear
+        await navigatorPrint.waitForResults();
+
+        // Click Expand All button
+        await navigatorPrint.clickExpandAll();
+
+        // Click Search again after expanding
+        await navigatorPrint.clickSearch();
+
+        // Click print button
+        await navigatorPrint.clickPrintButton();
+
+        // Verify disclaimer message appears in print dialog
+        await navigatorPrint.verifyFilterMessageVisible();
     });
 });
