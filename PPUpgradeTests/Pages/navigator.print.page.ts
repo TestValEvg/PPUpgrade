@@ -135,6 +135,18 @@ export class NavigatorPrint {
         await expect(printButton).toBeVisible({ timeout: 10000 });
     }
 
+    // Verify print button is disabled
+    async verifyPrintButtonDisabled() {
+        const printButton = this.page.locator('button:has(.s-icon--print)');
+        await expect(printButton).toBeDisabled({ timeout: 10000 });
+    }
+
+    // Verify print button is enabled
+    async verifyPrintButtonEnabled() {
+        const printButton = this.page.locator('button:has(.s-icon--print)');
+        await expect(printButton).toBeEnabled({ timeout: 10000 });
+    }
+
     // Verify filter applied message is visible
     async verifyFilterMessageVisible() {
         await expect(
