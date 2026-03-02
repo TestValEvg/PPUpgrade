@@ -3,6 +3,8 @@ import { LoginPage } from '../Pages/login.page';
 import { NavigatorPrint } from '../Pages/navigator.print.page';
 
 test.describe('Navigator Print Tests', () => {
+    // Set timeout for all tests in this suite to 6 minutes
+    test.setTimeout(360000);
 
     test('User can search and see print button in results', async ({ page }) => {
         const loginPage = new LoginPage(page);
@@ -373,8 +375,6 @@ test.describe('Navigator Print Tests', () => {
     });
 
     test('User can open print document with correct jurisdiction and cycle info', async ({ page, context }) => {
-        test.setTimeout(360000); // 6 minutes timeout - comprehensive E2E test with PDF generation
-        
         const loginPage = new LoginPage(page);
         const navigatorPrint = new NavigatorPrint(page);
         
