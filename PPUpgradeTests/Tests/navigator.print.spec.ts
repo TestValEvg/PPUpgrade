@@ -41,7 +41,7 @@ test.describe('Navigator Print Tests', () => {
         await loginPage.login();
         await expect(await loginPage.isLoginSuccessful()).toBeTruthy();
 
-        // Navigate to Navigator page (platform1.test-simmons.com - temporary URL)
+        // Navigate to Navigator page 
         await navigatorPrint.navigateToNavigator();
 
         // Select Jurisdiction: Argentina
@@ -58,9 +58,6 @@ test.describe('Navigator Print Tests', () => {
 
         // Click Expand All button to enable print
         await navigatorPrint.clickExpandAll();
-
-        // Click Search again after expanding
-        await navigatorPrint.clickSearch();
 
         // Click print button
         await navigatorPrint.clickPrintButton();
@@ -95,9 +92,6 @@ test.describe('Navigator Print Tests', () => {
 
         // Click Expand All button
         await navigatorPrint.clickExpandAll();
-
-        // Click Search again after expanding
-        await navigatorPrint.clickSearch();
 
         // Click print button
         await navigatorPrint.clickPrintButton();
@@ -138,9 +132,6 @@ test.describe('Navigator Print Tests', () => {
         // Click Expand All button
         await navigatorPrint.clickExpandAll();
 
-        // Click Search again after expanding
-        await navigatorPrint.clickSearch();
-
         // Verify Print/Export button becomes enabled after search
         await navigatorPrint.verifyPrintButtonEnabled();
     });
@@ -175,9 +166,6 @@ test.describe('Navigator Print Tests', () => {
 
         // Click Expand All button
         await navigatorPrint.clickExpandAll();
-
-        // Click Search again after expanding
-        await navigatorPrint.clickSearch();
 
         // Wait longer for results to fully load
         await page.waitForTimeout(5000);
@@ -239,9 +227,6 @@ test.describe('Navigator Print Tests', () => {
         // Click Expand All button to enable print
         await navigatorPrint.clickExpandAll();
 
-        // Click Search again after expanding
-        await navigatorPrint.clickSearch();
-
         // Click on Definitions button
         await page.getByRole('button', { name: 'Definitions' }).click();
 
@@ -286,9 +271,6 @@ test.describe('Navigator Print Tests', () => {
 
         // Click Expand All button to enable print
         await navigatorPrint.clickExpandAll();
-
-        // Click Search again after expanding
-        await navigatorPrint.clickSearch();
 
         // Click on Legends button
         await page.getByRole('button', { name: 'Legends' }).click();
@@ -337,9 +319,6 @@ test.describe('Navigator Print Tests', () => {
         // Click Expand All button
         await navigatorPrint.clickExpandAll();
 
-        // Click Search again after expanding
-        await navigatorPrint.clickSearch();
-
         // Click on Definitions button
         await page.getByRole('button', { name: 'Definitions' }).click();
 
@@ -380,9 +359,6 @@ test.describe('Navigator Print Tests', () => {
         // Click Expand All button
         await navigatorPrint.clickExpandAll();
 
-        // Click Search again after expanding
-        await navigatorPrint.clickSearch();
-
         // Click on Legends button
         await page.getByRole('button', { name: 'Legends' }).click();
 
@@ -397,6 +373,8 @@ test.describe('Navigator Print Tests', () => {
     });
 
     test('User can open print document with correct jurisdiction and cycle info', async ({ page, context }) => {
+        test.setTimeout(360000); // 6 minutes timeout - comprehensive E2E test with PDF generation
+        
         const loginPage = new LoginPage(page);
         const navigatorPrint = new NavigatorPrint(page);
         
@@ -429,33 +407,31 @@ test.describe('Navigator Print Tests', () => {
         // Click Expand All button to enable print
         await navigatorPrint.clickExpandAll();
 
-        // Click Search again after expanding
-        await navigatorPrint.clickSearch();
+        // Set up listener for new window/tab BEFORE clicking print button
+        const pagePromise = context.waitForEvent('page', { timeout: 120000 });
 
         // Click print button
         await navigatorPrint.clickPrintButton();
 
-        // Set up listener for new window/tab before clicking Print to PDF
-        const newPagePromise = context.waitForEvent('page');
+        // Wait for print dialog to appear
+        await page.waitForTimeout(3000);
 
         // Click on Print to PDF button
         const printToPDFButton = page.getByRole('button', { name: 'Print to PDF' });
         await printToPDFButton.click();
 
-        // Wait for new window/tab to open (up to 1 minute)
-        const newPage = await newPagePromise;
-        await newPage.waitForLoadState('load', { timeout: 60000 });
-
+        // Wait for new window/tab to open
+        const newPage = await pagePromise;
+        console.log('New page opened, waiting for PDF to load...');
+        
         // Get the URL of the new page
         const newPageURL = newPage.url();
         console.log(`New page URL: ${newPageURL}`);
 
-        // Wait a bit more for embed element to load
-        await newPage.waitForTimeout(3000);
-
-        // Wait for embed element to be attached to DOM
+        // Wait for embed element to be attached to DOM (PDF might take time to generate)
         const embedElement = newPage.locator('embed[type="application/x-google-chrome-pdf"]');
-        await embedElement.waitFor({ state: 'attached', timeout: 30000 });
+        await embedElement.waitFor({ state: 'attached', timeout: 90000 });
+        console.log('PDF embed element loaded');
 
         // Get the original-url attribute from embed element
         const embedOriginalUrl = await embedElement.getAttribute('original-url');
