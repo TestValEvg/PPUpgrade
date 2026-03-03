@@ -428,26 +428,42 @@ test.describe('Navigator Print Tests', () => {
         const newPageURL = newPage.url();
         console.log(`New page URL: ${newPageURL}`);
 
-        // Wait for embed element to be attached to DOM (PDF might take time to generate)
+        // Wait for the page to finish loading (PDF generation can take time)
+        await newPage.waitForLoadState('domcontentloaded', { timeout: 180000 });
+        console.log('PDF page loaded');
+
+        // Try to find embed element (Chrome may use embed tag)
         const embedElement = newPage.locator('embed[type="application/x-google-chrome-pdf"]');
-        await embedElement.waitFor({ state: 'attached', timeout: 180000 });
-        console.log('PDF embed element loaded');
+        const embedCount = await embedElement.count();
+        
+        let pdfUrl = newPageURL;
+        
+        if (embedCount > 0) {
+            // If embed element exists, get the original-url attribute
+            const embedOriginalUrl = await embedElement.getAttribute('original-url');
+            console.log(`Embed original-url: ${embedOriginalUrl}`);
+            pdfUrl = embedOriginalUrl || newPageURL;
+        } else {
+            // If no embed element, Chrome is displaying PDF directly - use page URL
+            console.log('No embed element found - Chrome displaying PDF directly');
+            console.log(`Using page URL for verification: ${pdfUrl}`);
+        }
 
-        // Get the original-url attribute from embed element
-        const embedOriginalUrl = await embedElement.getAttribute('original-url');
-        console.log(`Embed original-url: ${embedOriginalUrl}`);
+        // Decode URL for verification (URLs are percent-encoded)
+        const decodedPdfUrl = decodeURIComponent(pdfUrl);
+        console.log(`Decoded PDF URL: ${decodedPdfUrl}`);
 
-        // Verify embed original-url contains the API endpoint
-        expect(embedOriginalUrl).toContain('https://api.test-simmons.com/reports/pp/navigator/export-audit/');
+        // Verify PDF URL contains the API endpoint
+        expect(decodedPdfUrl).toContain('https://api.test-simmons.com/reports/pp/navigator/export-audit/');
 
-        // Verify embed original-url contains jurisdiction name (Argentina)
-        expect(embedOriginalUrl).toContain(jurisdictionName);
+        // Verify PDF URL contains jurisdiction name (Argentina)
+        expect(decodedPdfUrl).toContain(jurisdictionName);
 
-        // Verify embed original-url contains cycle name (e.g., "February 2024")
+        // Verify PDF URL contains cycle name (e.g., "February 2024")
         if (cycleName) {
             // Remove "As at " prefix and trim to get just "February 2024"
             const cycleNameOnly = cycleName.replace('As at ', '').trim();
-            expect(embedOriginalUrl).toContain(cycleNameOnly);
+            expect(decodedPdfUrl).toContain(cycleNameOnly);
         }
     });
 });
