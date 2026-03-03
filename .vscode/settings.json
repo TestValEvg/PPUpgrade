@@ -1,0 +1,8 @@
+{
+    "chat.tools.terminal.autoApprove": {
+        "/^powershell -ExecutionPolicy Bypass -Command \"npx playwright test PPUpgradeTests/Tests/navigator\\.print\\.spec\\.ts --project=chromium\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        }
+    }
+}
