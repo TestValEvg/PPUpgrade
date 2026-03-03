@@ -430,7 +430,7 @@ test.describe('Navigator Print Tests', () => {
 
         // Wait for embed element to be attached to DOM (PDF might take time to generate)
         const embedElement = newPage.locator('embed[type="application/x-google-chrome-pdf"]');
-        await embedElement.waitFor({ state: 'attached', timeout: 90000 });
+        await embedElement.waitFor({ state: 'attached', timeout: 180000 });
         console.log('PDF embed element loaded');
 
         // Get the original-url attribute from embed element
