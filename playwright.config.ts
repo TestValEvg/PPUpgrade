@@ -20,8 +20,8 @@ export default defineConfig({
   retries: process.env.CI ? 1 : 0,
   /* Opt out of parallel tests on CI for stability */
   workers: process.env.CI ? 1 : undefined,
-  /* Timeout for each test - increased to accommodate PDF generation tests */
-  timeout: 360 * 1000,
+  /* Timeout for each test - increased to 10 minutes for Navigator print tests with jurisdiction/service selection */
+  timeout: 600 * 1000,
   /* Timeout for all tests */
   globalTimeout: 60 * 60 * 1000,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
