@@ -425,4 +425,155 @@ export class NavigatorFavorites {
         
         throw new Error(`Failed to save favorite after ${maxRetries} retries - all combinations may already be saved`);
     }
+
+    // Reload the page
+    async reloadPage() {
+        await this.page.reload({ waitUntil: 'networkidle' });
+        await this.page.waitForTimeout(2000);
+        console.log('Page reloaded');
+    }
+
+    // Click favorites dropdown button to open dropdown
+    async clickFavoritesDropdownButton() {
+        // First wait for the page filters to be visible to ensure page is fully loaded
+        await this.page.locator(NAVIGATOR_SELECTORS.jurisdictionButton).waitFor({ state: 'visible', timeout: 30000 });
+        console.log('Navigator page filters loaded');
+        
+        // Wait for dynamic content to load
+        await this.page.waitForTimeout(3000);
+        
+        // Click the chevron SVG icon to open dropdown
+        const dropdownButton = this.page.locator(NAVIGATOR_SELECTORS.favoritesDropdownButton).first();
+        await dropdownButton.waitFor({ state: 'visible', timeout: 15000 });
+        await dropdownButton.click();
+        console.log('Clicked favorites dropdown chevron to open dropdown');
+        await this.page.waitForTimeout(1000);
+    }
+
+    // Wait for favorites dropdown to appear
+    async waitForFavoritesDropdown() {
+        // After clicking the dropdown button, favorites appear as a list
+        await this.page.waitForTimeout(2000);
+        console.log('Favorites dropdown opened');
+    }
+
+    // Check if favorite name exists in dropdown
+    async verifyFavoriteInDropdown(favoriteName: string): Promise<boolean> {
+        // After clicking dropdown, look for the favorite name in visible text
+        // Try multiple possible selectors for dropdown items
+        const possibleSelectors = [
+            NAVIGATOR_SELECTORS.favoriteDropdownItem,  // .s-dropdown-item
+            'li',  // Generic list items
+            '[role="button"]',  // Role-based selector
+            'button',  // Button elements
+            'div[class*="item"]',  // Divs with "item" in class
+        ];
+        
+        for (const selector of possibleSelectors) {
+            const items = this.page.locator(selector).filter({ hasText: favoriteName });
+            const count = await items.count();
+            if (count > 0) {
+                console.log(`✓ Found favorite '${favoriteName}' using selector: ${selector} (${count} matches)`);
+                return true;
+            }
+        }
+        
+        console.log(`✗ Favorite not found in dropdown: ${favoriteName}`);
+        return false;
+    }
+
+    // Click on specific favorite name in dropdown
+    async clickFavoriteInDropdown(favoriteName: string) {
+        // Try multiple possible selectors to find the favorite item
+        const selectors = [
+            NAVIGATOR_SELECTORS.favoriteDropdownItem,
+            'li',
+            '[role="button"]',
+            'button',
+            'div[class*="item"]'
+        ];
+        
+        for (const selector of selectors) {
+            const items = this.page.locator(selector).filter({ hasText: favoriteName });
+            const count = await items.count();
+            if (count > 0) {
+                await items.first().click();
+                console.log(`Clicked on favorite: ${favoriteName} (using selector: ${selector})`);
+                await this.page.waitForTimeout(1000);
+                return;
+            }
+        }
+        
+        throw new Error(`Could not find favorite to click: ${favoriteName}`);
+    }
+
+    // Click Search button after selecting favorite
+    async clickSearchAfterFavorite() {
+        const searchButton = this.page.locator(NAVIGATOR_SELECTORS.searchButtonSpan).filter({ hasText: 'Search' }).first();
+        await searchButton.waitFor({ state: 'visible', timeout: 5000 });
+        await searchButton.click();
+        console.log('Clicked Search button after selecting favorite');
+        await this.page.waitForLoadState('networkidle');
+        await this.page.waitForTimeout(3000);
+    }
+
+    // Verify correct filters are applied after loading favorite
+    async verifyFiltersApplied(): Promise<{ jurisdiction: string; service: string }> {
+        // Get selected jurisdiction from the first filter button
+        const jurisdictionText = await this.page.locator('div:nth-of-type(2) > .small span:nth-of-type(2)').first().textContent();
+        const selectedJurisdiction = jurisdictionText?.trim() || '';
+        
+        // Get selected service from the second filter button
+        const serviceText = await this.page.locator('div:nth-of-type(2) > .small button > span').nth(1).textContent();
+        const selectedService = serviceText?.trim() || '';
+        
+        console.log(`Filters applied - Jurisdiction: ${selectedJurisdiction}, Service: ${selectedService}`);
+        
+        return { jurisdiction: selectedJurisdiction, service: selectedService };
+    }
+
+    // Verify filters match expected values
+    async verifyCorrectFilters(expectedJurisdiction: string, expectedService: string) {
+        const filters = await this.verifyFiltersApplied();
+        
+        expect(filters.jurisdiction).toBe(expectedJurisdiction);
+        expect(filters.service).toBe(expectedService);
+        
+        console.log(`✓ Filters verified: ${expectedJurisdiction} - ${expectedService}`);
+    }
+
+    // Complete workflow: reload, select favorite, search, verify
+    async loadFavoriteAndVerify(favoriteName: string) {
+        // Reload page to ensure favorite is saved
+        await this.reloadPage();
+        
+        // Navigate back to Navigator base page where dropdown button is visible
+        await this.navigateToNavigator();
+        
+        // Open favorites dropdown (buttons should be visible on Navigator homepage)
+        await this.clickFavoritesDropdownButton();
+        await this.waitForFavoritesDropdown();
+        
+        // Verify favorite exists
+        const exists = await this.verifyFavoriteInDropdown(favoriteName);
+        expect(exists).toBe(true);
+        
+        // Click on favorite
+        await this.clickFavoriteInDropdown(favoriteName);
+        
+        // Click Search
+        await this.clickSearchAfterFavorite();
+        
+        // Wait for results
+        await this.waitForResults();
+        
+        // Verify filters match
+        await this.verifyCorrectFilters(this.selectedJurisdiction, this.selectedService);
+        
+        // Verify favorite button is filled (yellow)
+        await this.verifyFavoriteButtonSaved();
+        
+        console.log(`✓ Favorite loaded and verified successfully: ${favoriteName}`);
+    }
 }
+

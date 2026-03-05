@@ -40,4 +40,12 @@ export const NAVIGATOR_SELECTORS = {
     favoriteNameInput: 'input.s-input[placeholder="Enter favourite name"]',
     saveButton: 'span.button-text:has-text("Save")',
     successMessage: 'p:has-text("Search saved successfully")',
+    
+    // Favorites Dropdown
+    // Favorites dropdown button - click the chevron SVG itself
+    favoritesDropdownButton: 'div.s-button-dropdown__buttons > svg[title="Chevron down icon"]',
+    favoritesDropdownContainer: '.s-dropdown__container',
+    favoritesDropdownList: '.s-dropdown__list',
+    favoriteDropdownItem: '.s-dropdown-item',
+    searchButtonSpan: 'span.button-text:has-text("Search")',
 };

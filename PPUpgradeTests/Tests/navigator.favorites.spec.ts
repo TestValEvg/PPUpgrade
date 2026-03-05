@@ -44,7 +44,12 @@ test.describe('Navigator Favorites Tests', () => {
         console.log(`Search completed successfully with: ${randomJurisdiction} - ${randomService}`);        
         // Step 7: Save as favorite (with retry if already exists)
         const savedName = await navigatorFavorites.saveFavoriteWithRetry();
-        console.log(`Favorite saved with name: ${savedName}`);    });
+        console.log(`Favorite saved with name: ${savedName}`);
+        
+        // Step 8: Reload page and verify favorite was saved correctly
+        await navigatorFavorites.loadFavoriteAndVerify(savedName);
+        console.log(`✓ Favorite verification complete: ${savedName}`);
+    });
 
     test('User can navigate to Definitions static view after search', async ({ page }) => {
         const navigatorFavorites = new NavigatorFavorites(page);
