@@ -1,66 +1,23 @@
-<testsuites id="" name="" tests="1" failures="1" skipped="0" errors="0" time="93.59043">
-<testsuite name="Tests\navigator.print.spec.ts" timestamp="2026-03-03T14:59:21.497Z" hostname="Google Chrome" tests="1" failures="1" skipped="0" time="91.994" errors="0">
-<testcase name="Navigator Print Tests › User can download/export PDF document using Chrome PDF viewer button" classname="Tests\navigator.print.spec.ts" time="91.994">
-<failure message="navigator.print.spec.ts:470:9 User can download/export PDF document using Chrome PDF viewer button" type="FAILURE">
-<![CDATA[  [Google Chrome] › Tests\navigator.print.spec.ts:470:9 › Navigator Print Tests › User can download/export PDF document using Chrome PDF viewer button 
-
-    TimeoutError: page.waitForEvent: Timeout 30000ms exceeded while waiting for event "download"
-    =========================== logs ===========================
-    waiting for event "download"
-    ============================================================
-
-      525 |
-      526 |         // Set up download listener BEFORE clicking download button
-    > 527 |         const downloadPromise = newPage.waitForEvent('download', { timeout: 30000 });
-          |                                         ^
-      528 |
-      529 |         // Locate and click the download button in Chrome PDF viewer
-      530 |         // The button is in shadow DOM, so we need to use a more specific selector
-
-        at C:\Users\evghenia.valicova\Git files\PPUpgrade\PPUpgradeTests\Tests\navigator.print.spec.ts:527:41
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────
-    test-results\Tests-navigator.print-Navigator-Print-Tests-Us-15617-ort-PDF-document-using-Chrome-PDF-viewer-button-Google-Chrome\test-failed-2.png
-    ────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: screenshot (image/png) ──────────────────────────────────────
-    test-results\Tests-navigator.print-Navigator-Print-Tests-Us-15617-ort-PDF-document-using-Chrome-PDF-viewer-button-Google-Chrome\test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────
-
-    attachment #3: video (video/webm) ──────────────────────────────────────────
-    test-results\Tests-navigator.print-Navigator-Print-Tests-Us-15617-ort-PDF-document-using-Chrome-PDF-viewer-button-Google-Chrome\video-1.webm
-    ────────────────────────────────────────────────────────────────────────────
-
-    attachment #4: video (video/webm) ──────────────────────────────────────────
-    test-results\Tests-navigator.print-Navigator-Print-Tests-Us-15617-ort-PDF-document-using-Chrome-PDF-viewer-button-Google-Chrome\video.webm
-    ────────────────────────────────────────────────────────────────────────────
-
-    attachment #5: trace (application/zip) ─────────────────────────────────────
-    test-results\Tests-navigator.print-Navigator-Print-Tests-Us-15617-ort-PDF-document-using-Chrome-PDF-viewer-button-Google-Chrome\trace.zip
-    Usage:
-
-        npx playwright show-trace test-results\Tests-navigator.print-Navigator-Print-Tests-Us-15617-ort-PDF-document-using-Chrome-PDF-viewer-button-Google-Chrome\trace.zip
-
-    ────────────────────────────────────────────────────────────────────────────
-]]>
-</failure>
+<testsuites id="" name="" tests="1" failures="0" skipped="0" errors="0" time="49.252340000000004">
+<testsuite name="Tests\navigator.favorites.spec.ts" timestamp="2026-03-05T07:54:37.809Z" hostname="Google Chrome" tests="1" failures="0" skipped="0" time="48.028" errors="0">
+<testcase name="Navigator Favorites Tests › User can search with random jurisdiction and service selection" classname="Tests\navigator.favorites.spec.ts" time="48.028">
 <system-out>
-<![CDATA[Service options loaded after jurisdiction filter applied
-Selected service: Corporate Finance
-PDF viewer opened
-PDF URL: https://api.test-simmons.com/reports/pp/navigator/export-audit/Navigator%20export%20-%20Argentina%20-%20February%202024%20-%20Jurisdiction%20Analysis.pdf?id=cd6baf8f-9541-480d-a6ce-b71194427e2f&product=navigator
-PDF page loaded
-Download button not found with #save, trying cr-icon-button
-
-[[ATTACHMENT|Tests-navigator.print-Navigator-Print-Tests-Us-15617-ort-PDF-document-using-Chrome-PDF-viewer-button-Google-Chrome\test-failed-2.png]]
-
-[[ATTACHMENT|Tests-navigator.print-Navigator-Print-Tests-Us-15617-ort-PDF-document-using-Chrome-PDF-viewer-button-Google-Chrome\test-failed-1.png]]
-
-[[ATTACHMENT|Tests-navigator.print-Navigator-Print-Tests-Us-15617-ort-PDF-document-using-Chrome-PDF-viewer-button-Google-Chrome\video-1.webm]]
-
-[[ATTACHMENT|Tests-navigator.print-Navigator-Print-Tests-Us-15617-ort-PDF-document-using-Chrome-PDF-viewer-button-Google-Chrome\video.webm]]
-
-[[ATTACHMENT|Tests-navigator.print-Navigator-Print-Tests-Us-15617-ort-PDF-document-using-Chrome-PDF-viewer-button-Google-Chrome\trace.zip]]
+<![CDATA[Random jurisdiction selected: Croatia
+Selecting jurisdiction: Croatia
+Random service selected: Funds
+Selecting service: Funds
+Service options loaded after jurisdiction filter applied
+Selected service: Funds
+Search completed successfully with: Croatia - Funds
+Favorite button is empty, proceeding to save...
+Clicked favorite button
+Save Search modal appeared
+Entered favorite name: Fav97320478mdwk
+Clicked Save button
+Success message appeared
+Favorite button is now filled (saved state)
+Favorite saved successfully: Fav97320478mdwk
+Favorite saved with name: Fav97320478mdwk
 ]]>
 </system-out>
 </testcase>
