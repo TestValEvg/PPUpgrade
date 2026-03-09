@@ -1,23 +1,82 @@
-<testsuites id="" name="" tests="1" failures="0" skipped="0" errors="0" time="49.252340000000004">
-<testsuite name="Tests\navigator.favorites.spec.ts" timestamp="2026-03-05T07:54:37.809Z" hostname="Google Chrome" tests="1" failures="0" skipped="0" time="48.028" errors="0">
-<testcase name="Navigator Favorites Tests › User can search with random jurisdiction and service selection" classname="Tests\navigator.favorites.spec.ts" time="48.028">
+<testsuites id="" name="" tests="1" failures="0" skipped="0" errors="0" time="119.94197300000002">
+<testsuite name="Tests\navigator.filters.spec.ts" timestamp="2026-03-09T13:30:40.233Z" hostname="Google Chrome" tests="1" failures="0" skipped="0" time="118.692" errors="0">
+<testcase name="Navigator Filters - Validation Rules › Product-Service relationship test - verify correct products for each service" classname="Tests\navigator.filters.spec.ts" time="118.692">
 <system-out>
-<![CDATA[Random jurisdiction selected: Croatia
-Selecting jurisdiction: Croatia
-Random service selected: Funds
-Selecting service: Funds
+<![CDATA[
+========== Testing Service: Banking ==========
+Trying jurisdiction: Austria
+Checking if service "Banking" is available
+Service "Banking" available: true
+Selecting service: Banking
 Service options loaded after jurisdiction filter applied
-Selected service: Funds
-Search completed successfully with: Croatia - Funds
-Favorite button is empty, proceeding to save...
-Clicked favorite button
-Save Search modal appeared
-Entered favorite name: Fav97320478mdwk
-Clicked Save button
-Success message appeared
-Favorite button is now filled (saved state)
-Favorite saved successfully: Fav97320478mdwk
-Favorite saved with name: Fav97320478mdwk
+Selected service: Banking
+✓ Service Banking selected for Austria
+Available products found: [ [32m'Deposits'[39m, [32m'FX'[39m, [32m'Guarantees and Commitments'[39m, [32m'Payments'[39m ]
+✓ Verified: All expected products available for Banking
+  Expected: Deposits, FX, Guarantees and Commitments, Payments
+  Found: Deposits, FX, Guarantees and Commitments, Payments
+Cleared all filters
+
+========== Testing Service: Derivatives & FX ==========
+Trying jurisdiction: Austria
+Checking if service "Derivatives & FX" is available
+Service "Derivatives & FX" available: true
+Selecting service: Derivatives & FX
+Service options loaded after jurisdiction filter applied
+Selected service: Derivatives & FX
+✓ Service Derivatives & FX selected for Austria
+Available products found: [
+  [32m'Financial Derivatives'[39m,
+  [32m'Credit Derivatives'[39m,
+  [32m'Equity Derivatives'[39m,
+  [32m'Exotic Derivatives'[39m,
+  [32m'Contracts for Differences'[39m,
+  [32m'Commodity derivatives - Cash Settled Commodity Derivatives'[39m,
+  [32m'Commodity derivatives - Non Traded Commodity Derivatives'[39m,
+  [32m'Commodity derivatives - Traded Commodity Derivatives'[39m
+]
+✓ Verified: All expected products available for Derivatives & FX
+  Expected: Financial Derivatives, Credit Derivatives, Equity Derivatives, Exotic Derivatives, Contracts for Differences, Commodity derivatives - Cash Settled Commodity Derivatives, Commodity derivatives - Non Traded Commodity Derivatives, Commodity derivatives - Traded Commodity Derivatives
+  Found: Financial Derivatives, Credit Derivatives, Equity Derivatives, Exotic Derivatives, Contracts for Differences, Commodity derivatives - Cash Settled Commodity Derivatives, Commodity derivatives - Non Traded Commodity Derivatives, Commodity derivatives - Traded Commodity Derivatives
+Cleared all filters
+
+========== Testing Service: Lending ==========
+Trying jurisdiction: Austria
+Checking if service "Lending" is available
+Service "Lending" available: true
+Selecting service: Lending
+Service options loaded after jurisdiction filter applied
+Selected service: Lending
+✓ Service Lending selected for Austria
+Available products found: [
+  [32m'Lending'[39m,
+  [32m'Secondary Market Loans (Secondary Market Loan Activities)'[39m
+]
+✓ Verified: All expected products available for Lending
+  Expected: Lending, Secondary Market Loans (Secondary Market Loan Activities)
+  Found: Lending, Secondary Market Loans (Secondary Market Loan Activities)
+Cleared all filters
+
+========== Testing Service: Securities ==========
+Trying jurisdiction: Austria
+Checking if service "Securities" is available
+Service "Securities" available: true
+Selecting service: Securities
+Service options loaded after jurisdiction filter applied
+Selected service: Securities
+✓ Service Securities selected for Austria
+Available products found: [
+  [32m'Closed Ended Funds'[39m,
+  [32m'Equity Securities'[39m,
+  [32m'Debt Securities'[39m,
+  [32m'Linked Products'[39m
+]
+✓ Verified: All expected products available for Securities
+  Expected: Closed Ended Funds, Equity Securities, Debt Securities, Linked Products
+  Found: Closed Ended Funds, Equity Securities, Debt Securities, Linked Products
+Cleared all filters
+
+✓ All Service-Product relationships verified successfully
 ]]>
 </system-out>
 </testcase>

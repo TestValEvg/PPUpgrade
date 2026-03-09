@@ -16,6 +16,25 @@ export class NavigatorFilters {
     // Services that suppress General when selected
     private readonly GENERAL_SUPPRESSING_SERVICES = ['Banking', 'Corporate Finance', 'Lending'];
 
+    // Product-Service relationship mapping
+    private readonly SERVICE_PRODUCTS = {
+        'Banking': ['Deposits', 'FX', 'Guarantees and Commitments', 'Payments'],
+        'Corporate Finance': [], // No products available
+        'Derivatives & FX': [
+            'Financial Derivatives',
+            'Credit Derivatives',
+            'Equity Derivatives',
+            'Exotic Derivatives',
+            'Contracts for Differences',
+            'Commodity derivatives - Cash Settled Commodity Derivatives',
+            'Commodity derivatives - Non Traded Commodity Derivatives',
+            'Commodity derivatives - Traded Commodity Derivatives'
+        ],
+        'Funds': ['Open Ended Funds', 'Closed Ended Funds'],
+        'Lending': ['Lending', 'Secondary Market Loans (Secondary Market Loan Activities)'],
+        'Securities': ['Closed Ended Funds', 'Equity Securities', 'Debt Securities', 'Linked Products']
+    };
+
     constructor(page: Page) {
         this.page = page;
     }
@@ -35,9 +54,11 @@ export class NavigatorFilters {
     // Clear all filter selections
     async clearAllFilters() {
         const clearButton = this.page.locator(NAVIGATOR_SELECTORS.clearButton);
-        if (await clearButton.isVisible()) {
+        const isVisible = await clearButton.isVisible().catch(() => false);
+        if (isVisible) {
             await clearButton.click();
-            await this.page.waitForLoadState('networkidle');
+            await this.page.waitForTimeout(1000);
+            console.log('Cleared all filters');
         }
     }
 
@@ -77,17 +98,109 @@ export class NavigatorFilters {
         await this.clickOutside();
     }
 
-    // Select Service filter
+    // Select Service filter (using proven pattern from favorites)
     async selectService(service: string) {
+        console.log(`Selecting service: ${service}`);
+        
         await this.clickOutside();
         
-        const serviceButton = this.page.locator(NAVIGATOR_SELECTORS.serviceButton);
-        await serviceButton.waitFor({ state: 'visible' });
-        await serviceButton.click();
+        // Additional wait to ensure jurisdiction-based services are loaded
+        await this.page.waitForTimeout(2000);
+        
+        // Click on the Service dropdown
+        const serviceText = this.page.getByText('Service', { exact: true }).first();
+        await serviceText.waitFor({ state: 'visible' });
+        await serviceText.click();
 
-        const option = this.page.locator(`p:has-text("${service}")`);
-        await option.waitFor({ state: 'visible' });
-        await option.click();
+        // Wait for dropdown to open and populate with jurisdiction-specific services
+        await this.page.waitForTimeout(1500);
+
+        const searchInput = this.page.getByPlaceholder('Search items');
+        await searchInput.waitFor({ state: 'visible', timeout: 5000 });
+        
+        // Wait for "No options available" to disappear (if it appears initially)
+        try {
+            const noOptionsMessage = this.page.getByText('No options available');
+            await noOptionsMessage.waitFor({ state: 'hidden', timeout: 5000 });
+            console.log('Service options loaded after jurisdiction filter applied');
+        } catch (error) {
+            console.log('No "No options available" message, or it disappeared quickly');
+        }
+        
+        // Additional wait after options are loaded
+        await this.page.waitForTimeout(2500);
+
+        // Search for the service
+        await searchInput.clear();
+        await searchInput.fill(service);
+
+        // Wait for search to filter options
+        await this.page.waitForTimeout(1500);
+
+        // Find and click the service option
+        const option = this.page.getByRole('button', { name: service });
+        const optionCount = await option.count();
+
+        if (optionCount > 0) {
+            await option.first().click({ timeout: 3000 });
+            console.log(`Selected service: ${service}`);
+        } else {
+            throw new Error(`Service ${service} not found in dropdown`);
+        }
+
+        // Wait for selection to apply
+        await this.page.waitForTimeout(2500);
+        await this.clickOutside();
+    }
+
+    // Check if a service is available in the dropdown
+    async isServiceAvailable(service: string): Promise<boolean> {
+        console.log(`Checking if service "${service}" is available`);
+        
+        await this.clickOutside();
+        
+        // Additional wait to ensure jurisdiction-based services are loaded
+        await this.page.waitForTimeout(2000);
+        
+        // Click on the Service dropdown
+        const serviceText = this.page.getByText('Service', { exact: true }).first();
+        await serviceText.waitFor({ state: 'visible' });
+        await serviceText.click();
+
+        // Wait for dropdown to open
+        await this.page.waitForTimeout(1500);
+
+        const searchInput = this.page.getByPlaceholder('Search items');
+        await searchInput.waitFor({ state: 'visible', timeout: 5000 });
+        
+        // Wait for "No options available" to disappear (if it appears initially)
+        try {
+            const noOptionsMessage = this.page.getByText('No options available');
+            await noOptionsMessage.waitFor({ state: 'hidden', timeout: 5000 });
+        } catch (error) {
+            // No message or it disappeared
+        }
+        
+        // Additional wait after options are loaded
+        await this.page.waitForTimeout(2000);
+
+        // Search for the service
+        await searchInput.clear();
+        await searchInput.fill(service);
+
+        // Wait for search to filter options
+        await this.page.waitForTimeout(1500);
+
+        // Check if the service option exists
+        const option = this.page.getByRole('button', { name: service });
+        const count = await option.count();
+        
+        // Close dropdown
+        await this.page.keyboard.press('Escape');
+        await this.page.waitForTimeout(500);
+        
+        console.log(`Service "${service}" available: ${count > 0}`);
+        return count > 0;
     }
 
     // Select multiple services
@@ -221,5 +334,111 @@ export class NavigatorFilters {
     // Wait for results to load
     async waitForResults(timeout: number = 10000) {
         await this.page.waitForSelector('h4', { timeout });
+    }
+
+    // Select Product filter
+    async selectProduct(product: string) {
+        await this.clickOutside();
+        
+        const productLabel = this.page.locator('span.s-input-dropdown-item__item__label:has-text("Product")');
+        await productLabel.waitFor({ state: 'visible', timeout: 10000 });
+        await productLabel.click();
+        await this.page.waitForTimeout(500);
+
+        const option = this.page.locator(`p:has-text("${product}")`).first();
+        await option.waitFor({ state: 'visible', timeout: 10000 });
+        await option.click();
+        
+        console.log(`Selected product: ${product}`);
+    }
+
+    // Get available products from dropdown
+    async getAvailableProducts(): Promise<string[]> {
+        await this.clickOutside();
+        
+        const productLabel = this.page.locator('span.s-input-dropdown-item__item__label:has-text("Product")');
+        await productLabel.waitFor({ state: 'visible', timeout: 10000 });
+        await productLabel.click();
+        await this.page.waitForTimeout(1000);
+
+        // Check if "No options available" is present
+        const noOptionsText = await this.page.locator('text="No options available"').isVisible().catch(() => false);
+        if (noOptionsText) {
+            await this.clickOutside();
+            console.log('No products available in dropdown');
+            return [];
+        }
+
+        // Get all product options using the same pattern as service selection
+        const productOptions = await this.page.locator('li p').allTextContents();
+        
+        await this.clickOutside();
+        
+        const products = productOptions.map(p => p.trim()).filter(p => p.length > 0);
+        console.log('Available products found:', products);
+        return products;
+    }
+
+    // Verify Product options match expected list for selected service
+    async verifyProductOptionsForService(service: string) {
+        const expectedProducts = this.SERVICE_PRODUCTS[service as keyof typeof this.SERVICE_PRODUCTS];
+        
+        if (expectedProducts === undefined) {
+            throw new Error(`Unknown service: ${service}`);
+        }
+
+        if (expectedProducts.length === 0) {
+            // Corporate Finance has no products - verify Product dropdown is disabled/hidden or shows "No options available"
+            await this.clickOutside();
+            await this.page.waitForTimeout(1000);
+            
+            const productLabel = this.page.locator('span.s-input-dropdown-item__item__label:has-text("Product")');
+            const isProductVisible = await productLabel.isVisible().catch(() => false);
+            
+            if (!isProductVisible) {
+                console.log(`✓ Verified: ${service} has no product dropdown (hidden/disabled as expected)`);
+                return;
+            }
+            
+            // If visible, check if it shows "No options available"
+            await productLabel.click();
+            await this.page.waitForTimeout(500);
+
+            const noOptionsText = this.page.locator('text="No options available"');
+            const noOptionsVisible = await noOptionsText.isVisible().catch(() => false);
+            
+            await this.clickOutside();
+            
+            if (!noOptionsVisible) {
+                throw new Error(`Expected "No options available" for ${service}, but found options`);
+            }
+            
+            console.log(`✓ Verified: ${service} has no product options`);
+            return;
+        }
+
+        const availableProducts = await this.getAvailableProducts();
+        
+        // Check if all expected products are available
+        for (const expectedProduct of expectedProducts) {
+            const found = availableProducts.some(p => 
+                p.toLowerCase().includes(expectedProduct.toLowerCase()) || 
+                expectedProduct.toLowerCase().includes(p.toLowerCase())
+            );
+            
+            if (!found) {
+                console.log(`Expected product "${expectedProduct}" not found for service "${service}". Available: ${availableProducts.join(', ')}`);
+                throw new Error(`Expected product "${expectedProduct}" not found for service "${service}". Available: ${availableProducts.join(', ')}`);
+            }
+        }
+        
+        console.log(`✓ Verified: All expected products available for ${service}`);
+        console.log(`  Expected: ${expectedProducts.join(', ')}`);
+        console.log(`  Found: ${availableProducts.join(', ')}`);
+    }
+
+    // Get expected products for a service
+    getExpectedProductsForService(service: string): string[] {
+        return this.SERVICE_PRODUCTS[service as keyof typeof this.SERVICE_PRODUCTS] || [];
     }
 }

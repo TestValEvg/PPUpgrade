@@ -41,6 +41,25 @@ export class NavigatorFavorites {
         'Funds', 'Lending', 'Securities'
     ];
 
+    // Service to Products mapping
+    private serviceProductsMap: { [key: string]: string[] } = {
+        'Banking': ['Deposits', 'FX', 'Guarantees and Commitments', 'Payments'],
+        'Corporate Finance': [], // No products available
+        'Derivatives & FX': [
+            'Financial Derivatives',
+            'Credit Derivatives',
+            'Equity Derivatives',
+            'Exotic Derivatives',
+            'Contracts for Differences',
+            'Commodity derivatives - Cash Settled Commodity Derivatives',
+            'Commodity derivatives - Non Traded Commodity Derivatives',
+            'Commodity derivatives - Traded Commodity Derivatives'
+        ],
+        'Funds': ['Open Ended Funds', 'Closed Ended Funds'],
+        'Lending': ['Lending', 'Secondary Market Loans (Secondary Market Loan Activities)'],
+        'Securities': ['Closed Ended Funds', 'Equity Securities', 'Debt Securities', 'Linked Products']
+    };
+
     // Store selected values for verification
     public selectedJurisdiction: string = '';
     public selectedService: string = '';
@@ -201,6 +220,89 @@ export class NavigatorFavorites {
         // Wait for selection to apply
         await this.page.waitForTimeout(2500);
         await this.clickOutside();
+    }
+
+    // Get expected products for a service
+    getExpectedProducts(service: string): string[] {
+        return this.serviceProductsMap[service] || [];
+    }
+
+    // Click Product dropdown to open it
+    async clickProductDropdown() {
+        await this.clickOutside();
+        await this.page.waitForTimeout(1000);
+        
+        // Click on the Product dropdown label
+        const productLabel = this.page.locator(NAVIGATOR_SELECTORS.productLabel);
+        await productLabel.waitFor({ state: 'visible', timeout: 10000 });
+        await productLabel.click();
+        
+        console.log('Opened Product dropdown');
+        await this.page.waitForTimeout(1500);
+    }
+
+    // Get all available products from the dropdown
+    async getAvailableProducts(): Promise<string[]> {
+        // Wait for dropdown to populate
+        await this.page.waitForTimeout(1000);
+        
+        // Check if "No options available" message is present
+        const noOptionsMessage = this.page.getByText('No options available');
+        const noOptionsCount = await noOptionsMessage.count();
+        
+        if (noOptionsCount > 0) {
+            console.log('No products available');
+            return [];
+        }
+        
+        // Get all product options from dropdown
+        const productOptions = this.page.locator('li [role="button"]');
+        const count = await productOptions.count();
+        
+        const products: string[] = [];
+        for (let i = 0; i < count; i++) {
+            const text = await productOptions.nth(i).textContent();
+            if (text) {
+                products.push(text.trim());
+            }
+        }
+        
+        console.log(`Found ${products.length} available products:`, products);
+        return products;
+    }
+
+    // Verify products match expected list for a service
+    async verifyProductsForService(service: string): Promise<boolean> {
+        const expectedProducts = this.getExpectedProducts(service);
+        const availableProducts = await this.getAvailableProducts();
+        
+        // If no products expected, verify "No options available" or empty list
+        if (expectedProducts.length === 0) {
+            if (availableProducts.length === 0) {
+                console.log(`✓ Correct: No products available for ${service}`);
+                return true;
+            } else {
+                console.log(`✗ Error: Expected no products for ${service}, but found:`, availableProducts);
+                return false;
+            }
+        }
+        
+        // Verify all expected products are present
+        const missingProducts = expectedProducts.filter(p => !availableProducts.includes(p));
+        const extraProducts = availableProducts.filter(p => !expectedProducts.includes(p));
+        
+        if (missingProducts.length === 0 && extraProducts.length === 0) {
+            console.log(`✓ All expected products present for ${service}`);
+            return true;
+        } else {
+            if (missingProducts.length > 0) {
+                console.log(`✗ Missing products for ${service}:`, missingProducts);
+            }
+            if (extraProducts.length > 0) {
+                console.log(`✗ Unexpected products for ${service}:`, extraProducts);
+            }
+            return false;
+        }
     }
 
     // Click Search button

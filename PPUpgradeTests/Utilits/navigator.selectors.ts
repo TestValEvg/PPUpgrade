@@ -5,7 +5,7 @@
 export const NAVIGATOR_SELECTORS = {
     // Filter buttons - from YAML file
     jurisdictionButton: 'div:nth-of-type(2) > .small span:nth-of-type(2)',
-    serviceButton: 'div:nth-of-type(2) > .small button > span',
+    serviceButton: 'div:nth-of-type(2) > .small button',
     
     // Search button
     searchButton: 'span.button-text',
@@ -48,4 +48,11 @@ export const NAVIGATOR_SELECTORS = {
     favoritesDropdownList: '.s-dropdown__list',
     favoriteDropdownItem: '.s-dropdown-item',
     searchButtonSpan: 'span.button-text:has-text("Search")',
+    
+    // Product filter
+    productLabel: 'span.s-input-dropdown-item__item__label:has-text("Product")',
+    productDropdown: 'div.s-input-dropdown-item:has(span:has-text("Product"))',
+    
+    // Clear button
+    clearButton: 'span.button-text:has-text("Clear")',
 };

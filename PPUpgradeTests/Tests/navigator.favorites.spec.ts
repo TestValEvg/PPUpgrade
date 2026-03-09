@@ -193,4 +193,42 @@ test.describe('Navigator Favorites Tests', () => {
         
         console.log('Navigated to Contacts tab successfully');
     });
+
+    test('Product-Service relationship test', async ({ page }) => {
+        const navigatorFavorites = new NavigatorFavorites(page);
+
+        // Login and navigate to Navigator
+        await navigatorFavorites.login();
+        await navigatorFavorites.navigateToNavigator();
+
+        // Select a jurisdiction (required for service options to load)
+        const jurisdiction = navigatorFavorites.getRandomJurisdiction();
+        console.log(`Selected jurisdiction: ${jurisdiction}`);
+        await navigatorFavorites.selectJurisdiction(jurisdiction);
+
+        // Test each service and verify its products
+        const services = ['Banking', 'Corporate Finance', 'Derivatives & FX', 'Funds', 'Lending', 'Securities'];
+        
+        for (const service of services) {
+            console.log(`\n========== Testing Service: ${service} ==========`);
+            
+            // Select the service
+            await navigatorFavorites.selectService(service);
+            
+            // Open Product dropdown
+            await navigatorFavorites.clickProductDropdown();
+            
+            // Verify products match expected list
+            const isCorrect = await navigatorFavorites.verifyProductsForService(service);
+            
+            // Assert that products match
+            expect(isCorrect).toBe(true);
+            
+            // Close dropdown before next iteration
+            await navigatorFavorites.clickOutside();
+            await page.waitForTimeout(1000);
+        }
+        
+        console.log('\n✓ All Service-Product relationships verified successfully');
+    });
 });
