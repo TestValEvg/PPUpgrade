@@ -483,7 +483,7 @@ export class NavigatorFavorites {
     }
 
     // Click on specific favorite name in dropdown
-    async clickFavoriteInDropdown(favoriteName: string) {
+    async clickFavoriteInDropdown(favoriteName: string, clickSearch: boolean = true) {
         // Try multiple possible selectors to find the favorite item
         const selectors = [
             NAVIGATOR_SELECTORS.favoriteDropdownItem,
@@ -500,6 +500,12 @@ export class NavigatorFavorites {
                 await items.first().click();
                 console.log(`Clicked on favorite: ${favoriteName} (using selector: ${selector})`);
                 await this.page.waitForTimeout(1000);
+                
+                if (clickSearch) {
+                    // Click Search button after selecting favorite
+                    await this.clickSearchAfterFavorite();
+                }
+                
                 return;
             }
         }
@@ -558,11 +564,8 @@ export class NavigatorFavorites {
         const exists = await this.verifyFavoriteInDropdown(favoriteName);
         expect(exists).toBe(true);
         
-        // Click on favorite
+        // Click on favorite (will auto-click Search)
         await this.clickFavoriteInDropdown(favoriteName);
-        
-        // Click Search
-        await this.clickSearchAfterFavorite();
         
         // Wait for results
         await this.waitForResults();
@@ -574,6 +577,72 @@ export class NavigatorFavorites {
         await this.verifyFavoriteButtonSaved();
         
         console.log(`✓ Favorite loaded and verified successfully: ${favoriteName}`);
+    }
+
+    // Click Delete button in dropdown after selecting favorite
+    async clickDeleteButtonInDropdown() {
+        // Wait for Delete button to be visible
+        const deleteButton = this.page.locator('span.button-text:has-text("Delete")');
+        await deleteButton.waitFor({ state: 'visible', timeout: 10000 });
+        await deleteButton.click();
+        console.log('Clicked Delete button in dropdown');
+        await this.page.waitForTimeout(1000);
+    }
+
+    // Confirm delete by clicking "Yes, delete" button in popup
+    async confirmDeleteFavorite() {
+        // Wait for confirmation popup and "Yes, delete" button
+        const confirmButton = this.page.locator('button.s-button:has-text("Yes, delete")');
+        await confirmButton.waitFor({ state: 'visible', timeout: 10000 });
+        await confirmButton.click();
+        console.log('Clicked "Yes, delete" button');
+        await this.page.waitForTimeout(1000);
+    }
+
+    // Verify delete success message appears
+    async verifyDeleteSuccessMessage() {
+        const successMessage = this.page.locator('p:has-text("Search deleted successfully")');
+        await successMessage.waitFor({ state: 'visible', timeout: 10000 });
+        const messageText = await successMessage.textContent();
+        
+        if (messageText?.includes('Search deleted successfully')) {
+            console.log('✓ Delete success message verified');
+            return true;
+        } else {
+            console.log('✗ Delete success message not found');
+            throw new Error('Delete success message not found');
+        }
+    }
+
+    // Complete workflow: save → reload → delete favorite
+    async deleteFavoriteWorkflow(favoriteName: string) {
+        // Reload page to ensure favorite is saved
+        await this.reloadPage();
+        
+        // Navigate back to Navigator base page where dropdown button is visible
+        await this.navigateToNavigator();
+        
+        // Open favorites dropdown
+        await this.clickFavoritesDropdownButton();
+        await this.waitForFavoritesDropdown();
+        
+        // Verify favorite exists
+        const exists = await this.verifyFavoriteInDropdown(favoriteName);
+        expect(exists).toBe(true);
+        
+        // Click on favorite to select it (but don't search)
+        await this.clickFavoriteInDropdown(favoriteName, false);
+        
+        // Click Delete button
+        await this.clickDeleteButtonInDropdown();
+        
+        // Confirm deletion
+        await this.confirmDeleteFavorite();
+        
+        // Verify success message
+        await this.verifyDeleteSuccessMessage();
+        
+        console.log(`✓ Favorite deleted successfully: ${favoriteName}`);
     }
 }
 

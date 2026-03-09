@@ -51,6 +51,45 @@ test.describe('Navigator Favorites Tests', () => {
         console.log(`✓ Favorite verification complete: ${savedName}`);
     });
 
+    test('User can delete a saved favorite', async ({ page }) => {
+        const navigatorFavorites = new NavigatorFavorites(page);
+
+        // Step 1: Login
+        await navigatorFavorites.login();
+
+        // Step 2: Navigate to Navigator
+        await navigatorFavorites.navigateToNavigator();
+
+        // Step 3: Randomly select a jurisdiction
+        const randomJurisdiction = navigatorFavorites.getRandomJurisdiction();
+        console.log(`Random jurisdiction selected: ${randomJurisdiction}`);
+        await navigatorFavorites.selectJurisdiction(randomJurisdiction);
+
+        // Step 4: Randomly select a service
+        const randomService = navigatorFavorites.getRandomService();
+        console.log(`Random service selected: ${randomService}`);
+        await navigatorFavorites.selectService(randomService);
+
+        // Step 5: Click search button
+        await navigatorFavorites.clickSearch();
+
+        // Step 6: Wait for results to appear
+        await navigatorFavorites.waitForResults();
+
+        // Verify that results are displayed
+        await expect(page.getByText('JURISDICTION ANALYSIS')).toBeVisible();
+        
+        console.log(`Search completed successfully with: ${randomJurisdiction} - ${randomService}`);
+        
+        // Step 7: Save as favorite (with retry if already exists)
+        const savedName = await navigatorFavorites.saveFavoriteWithRetry();
+        console.log(`Favorite saved with name: ${savedName}`);
+        
+        // Step 8: Reload page and delete the favorite
+        await navigatorFavorites.deleteFavoriteWorkflow(savedName);
+        console.log(`✓ Favorite deletion complete: ${savedName}`);
+    });
+
     test('User can navigate to Definitions static view after search', async ({ page }) => {
         const navigatorFavorites = new NavigatorFavorites(page);
 

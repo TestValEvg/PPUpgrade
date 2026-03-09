@@ -21,6 +21,8 @@ export const CRYPTO_SELECTORS = {
     jurisdictionOptionCanada: 'p:has-text("Canada")',
     
     tokenTypeLabel: 'div.s-input-dropdown__box >> span:text-is("Token Type")',
+    tokenTypeSelectAll: 'span.s-dropdown__select-all:has-text("All")',
+    questionContainer: 'div.question-container.question-container--vertical',
     categoryLabel: 'div.s-input-dropdown__box >> span:text-is("Category")',
     subCategoryLabel: 'div.s-input-dropdown__box >> span:text-is("Sub Category")',
     methodLabel: 'div.s-input-dropdown__box >> span:text-is("Method")',
