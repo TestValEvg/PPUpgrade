@@ -2,11 +2,13 @@ import { test, expect } from '@playwright/test';
 import { LoginPage } from '../Pages/login.page';
 import { CryptoResults } from '../Pages/crypto.results';
 import { CryptoStatus } from '../Pages/CryptoStatus';
+import { CryptoFavorites } from '../Pages/crypto.favorites.page';
 
 test('User can open Status tab from Crypto results and see Jurisdiction, Date, and Changes columns', async ({ page }) => {
   const loginPage = new LoginPage(page);
   const cryptoResults = new CryptoResults(page);
   const cryptoStatus = new CryptoStatus(page);
+  const cryptoFavorites = new CryptoFavorites(page);
 
   // Step 1: Login
   await loginPage.navigate();
@@ -23,6 +25,15 @@ test('User can open Status tab from Crypto results and see Jurisdiction, Date, a
 
   // Step 4: Verify that the table contains data rows
   await cryptoStatus.verifyStatusDataVisible();
+  
+  console.log('Navigated to Status tab successfully');
+  
+  // Save as favorite (with retry if already exists)
+  const savedName = await cryptoFavorites.saveFavoriteWithRetry();
+  console.log(`✓ Favorite saved successfully: ${savedName}`);
+  
+  // Verify favorite button shows saved state
+  await cryptoFavorites.verifyFavoriteButtonSaved();
 });
 
 test.skip('Search with 2 jurisdictions shows Status view message and redirects to Status page', async ({ page }) => {

@@ -63,6 +63,7 @@ export class NavigatorFavorites {
     // Store selected values for verification
     public selectedJurisdiction: string = '';
     public selectedService: string = '';
+    public selectedProduct: string = '';
     public savedFavoriteName: string = '';
 
     constructor(page: Page) {
@@ -104,14 +105,14 @@ export class NavigatorFavorites {
         ]);
         
         // Wait for platform to load
-        await this.page.waitForTimeout(2000);
+        await this.page.waitForTimeout(1000);
     }
 
     // Navigate to Navigator page
     async navigateToNavigator() {
         await this.page.goto('https://platform.test-simmons.com/navigator/');
         await this.page.waitForLoadState('networkidle');
-        await this.page.waitForTimeout(2000);
+        await this.page.waitForTimeout(500);
     }
 
     // Click outside to close any open dropdowns
@@ -152,18 +153,18 @@ export class NavigatorFavorites {
         await searchInput.fill(jurisdiction);
 
         // Wait for search to filter options
-        await this.page.waitForTimeout(800);
+        await this.page.waitForTimeout(700);
 
         const option = this.page.getByRole('button', { name: `${jurisdiction} ${jurisdiction}` });
         await option.waitFor({ state: 'visible', timeout: 10000 });
         await option.click();
 
         // Wait for selection to apply and for services to update
-        await this.page.waitForTimeout(2000);
+        await this.page.waitForTimeout(1000);
         await this.clickOutside();
         
         // Additional waits to ensure services dropdown is populated with jurisdiction-specific options
-        await this.page.waitForTimeout(3000);
+        await this.page.waitForTimeout(800);
     }
 
     // Select Service filter
@@ -197,14 +198,14 @@ export class NavigatorFavorites {
         }
         
         // Additional wait after options are loaded
-        await this.page.waitForTimeout(2500);
+        await this.page.waitForTimeout(1000);
 
         // Search for the service
         await searchInput.clear();
         await searchInput.fill(service);
 
         // Wait for search to filter options
-        await this.page.waitForTimeout(1500);
+        await this.page.waitForTimeout(800);
 
         // Find and click the service option
         const option = this.page.getByRole('button', { name: service });
@@ -218,7 +219,7 @@ export class NavigatorFavorites {
         }
 
         // Wait for selection to apply
-        await this.page.waitForTimeout(2500);
+        await this.page.waitForTimeout(1000);
         await this.clickOutside();
     }
 
@@ -312,7 +313,7 @@ export class NavigatorFavorites {
         await expect(searchButton).toBeEnabled();
         await searchButton.click();
         await this.page.waitForLoadState('networkidle');
-        await this.page.waitForTimeout(3000);
+        await this.page.waitForTimeout(1000);
     }
 
     // Wait for results to appear
@@ -320,34 +321,46 @@ export class NavigatorFavorites {
         // Wait for the JURISDICTION ANALYSIS section to be visible
         await this.page.getByText('JURISDICTION ANALYSIS').waitFor({ state: 'visible', timeout: 20000 });
         // Brief wait for initial render
-        await this.page.waitForTimeout(1500);
+        await this.page.waitForTimeout(500);
     }
 
     // Navigate to Static Views tabs
     async navigateToDefinitions() {
-        const definitionsTab = this.page.getByRole('tab', { name: 'Definitions' });
-        await definitionsTab.waitFor({ state: 'visible', timeout: 10000 });
+        // Wait for page to stabilize after results load
+        await this.page.waitForTimeout(3000);
+        
+        const definitionsTab = this.page.locator('button.static-tab-button', { hasText: 'Definitions' });
+        await definitionsTab.waitFor({ state: 'visible', timeout: 20000 });
         await definitionsTab.click();
         await this.page.waitForTimeout(2000);
     }
 
     async navigateToStatus() {
-        const statusTab = this.page.getByRole('tab', { name: 'Status' });
-        await statusTab.waitFor({ state: 'visible', timeout: 10000 });
+        // Wait for page to stabilize after results load
+        await this.page.waitForTimeout(3000);
+        
+        const statusTab = this.page.locator('button.static-tab-button', { hasText: 'Status' });
+        await statusTab.waitFor({ state: 'visible', timeout: 20000 });
         await statusTab.click();
         await this.page.waitForTimeout(2000);
     }
 
     async navigateToLegends() {
-        const legendsTab = this.page.getByRole('tab', { name: 'Legends' });
-        await legendsTab.waitFor({ state: 'visible', timeout: 10000 });
+        // Wait for page to stabilize after results load
+        await this.page.waitForTimeout(3000);
+        
+        const legendsTab = this.page.locator('button.static-tab-button', { hasText: 'Legends' });
+        await legendsTab.waitFor({ state: 'visible', timeout: 20000 });
         await legendsTab.click();
         await this.page.waitForTimeout(2000);
     }
 
     async navigateToContacts() {
-        const contactsTab = this.page.getByRole('tab', { name: 'Contacts' });
-        await contactsTab.waitFor({ state: 'visible', timeout: 10000 });
+        // Wait for page to stabilize after results load
+        await this.page.waitForTimeout(3000);
+        
+        const contactsTab = this.page.locator('button.static-tab-button', { hasText: 'Contacts' });
+        await contactsTab.waitFor({ state: 'visible', timeout: 20000 });
         await contactsTab.click();
         await this.page.waitForTimeout(2000);
     }
@@ -468,7 +481,7 @@ export class NavigatorFavorites {
     }
 
     // Complete favorite save workflow with retry if already exists
-    async saveFavoriteWithRetry(customName?: string, maxRetries: number = 3): Promise<string> {
+    async saveFavoriteWithRetry(customName?: string, maxRetries: number = 3, handleProducts: boolean = false): Promise<string> {
         let retryCount = 0;
         
         while (retryCount < maxRetries) {
@@ -481,13 +494,34 @@ export class NavigatorFavorites {
                 
                 // Select different random jurisdiction and service
                 const newJurisdiction = this.getRandomJurisdiction();
-                const newService = this.getRandomService();
+                
+                // If handling products, use getRandomServiceWithProducts, otherwise use getRandomService
+                const newService = handleProducts ? this.getRandomServiceWithProducts() : this.getRandomService();
                 
                 console.log(`Trying with new selection: ${newJurisdiction} - ${newService}`);
                 
                 // Select new filters
                 await this.selectJurisdiction(newJurisdiction);
                 await this.selectService(newService);
+                
+                // If handling products, reselect product for the new service
+                if (handleProducts) {
+                    const availableProducts = this.getAvailableProductsForService(newService);
+                    if (availableProducts.length > 0) {
+                        // Pick one product to keep selected
+                        const productToKeep = this.getRandomProduct(newService);
+                        console.log(`Product to keep selected: ${productToKeep}`);
+                        this.selectedProduct = productToKeep;
+                        
+                        // Unselect all other products
+                        const productsToUnselect = availableProducts.filter(p => p !== productToKeep);
+                        console.log(`Products to unselect (by clicking them):`, productsToUnselect);
+                        
+                        if (productsToUnselect.length > 0) {
+                            await this.unselectProducts(productsToUnselect);
+                        }
+                    }
+                }
                 
                 // Re-run search
                 await this.clickSearch();
@@ -531,7 +565,7 @@ export class NavigatorFavorites {
     // Reload the page
     async reloadPage() {
         await this.page.reload({ waitUntil: 'networkidle' });
-        await this.page.waitForTimeout(2000);
+        await this.page.waitForTimeout(500);
         console.log('Page reloaded');
     }
 
@@ -555,7 +589,7 @@ export class NavigatorFavorites {
     // Wait for favorites dropdown to appear
     async waitForFavoritesDropdown() {
         // After clicking the dropdown button, favorites appear as a list
-        await this.page.waitForTimeout(2000);
+        await this.page.waitForTimeout(1000);
         console.log('Favorites dropdown opened');
     }
 
@@ -745,6 +779,124 @@ export class NavigatorFavorites {
         await this.verifyDeleteSuccessMessage();
         
         console.log(`✓ Favorite deleted successfully: ${favoriteName}`);
+    }
+
+    // Get random service that has products available
+    getRandomServiceWithProducts(): string {
+        const servicesWithProducts = Object.keys(this.serviceProductsMap).filter(
+            service => this.serviceProductsMap[service].length > 0
+        );
+        const randomIndex = Math.floor(Math.random() * servicesWithProducts.length);
+        return servicesWithProducts[randomIndex];
+    }
+
+    // Get random product for a given service
+    getRandomProduct(service: string): string {
+        const products = this.serviceProductsMap[service] || [];
+        if (products.length === 0) {
+            throw new Error(`No products available for service: ${service}`);
+        }
+        const randomIndex = Math.floor(Math.random() * products.length);
+        return products[randomIndex];
+    }
+
+    // Select a specific product from the dropdown
+    async selectProduct(product: string) {
+        console.log(`Selecting product: ${product}`);
+        
+        // Click Product dropdown to open it
+        await this.clickProductDropdown();
+        
+        // Wait for dropdown to populate
+        await this.page.waitForTimeout(1500);
+        
+        // Search for the product
+        const searchInput = this.page.getByPlaceholder('Search items');
+        await searchInput.waitFor({ state: 'visible', timeout: 5000 });
+        await searchInput.clear();
+        await searchInput.fill(product);
+        await this.page.waitForTimeout(1000);
+        
+        // Find and click the product option
+        const option = this.page.getByRole('button', { name: product });
+        const optionCount = await option.count();
+        
+        if (optionCount > 0) {
+            await option.first().click({ timeout: 3000 });
+            console.log(`Selected product: ${product}`);
+        } else {
+            throw new Error(`Product ${product} not found in dropdown`);
+        }
+        
+        // Wait for selection to apply
+        await this.page.waitForTimeout(1500);
+        await this.clickOutside();
+    }
+
+    // Get available products for a service
+    getAvailableProductsForService(service: string): string[] {
+        return this.serviceProductsMap[service] || [];
+    }
+
+    // Unselect products by clicking on them (in Navigator, clicking = unselecting when "All" is default)
+    async unselectProducts(productsToUnselect: string[]) {
+        console.log(`Unselecting products: ${productsToUnselect.join(', ')}`);
+        
+        // Click Product dropdown to open it
+        await this.clickProductDropdown();
+        await this.page.waitForTimeout(1500);
+        
+        for (const product of productsToUnselect) {
+            console.log(`Unselecting: ${product}`);
+            
+            // Search for the product
+            const searchInput = this.page.getByPlaceholder('Search items');
+            await searchInput.waitFor({ state: 'visible', timeout: 5000 });
+            await searchInput.clear();
+            await searchInput.fill(product);
+            await this.page.waitForTimeout(1000);
+            
+            // Find and click the product option to unselect it
+            const option = this.page.getByRole('button', { name: product });
+            const optionCount = await option.count();
+            
+            if (optionCount > 0) {
+                await option.first().click({ timeout: 3000 });
+                console.log(`Unselected product: ${product}`);
+            } else {
+                console.log(`Product ${product} not found in dropdown`);
+            }
+            
+            await this.page.waitForTimeout(500);
+        }
+        
+        // Close the dropdown
+        await this.page.waitForTimeout(1000);
+        await this.clickOutside();
+        console.log('Finished unselecting products');
+    }
+
+    // Verify product selection after reload
+    async verifyProductSelection(expectedProduct: string): Promise<boolean> {
+        console.log(`Verifying product selection: ${expectedProduct}`);
+        
+        // Click Product dropdown to see what's selected
+        await this.clickProductDropdown();
+        await this.page.waitForTimeout(1000);
+        
+        // Check if the expected product is marked as selected
+        const selectedProduct = this.page.locator(`li [role="button"]:has-text("${expectedProduct}")`).first();
+        const isSelected = await selectedProduct.getAttribute('aria-selected');
+        
+        await this.clickOutside();
+        
+        if (isSelected === 'true') {
+            console.log(`✓ Product verified: ${expectedProduct}`);
+            return true;
+        } else {
+            console.log(`✗ Product mismatch. Expected: ${expectedProduct}`);
+            return false;
+        }
     }
 }
 
