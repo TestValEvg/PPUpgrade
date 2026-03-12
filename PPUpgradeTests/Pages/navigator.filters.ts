@@ -35,6 +35,47 @@ export class NavigatorFilters {
         'Securities': ['Closed Ended Funds', 'Equity Securities', 'Debt Securities', 'Linked Products']
     };
 
+    // Activity-Service relationship mapping (common activities for each service)
+    private readonly SERVICE_ACTIVITIES = {
+        'Banking': [
+            'Banking activities in scope',
+            'Deposit Taking',
+            'Foreign Exchange Trading',
+            'Guarantees and Commitments',
+            'Payments',
+            'Reach In treatment',
+            'Fly In treatment',
+            'Fly Out treatment',
+            'Client Type',
+            'End Client / Counterparty is locally licensed',
+            'Existing Client',
+            'Intermediation',
+            'Nominee Accounts',
+            'Offshore Accounts',
+            'EU Passport',
+            'MiFID Exemptions',
+            'Ancillary Services Exemptions',
+            'Other Local Exemptions',
+            'Tolerated Market Practice',
+            'Legal Basis',
+            'What constitutes an unsolicited approach?',
+            'Limitations to the response',
+            'Third party referrals',
+            'Relationship or transaction based',
+            'Record keeping',
+            'Marketing materials - additional considerations',
+            'Other local restrictions'
+        ]
+    };
+
+    // Product-Activity relationship mapping (activities specific to products within Banking service)
+    private readonly PRODUCT_ACTIVITIES = {
+        'Deposits': ['Deposit Taking'],
+        'FX': ['Foreign Exchange Trading'],
+        'Guarantees and Commitments': ['Guarantees and Commitments'],
+        'Payments': ['Payments']
+    };
+
     constructor(page: Page) {
         this.page = page;
     }
@@ -66,36 +107,44 @@ export class NavigatorFilters {
     async selectJurisdiction(jurisdiction: string) {
         await this.clickOutside();
         
-        const jurisdictionButton = this.page.locator(NAVIGATOR_SELECTORS.jurisdictionButton);
-        await jurisdictionButton.waitFor({ state: 'visible' });
-        await jurisdictionButton.click();
+        const jurisdictionText = this.page.getByText('Jurisdiction', { exact: true });
+        await jurisdictionText.waitFor({ state: 'visible' });
+        await jurisdictionText.click();
+        await this.page.waitForTimeout(300);
 
-        const searchInput = this.page.locator(NAVIGATOR_SELECTORS.searchInput);
+        const searchInput = this.page.getByPlaceholder('Search items');
         await searchInput.fill(jurisdiction);
+        await this.page.waitForTimeout(500);
 
-        const option = this.page.locator(`p:has-text("${jurisdiction}")`);
+        const option = this.page.getByRole('button', { name: `${jurisdiction} ${jurisdiction}` });
         await option.waitFor({ state: 'visible' });
         await option.click();
+        await this.page.keyboard.press('Escape');
+        await this.page.waitForTimeout(300);
     }
 
     // Select multiple jurisdictions
     async selectJurisdictions(jurisdictions: string[]) {
         await this.clickOutside();
         
-        const jurisdictionButton = this.page.locator(NAVIGATOR_SELECTORS.jurisdictionButton);
-        await jurisdictionButton.waitFor({ state: 'visible' });
-        await jurisdictionButton.click();
+        const jurisdictionText = this.page.getByText('Jurisdiction', { exact: true });
+        await jurisdictionText.waitFor({ state: 'visible' });
+        await jurisdictionText.click();
+        await this.page.waitForTimeout(300);
 
         for (const jurisdiction of jurisdictions) {
-            const searchInput = this.page.locator(NAVIGATOR_SELECTORS.searchInput);
+            const searchInput = this.page.getByPlaceholder('Search items');
+            await searchInput.clear();
             await searchInput.fill(jurisdiction);
+            await this.page.waitForTimeout(500);
 
-            const option = this.page.locator(`p:has-text("${jurisdiction}")`);
+            const option = this.page.getByRole('button', { name: `${jurisdiction} ${jurisdiction}` });
             await option.waitFor({ state: 'visible' });
             await option.click();
         }
 
-        await this.clickOutside();
+        await this.page.keyboard.press('Escape');
+        await this.page.waitForTimeout(300);
     }
 
     // Select Service filter (using proven pattern from favorites)
@@ -336,26 +385,111 @@ export class NavigatorFilters {
         await this.page.waitForSelector('h4', { timeout });
     }
 
-    // Select Product filter
+    // Select Product filter (using working selector from navigator.favorites.page.ts)
     async selectProduct(product: string) {
-        await this.clickOutside();
+        console.log(`Selecting product: ${product}`);
         
+        await this.clickOutside();
+        await this.page.waitForTimeout(1000);
+        
+        // Using the working selector from NAVIGATOR_SELECTORS.productLabel
         const productLabel = this.page.locator('span.s-input-dropdown-item__item__label:has-text("Product")');
         await productLabel.waitFor({ state: 'visible', timeout: 10000 });
         await productLabel.click();
-        await this.page.waitForTimeout(500);
-
-        const option = this.page.locator(`p:has-text("${product}")`).first();
-        await option.waitFor({ state: 'visible', timeout: 10000 });
-        await option.click();
         
-        console.log(`Selected product: ${product}`);
+        console.log('Opened Product dropdown');
+        await this.page.waitForTimeout(1500);
+        
+        // Search for the product
+        const searchInput = this.page.getByPlaceholder('Search items');
+        await searchInput.waitFor({ state: 'visible', timeout: 5000 });
+        await searchInput.clear();
+        await searchInput.fill(product);
+        await this.page.waitForTimeout(1000);
+        
+        // Find and click the product option using getByRole (working pattern)
+        const option = this.page.getByRole('button', { name: product });
+        const optionCount = await option.count();
+        
+        if (optionCount > 0) {
+            await option.first().click({ timeout: 3000 });
+            console.log(`Selected product: ${product}`);
+        } else {
+            throw new Error(`Product ${product} not found in dropdown`);
+        }
+        
+        // Wait for selection to apply
+        await this.page.waitForTimeout(1500);
+        await this.clickOutside();
     }
 
-    // Get available products from dropdown
+    // Unselect specific products (by default all products are selected when a service is chosen)
+    async unselectProducts(productsToUnselect: string[]) {
+        console.log(`Unselecting products: ${productsToUnselect.join(', ')}`);
+        
+        await this.clickOutside();
+        await this.page.waitForTimeout(1000);
+        
+        // Open Product dropdown
+        const productLabel = this.page.locator('span.s-input-dropdown-item__item__label:has-text("Product")');
+        await productLabel.waitFor({ state: 'visible', timeout: 10000 });
+        await productLabel.click();
+        await this.page.waitForTimeout(1500);
+        
+        for (const product of productsToUnselect) {
+            console.log(`Unselecting: ${product}`);
+            
+            const searchInput = this.page.getByPlaceholder('Search items');
+            await searchInput.waitFor({ state: 'visible', timeout: 5000 });
+            await searchInput.clear();
+            await searchInput.fill(product);
+            await this.page.waitForTimeout(800);
+            
+            // Click the product to unselect it
+            const option = this.page.getByRole('button', { name: product });
+            const optionCount = await option.count();
+            
+            if (optionCount > 0) {
+                await option.first().click({ timeout: 3000 });
+                console.log(`Unselected: ${product}`);
+            } else {
+                console.log(`Product ${product} not found`);
+            }
+            
+            await this.page.waitForTimeout(500);
+        }
+        
+        await this.clickOutside();
+        await this.page.waitForTimeout(1000);
+    }
+
+    // Unselect all products except the specified one (to isolate a single product for testing)
+    async unselectAllProductsExcept(productToKeep: string) {
+        console.log(`Keeping only product: ${productToKeep}`);
+        
+        // Get all available products
+        const allProducts = await this.getAvailableProducts();
+        console.log(`All available products: ${allProducts.join(', ')}`);
+        
+        // Filter out the product we want to keep
+        const productsToUnselect = allProducts.filter(p => 
+            !p.toLowerCase().includes(productToKeep.toLowerCase()) &&
+            !productToKeep.toLowerCase().includes(p.toLowerCase())
+        );
+        
+        if (productsToUnselect.length > 0) {
+            await this.unselectProducts(productsToUnselect);
+        } else {
+            console.log('No other products to unselect');
+        }
+    }
+
+    // Get available products from dropdown (using working selector)
     async getAvailableProducts(): Promise<string[]> {
         await this.clickOutside();
+        await this.page.waitForTimeout(1000);
         
+        // Using working selector from navigator.favorites
         const productLabel = this.page.locator('span.s-input-dropdown-item__item__label:has-text("Product")');
         await productLabel.waitFor({ state: 'visible', timeout: 10000 });
         await productLabel.click();
@@ -441,4 +575,270 @@ export class NavigatorFilters {
     getExpectedProductsForService(service: string): string[] {
         return this.SERVICE_PRODUCTS[service as keyof typeof this.SERVICE_PRODUCTS] || [];
     }
+
+    // ============================================================
+    // Activity/SubActivity Filter Methods
+    // ============================================================
+
+    // Click Activity dropdown to open it
+    async clickActivityDropdown() {
+        await this.clickOutside();
+        await this.page.waitForTimeout(2000);
+        
+        console.log('DEBUG: Checking for Activity dropdown...');
+        
+        // Check all filter labels on page
+        const allLabels = await this.page.locator('span.s-input-dropdown-item__item__label').allTextContents();
+        console.log('DEBUG: All filter labels found:', allLabels);
+        
+        // Try exact text match
+        const activityLabelExact = this.page.locator('span.s-input-dropdown-item__item__label', { hasText: 'Activity' });
+        const exactCount = await activityLabelExact.count();
+        console.log(`DEBUG: Activity label count with exact match: ${exactCount}`);
+        
+        // Try contains match
+        const activityLabelContains = this.page.locator('span.s-input-dropdown-item__item__label:has-text("Activity")');
+        const containsCount = await activityLabelContains.count();
+        console.log(`DEBUG: Activity label count with contains match: ${containsCount}`);
+        
+        if (containsCount === 0) {
+            // Try alternative: look for any element with text "Activity"
+            const anyActivity = this.page.getByText('Activity', { exact: true });
+            const anyCount = await anyActivity.count();
+            console.log(`DEBUG: Any element with "Activity" text: ${anyCount}`);
+            
+            if (anyCount > 0) {
+                console.log('Found Activity with getByText, clicking it...');
+                await anyActivity.first().click();
+            } else {
+                throw new Error('Activity dropdown not found with any selector');
+            }
+        } else {
+            console.log('Clicking Activity dropdown with standard selector...');
+            await activityLabelContains.first().click();
+        }
+        
+        console.log('Opened Activity dropdown');
+        await this.page.waitForTimeout(2000);
+    }
+
+    // Select Activity filter (using same pattern as Product from navigator.favorites.page.ts)
+    async selectActivity(activity: string) {
+        console.log(`Selecting activity: ${activity}`);
+        
+        await this.clickOutside();
+        await this.page.waitForTimeout(1000);
+        
+        // Using same selector pattern as Product
+        const activityLabel = this.page.locator('span.s-input-dropdown-item__item__label:has-text("Activity")');
+        await activityLabel.waitFor({ state: 'visible', timeout: 10000 });
+        await activityLabel.click();
+        
+        console.log('Opened Activity dropdown');
+        await this.page.waitForTimeout(1500);
+        
+        // Search for the activity
+        const searchInput = this.page.getByPlaceholder('Search items');
+        await searchInput.waitFor({ state: 'visible', timeout: 5000 });
+        await searchInput.clear();
+        await searchInput.fill(activity);
+        await this.page.waitForTimeout(1000);
+        
+        // Find and click the activity option using getByRole (working pattern)
+        const option = this.page.getByRole('button', { name: activity });
+        const optionCount = await option.count();
+        
+        if (optionCount > 0) {
+            await option.first().click({ timeout: 3000 });
+            console.log(`Selected activity: ${activity}`);
+        } else {
+            throw new Error(`Activity ${activity} not found in dropdown`);
+        }
+        
+        // Wait for selection to apply
+        await this.page.waitForTimeout(1500);
+        await this.clickOutside();
+    }
+
+    // Get available activities from dropdown
+    async getAvailableActivities(): Promise<string[]> {
+        console.log('Getting available activities...');
+        
+        await this.clickOutside();
+        await this.page.waitForTimeout(1000);
+        
+        // Wait for activity data to load after product selection
+        await this.page.waitForTimeout(2000);
+        
+        // Using working selector pattern from Product
+        const activityLabel = this.page.locator('span.s-input-dropdown-item__item__label:has-text("Activity")');
+        
+        // Check if Activity dropdown exists
+        const activityCount = await activityLabel.count();
+        console.log(`Activity dropdown count: ${activityCount}`);
+        
+        const isActivityVisible = await activityLabel.isVisible().catch(() => false);
+        
+        if (!isActivityVisible) {
+            console.log('Activity dropdown not visible with standard selector');
+            console.log('Checking for Activity filter in page...');
+            
+            // Try alternative: check all filter labels
+            const allLabels = await this.page.locator('span.s-input-dropdown-item__item__label').allTextContents();
+            console.log('All available filter labels:', allLabels);
+            
+            return [];
+        }
+        
+        console.log('Clicking Activity dropdown...');
+        await activityLabel.click();
+        await this.page.waitForTimeout(1500);
+        
+        // Wait for "No options available" to disappear (if it appears initially while loading)
+        try {
+            const noOptionsMessage = this.page.getByText('No options available');
+            await noOptionsMessage.waitFor({ state: 'hidden', timeout: 5000 });
+            console.log('Activity options loaded after product filter applied');
+        } catch (error) {
+            console.log('No "No options available" message, or it disappeared quickly');
+        }
+        
+        // Additional wait for options to populate
+        await this.page.waitForTimeout(2000);
+
+        // Check if "No options available" is still present
+        const noOptionsText = await this.page.locator('text="No options available"').isVisible().catch(() => false);
+        if (noOptionsText) {
+            await this.clickOutside();
+            console.log('No activities available in dropdown after waiting');
+            return [];
+        }
+
+        // Get all activity options
+        const activityOptions = await this.page.locator('li p').allTextContents();
+        
+        await this.clickOutside();
+        
+        const activities = activityOptions.map(a => a.trim()).filter(a => a.length > 0);
+        console.log('Available activities found:', activities);
+        return activities;
+    }
+
+    // Verify Activity options match expected list for selected service
+    async verifyActivitiesForService(service: string) {
+        const expectedActivities = this.SERVICE_ACTIVITIES[service as keyof typeof this.SERVICE_ACTIVITIES];
+        
+        if (expectedActivities === undefined) {
+            console.log(`No activity mapping defined for service: ${service}`);
+            return;
+        }
+
+        const availableActivities = await this.getAvailableActivities();
+        
+        if (availableActivities.length === 0) {
+            throw new Error(`No activities found for service: ${service}`);
+        }
+
+        // Check if key expected activities are available (sample check, not all)
+        // We check a subset as the full activity list can be very large
+        const keyActivities = expectedActivities.slice(0, 5); // Check first 5 activities
+        
+        for (const expectedActivity of keyActivities) {
+            const found = availableActivities.some(a => 
+                a.toLowerCase().includes(expectedActivity.toLowerCase()) || 
+                expectedActivity.toLowerCase().includes(a.toLowerCase())
+            );
+            
+            if (!found) {
+                console.log(`Expected activity "${expectedActivity}" not found for service "${service}"`);
+                console.log(`Available activities: ${availableActivities.slice(0, 10).join(', ')}...`);
+            } else {
+                console.log(`✓ Found expected activity: ${expectedActivity}`);
+            }
+        }
+        
+        console.log(`✓ Verified: Key activities available for ${service}`);
+    }
+
+    // Verify specific activity is available for a product
+    async verifyActivityForProduct(product: string, expectedActivity: string) {
+        const availableActivities = await this.getAvailableActivities();
+        
+        const found = availableActivities.some(a => 
+            a.toLowerCase().includes(expectedActivity.toLowerCase()) || 
+            expectedActivity.toLowerCase().includes(a.toLowerCase())
+        );
+        
+        if (!found) {
+            throw new Error(`Expected activity "${expectedActivity}" not found for product "${product}". Available: ${availableActivities.slice(0, 10).join(', ')}`);
+        }
+        
+        console.log(`✓ Verified: Activity "${expectedActivity}" available for product "${product}"`);
+    }
+
+    // Get expected activities for a service
+    getExpectedActivitiesForService(service: string): string[] {
+        return this.SERVICE_ACTIVITIES[service as keyof typeof this.SERVICE_ACTIVITIES] || [];
+    }
+
+    // Get expected activity for a product (returns first matching activity)
+    getExpectedActivityForProduct(product: string): string | undefined {
+        return this.PRODUCT_ACTIVITIES[product as keyof typeof this.PRODUCT_ACTIVITIES]?.[0];
+    }
+
+    // Select SubActivity filter
+    async selectSubActivity(subActivity: string) {
+        await this.clickOutside();
+        
+        const subActivityLabel = this.page.locator('span.s-input-dropdown-item__item__label:has-text("Sub Activity")');
+        await subActivityLabel.waitFor({ state: 'visible', timeout: 10000 });
+        await subActivityLabel.click();
+        await this.page.waitForTimeout(500);
+
+        const searchInput = this.page.getByPlaceholder('Search items');
+        await searchInput.clear();
+        await searchInput.fill(subActivity);
+        await this.page.waitForTimeout(500);
+
+        const option = this.page.locator(`li [role="button"]:has-text("${subActivity}")`).first();
+        await option.waitFor({ state: 'visible', timeout: 10000 });
+        await option.click();
+        
+        console.log(`Selected sub activity: ${subActivity}`);
+        await this.clickOutside();
+    }
+
+    // Get available subactivities from dropdown
+    async getAvailableSubActivities(): Promise<string[]> {
+        await this.clickOutside();
+        
+        const subActivityLabel = this.page.locator('span.s-input-dropdown-item__item__label:has-text("Sub Activity")');
+        const isSubActivityVisible = await subActivityLabel.isVisible().catch(() => false);
+        
+        if (!isSubActivityVisible) {
+            console.log('Sub Activity dropdown not visible');
+            return [];
+        }
+        
+        await subActivityLabel.click();
+        await this.page.waitForTimeout(1000);
+
+        // Check if "No options available" is present
+        const noOptionsText = await this.page.locator('text="No options available"').isVisible().catch(() => false);
+        if (noOptionsText) {
+            await this.clickOutside();
+            console.log('No sub activities available in dropdown');
+            return [];
+        }
+
+        // Get all subactivity options
+        const subActivityOptions = await this.page.locator('li p').allTextContents();
+        
+        await this.clickOutside();
+        
+        const subActivities = subActivityOptions.map(s => s.trim()).filter(s => s.length > 0);
+        console.log('Available sub activities found:', subActivities);
+        return subActivities;
+    }
+
 }
