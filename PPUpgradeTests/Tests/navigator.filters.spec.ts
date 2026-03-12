@@ -249,4 +249,122 @@ test.describe('Navigator Filters - Validation Rules', () => {
         await navigatorFilters.clickOutside();
         
         console.log('\n✓ Product-Activity relationship verified successfully');
-    });});
+    });
+
+    test('SubActivity-Activity relationship test - verify subactivities for Banking activities', async ({ page }) => {
+        const loginPage = new LoginPage(page);
+        
+        // Login
+        await loginPage.navigate();
+        await loginPage.login();
+        await expect(await loginPage.isLoginSuccessful()).toBeTruthy();
+
+        // Navigate to Navigator Compare Licensing page
+        await page.goto('https://platform.test-simmons.com/navigator/compare/licensing');
+        
+        // Wait for the page to load completely
+        await page.waitForLoadState('networkidle');
+        await page.waitForTimeout(2000);
+
+        // Create NavigatorFilters instance
+        const navigatorFilters = new NavigatorFilters(page);
+
+        console.log('\n========== Testing Activity-SubActivity relationship ==========');
+        
+        // Select a jurisdiction
+        const jurisdiction = 'Austria';
+        console.log(`Selecting jurisdiction: ${jurisdiction}`);
+        await navigatorFilters.selectJurisdiction(jurisdiction);
+        await page.waitForLoadState('networkidle');
+        await page.waitForTimeout(1000);
+
+        // Select Banking service
+        const service = 'Banking';
+        await navigatorFilters.selectService(service);
+        await page.waitForLoadState('networkidle');
+        await page.waitForTimeout(1500);
+
+        // Test Activity-SubActivity relationships
+        // NOTE: Only "Deposits" product with "Deposit Taking" activity has subactivities
+        // Other activities (FX, Guarantees, Payments) show "No options available"
+        const activityTests = [
+            { product: 'Deposits', activity: 'Deposit Taking', hasSubActivities: true, 
+              expectedSubActivities: ['Certificates of deposit', 'Current account', 'Deposits', 'Structured deposits', 'Sweep deposit accounts', 'Term deposits'] },
+            { product: 'FX', activity: 'Foreign Exchange Trading', hasSubActivities: false, expectedSubActivities: [] },
+            { product: 'Guarantees and Commitments', activity: 'Guarantees and Commitments', hasSubActivities: false, expectedSubActivities: [] },
+            { product: 'Payments', activity: 'Payment Services', hasSubActivities: false, expectedSubActivities: [] }
+        ];
+        
+        // Pick a random activity to test
+        const randomIndex = Math.floor(Math.random() * activityTests.length);
+        const test = activityTests[randomIndex];
+        
+        console.log(`\n========== RANDOMLY SELECTED: Testing Activity "${test.activity}" for Product "${test.product}" ==========\n`);
+        
+        // Unselect all products EXCEPT the one we want to test
+        await navigatorFilters.unselectAllProductsExcept(test.product);
+        await page.waitForLoadState('networkidle');
+        await page.waitForTimeout(3000); // Wait for Activity dropdown to populate
+        
+        console.log(`Only ${test.product} selected, waiting for activities to load...`);
+        
+        // Unselect all activities EXCEPT the one we want to test
+        await navigatorFilters.unselectAllActivitiesExcept(test.activity);
+        await page.waitForLoadState('networkidle');
+        await page.waitForTimeout(5000); // Wait longer for SubActivity dropdown to appear
+        
+        console.log(`Only ${test.activity} selected, waiting for subactivities to load...`);
+        console.log('Waiting additional time for SubActivity dropdown to appear...');
+        await page.waitForTimeout(3000); // Additional wait for SubActivity
+
+        // Click SubActivity dropdown to see what's available/selected
+        console.log('Clicking SubActivity dropdown to see subactivities...');
+        await navigatorFilters.clickSubActivityDropdown();
+        await page.waitForTimeout(2000);
+        
+        // Check for "No options available" message
+        const noOptionsAvailable = await page.locator('text="No options available"').isVisible().catch(() => false);
+        
+        if (test.hasSubActivities) {
+            // This activity should have subactivities
+            if (noOptionsAvailable) {
+                console.log(`\n✗ FAIL: Expected subactivities for "${test.activity}" but found "No options available"`);
+                throw new Error(`SubActivities expected for "${test.activity}" but none found`);
+            }
+            
+            // Get all available subactivities
+            const availableSubActivities = await page.locator('li [role="button"]').allTextContents();
+            console.log(`Available subactivities for ${test.activity}:`, availableSubActivities);
+            
+            // Check if at least some expected subactivities are present
+            const foundSubActivities = test.expectedSubActivities.filter(expected => 
+                availableSubActivities.some(available => 
+                    available.toLowerCase().includes(expected.toLowerCase())
+                )
+            );
+            
+            if (foundSubActivities.length > 0) {
+                console.log(`\n✓ PASS: Found ${foundSubActivities.length}/${test.expectedSubActivities.length} expected subactivities for "${test.activity}"`);
+                console.log(`Found: ${foundSubActivities.join(', ')}`);
+            } else {
+                console.log(`\n✗ FAIL: No expected subactivities found for "${test.activity}"`);
+                console.log(`Expected: ${test.expectedSubActivities.slice(0, 5).join(', ')}`);
+                console.log(`Available: ${availableSubActivities.slice(0, 10).join(', ')}`);
+                throw new Error(`No expected subactivities found for "${test.activity}"`);
+            }
+        } else {
+            // This activity should NOT have subactivities
+            if (noOptionsAvailable) {
+                console.log(`\n✓ PASS: Correctly shows "No options available" for "${test.activity}" (no subactivities expected)`);
+            } else {
+                const availableSubActivities = await page.locator('li [role="button"]').allTextContents();
+                console.log(`\n✗ FAIL: Expected "No options available" for "${test.activity}" but found subactivities:`, availableSubActivities);
+                throw new Error(`No subactivities expected for "${test.activity}" but some were found`);
+            }
+        }
+        
+        await navigatorFilters.clickOutside();
+        
+        console.log('\n✓ Activity-SubActivity relationship verified successfully');
+    });
+});

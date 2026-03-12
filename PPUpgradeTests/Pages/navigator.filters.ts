@@ -76,6 +76,21 @@ export class NavigatorFilters {
         'Payments': ['Payments']
     };
 
+    // Activity-SubActivity relationship mapping (subactivities specific to activities within Banking service)
+    private readonly ACTIVITY_SUBACTIVITIES = {
+        'Deposit Taking': [
+            'Certificates of deposit',
+            'Current account',
+            'Deposits',
+            'Structured deposits',
+            'Sweep deposit accounts',
+            'Term deposits'
+        ],
+        'Foreign Exchange Trading': [], // No subactivities
+        'Guarantees and Commitments': [], // No subactivities
+        'Payment Services': [] // No subactivities
+    };
+
     constructor(page: Page) {
         this.page = page;
     }
@@ -580,6 +595,68 @@ export class NavigatorFilters {
     // Activity/SubActivity Filter Methods
     // ============================================================
 
+    // Unselect specific activities (by default all activities are selected when products are selected)
+    async unselectActivities(activitiesToUnselect: string[]) {
+        console.log(`Unselecting activities: ${activitiesToUnselect.join(', ')}`);
+        
+        await this.clickOutside();
+        await this.page.waitForTimeout(1000);
+        
+        // Open Activity dropdown
+        const activityLabel = this.page.locator('span.s-input-dropdown-item__item__label:has-text("Activity")');
+        await activityLabel.waitFor({ state: 'visible', timeout: 10000 });
+        await activityLabel.click();
+        await this.page.waitForTimeout(1500);
+        
+        for (const activity of activitiesToUnselect) {
+            console.log(`Unselecting: ${activity}`);
+            
+            const searchInput = this.page.getByPlaceholder('Search items');
+            await searchInput.waitFor({ state: 'visible', timeout: 5000 });
+            await searchInput.clear();
+            await searchInput.fill(activity);
+            await this.page.waitForTimeout(800);
+            
+            // Click the activity to unselect it (toggle behavior)
+            const option = this.page.getByRole('button', { name: activity });
+            const optionCount = await option.count();
+            
+            if (optionCount > 0) {
+                await option.first().click({ timeout: 3000 });
+                console.log(`Unselected: ${activity}`);
+            } else {
+                console.log(`Activity ${activity} not found`);
+            }
+            
+            await this.page.waitForTimeout(500);
+        }
+        
+        await this.clickOutside();
+        await this.page.waitForTimeout(1000);
+    }
+
+    // Unselect all activities except the specified one (to isolate a single activity for testing)
+    async unselectAllActivitiesExcept(activityToKeep: string) {
+        console.log(`Keeping only activity: ${activityToKeep}`);
+        
+        // Get all available activities
+        const allActivities = await this.getAvailableActivities();
+        console.log(`All available activities: ${allActivities.join(', ')}`);
+        
+        // Filter out the activity we want to keep
+        const activitiesToUnselect = allActivities.filter(a => 
+            !a.toLowerCase().includes(activityToKeep.toLowerCase()) &&
+            !activityToKeep.toLowerCase().includes(a.toLowerCase())
+        );
+        
+        if (activitiesToUnselect.length > 0) {
+            console.log(`Unselecting ${activitiesToUnselect.length} activities`);
+            await this.unselectActivities(activitiesToUnselect);
+        } else {
+            console.log('No activities to unselect');
+        }
+    }
+
     // Click Activity dropdown to open it
     async clickActivityDropdown() {
         await this.clickOutside();
@@ -808,36 +885,116 @@ export class NavigatorFilters {
         await this.clickOutside();
     }
 
-    // Get available subactivities from dropdown
-    async getAvailableSubActivities(): Promise<string[]> {
+    // Click SubActivity dropdown to open it
+    async clickSubActivityDropdown() {
         await this.clickOutside();
         
+        // Wait longer for SubActivity dropdown to appear after activity selection
+        console.log('Waiting for SubActivity dropdown to appear...');
+        await this.page.waitForTimeout(4000);
+        
+        console.log('DEBUG: Checking for SubActivity dropdown...');
+        
+        // Check all filter labels on page
+        const allLabels = await this.page.locator('span.s-input-dropdown-item__item__label').allTextContents();
+        console.log('DEBUG: All filter labels found:', allLabels);
+        
+        // Try multiple variations of SubActivity text
+        const variations = ['Sub Activity', 'SubActivity', 'Sub-Activity', 'Subactivity'];
+        
+        for (const variation of variations) {
+            const labelContains = this.page.locator('span.s-input-dropdown-item__item__label:has-text("' + variation + '")');
+            const count = await labelContains.count();
+            
+            if (count > 0) {
+                console.log(`Found SubActivity dropdown with text: "${variation}"`);
+                await labelContains.first().click();
+                console.log('Opened SubActivity dropdown');
+                await this.page.waitForTimeout(2000);
+                return;
+            }
+        }
+        
+        // If not found with standard selector, try getByText with variations
+        console.log('SubActivity not found with standard selector, trying alternatives...');
+        for (const variation of variations) {
+            const anySubActivity = this.page.getByText(variation, { exact: true });
+            const anyCount = await anySubActivity.count();
+            
+            if (anyCount > 0) {
+                console.log(`Found SubActivity with getByText: "${variation}"`);
+                await anySubActivity.first().click();
+                console.log('Opened SubActivity dropdown');
+                await this.page.waitForTimeout(2000);
+                return;
+            }
+        }
+        
+        // Still not found - throw detailed error
+        throw new Error(`SubActivity dropdown not found with any variation. Available filters: ${allLabels.join(', ')}`);
+    }
+
+    // Get available subactivities from dropdown
+    async getAvailableSubActivities(): Promise<string[]> {
+        console.log('Getting available subactivities...');
+        
+        await this.clickOutside();
+        await this.page.waitForTimeout(1000);
+        
+        // Wait for subactivity data to load after activity selection
+        await this.page.waitForTimeout(2000);
+        
+        // Using working selector pattern
         const subActivityLabel = this.page.locator('span.s-input-dropdown-item__item__label:has-text("Sub Activity")');
+        
+        // Check if SubActivity dropdown exists
+        const subActivityCount = await subActivityLabel.count();
+        console.log(`SubActivity dropdown count: ${subActivityCount}`);
+        
         const isSubActivityVisible = await subActivityLabel.isVisible().catch(() => false);
         
         if (!isSubActivityVisible) {
-            console.log('Sub Activity dropdown not visible');
+            console.log('Sub Activity dropdown not visible with standard selector');
+            console.log('Checking for SubActivity filter in page...');
+            
+            // Try alternative: check all filter labels
+            const allLabels = await this.page.locator('span.s-input-dropdown-item__item__label').allTextContents();
+            console.log('All available filter labels:', allLabels);
+            
             return [];
         }
         
+        console.log('Clicking SubActivity dropdown...');
         await subActivityLabel.click();
-        await this.page.waitForTimeout(1000);
+        await this.page.waitForTimeout(1500);
+        
+        // Wait for "No options available" to disappear (if it appears initially while loading)
+        try {
+            const noOptionsMessage = this.page.getByText('No options available');
+            await noOptionsMessage.waitFor({ state: 'hidden', timeout: 5000 });
+            console.log('SubActivity options loaded after activity filter applied');
+        } catch (error) {
+            console.log('No "No options available" message, or it disappeared quickly');
+        }
+        
+        // Additional wait for options to populate
+        await this.page.waitForTimeout(2000);
 
-        // Check if "No options available" is present
+        // Check if "No options available" is still present
         const noOptionsText = await this.page.locator('text="No options available"').isVisible().catch(() => false);
         if (noOptionsText) {
             await this.clickOutside();
-            console.log('No sub activities available in dropdown');
+            console.log('No subactivities available in dropdown after waiting');
             return [];
         }
 
-        // Get all subactivity options
-        const subActivityOptions = await this.page.locator('li p').allTextContents();
+        // Get all subactivity options using same pattern as Activity
+        const subActivityOptions = await this.page.locator('li [role="button"]').allTextContents();
         
         await this.clickOutside();
         
         const subActivities = subActivityOptions.map(s => s.trim()).filter(s => s.length > 0);
-        console.log('Available sub activities found:', subActivities);
+        console.log('Available subactivities found:', subActivities);
         return subActivities;
     }
 
