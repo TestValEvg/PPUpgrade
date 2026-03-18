@@ -65,19 +65,77 @@ export class NavigatorFilters {
             'Record keeping',
             'Marketing materials - additional considerations',
             'Other local restrictions'
+        ],
+        'Securities': [
+            'Securities Products',
+            'Marketing by a third party entity',
+            'Reach In treatment',
+            'Fly In treatment',
+            'Fly Out treatment',
+            'Will use of Local Licensed Entity or Intermediary',
+            'Pre-Marketing',
+            'Generic Marketing Regime',
+            'Private Placement Regime',
+            'Other Local Law Licence or Exemption available',
+            'Tolerated Market Practice available?',
+            'Is Product registration available?',
+            'Avoiding a Public Offer',
+            'Civil/Administrative sanctions',
+            'Criminal sanctions',
+            'Risk of liability',
+            'Risk of unenforceability',
+            'Enforcement trends',
+            'Marketing materials - additional considerations',
+            'Selling restriction language / Legends for services',
+            'Possibility of public offer',
+            'Other local restrictions',
+            'On sale liability',
+            'Market abuse and insider dealing',
+            // General activities (added to all services except Banking, CF, Lending)
+            'Cold calling',
+            'Product intervention considerations',
+            'PRIIPS/ KID considerations',
+            'Cross Border conduct considerations',
+            'Currency name',
+            'General',
+            'Trading restriction',
+            'Transfer/ Payment restrictions',
+            'Repatriation restrictions',
+            'Conversion restrictions',
+            'Offshore Account restrictions',
+            'Reference currency',
+            'Territorial reach of currency controls',
+            'Other restrictions',
+            'Availability of exemptions',
+            'Reporting requirements',
+            'Sanctions',
+            'Irrevocability of payment instruction',
+            'Finality of currency transfer',
+            'Impact of bankruptcy',
+            'Zero hour rule',
+            'Local payment and securities settlement',
+            'Capacity and Authority',
+            'Contract (including but not limited to information on: local representations and warranties, and location of contract execution if applicable)',
+            'Governing law/ jurisdiction'
         ]
     };
 
-    // Product-Activity relationship mapping (activities specific to products within Banking service)
+    // Product-Activity relationship mapping (activities specific to products within each service)
     private readonly PRODUCT_ACTIVITIES = {
+        // Banking products
         'Deposits': ['Deposit Taking'],
         'FX': ['Foreign Exchange Trading'],
         'Guarantees and Commitments': ['Guarantees and Commitments'],
-        'Payments': ['Payments']
+        'Payments': ['Payments'],
+        // Securities products (using actual UI product names)
+        // NOTE: Excluding hidden products: Debt Securities, Equity Securities (per hidden rules)
+        'Closed Ended Funds': ['Securities Products'],
+        'Linked Products': ['Securities Products']
     };
 
-    // Activity-SubActivity relationship mapping (subactivities specific to activities within Banking service)
+    // Activity-SubActivity relationship mapping (subactivities specific to activities within each service)
     private readonly ACTIVITY_SUBACTIVITIES = {
+        // Banking activities
         'Deposit Taking': [
             'Certificates of deposit',
             'Current account',
@@ -88,7 +146,56 @@ export class NavigatorFilters {
         ],
         'Foreign Exchange Trading': [], // No subactivities
         'Guarantees and Commitments': [], // No subactivities
-        'Payment Services': [] // No subactivities
+        'Payment Services': [], // No subactivities
+        // Securities activities
+        'Marketing by a third party entity': [], // No subactivities
+        'Securities Products': [], // No subactivities
+        'Marketing materials - additional considerations': [
+            'Additional financial promotions regimes (if applicable)',
+            'Selling restriction language / Legends for services'
+        ],
+        'Other local restrictions': ['Investment restrictions'],
+        // General activities (added to Securities and other services except Banking, CF, Lending)
+        'Cold calling': [], // No subactivities
+        'Product intervention considerations': [], // No subactivities
+        'PRIIPS/ KID considerations': [], // No subactivities
+        'Cross Border conduct considerations': [
+            'Application of COB rules / continuing obligations / disapplications',
+            'Client money',
+            'Client assets',
+            'Local call and investor restrictions'
+        ],
+        'Currency name': [], // No subactivities
+        'General': [], // No subactivities
+        'Trading restriction': [], // No subactivities
+        'Transfer/ Payment restrictions': [], // No subactivities
+        'Repatriation restrictions': [], // No subactivities
+        'Conversion restrictions': [], // No subactivities
+        'Offshore Account restrictions': [], // No subactivities
+        'Reference currency': [], // No subactivities
+        'Territorial reach of currency controls': [], // No subactivities
+        'Other restrictions': [], // No subactivities
+        'Availability of exemptions': [], // No subactivities
+        'Reporting requirements': [], // No subactivities
+        'Sanctions': [], // No subactivities
+        'Irrevocability of payment instruction': [], // No subactivities
+        'Finality of currency transfer': [], // No subactivities
+        'Impact of bankruptcy': [], // No subactivities
+        'Zero hour rule': [], // No subactivities
+        'Local payment and securities settlement': [], // No subactivities
+        'Capacity and Authority': [
+            'Does the guidance set out in the Capacity and Authority Grid apply without exception in the jurisdiction?'
+        ],
+        'Contract (including but not limited to information on: local representations and warranties, and location of contract execution if applicable)': [], // No subactivities
+        'Governing law/ jurisdiction': [
+            'Recognition of choice of law - Will the jurisdictions courts recognise the choice of law?',
+            'Arbitration - Is the jurisdiction a signatory to the New York Convention?',
+            'Arbitration - Is arbitration an accepted method of dispute resolution in the jurisdiction?',
+            'Foreign judgments - Are foreign judgments recognised under local law?',
+            'Validity and Enforceability of Contracts - Are financial contracts enforceable under local law?',
+            'Validity and Enforceability of Contracts - Is the law of the jurisdiction, for the purposes of contract law, statute or contract based?',
+            'Sovereign immunity - Can entities claim sovereign immunity under local law?'
+        ]
     };
 
     constructor(page: Page) {
@@ -169,7 +276,7 @@ export class NavigatorFilters {
         await this.clickOutside();
         
         // Additional wait to ensure jurisdiction-based services are loaded
-        await this.page.waitForTimeout(2000);
+        await this.page.waitForTimeout(1000);
         
         // Click on the Service dropdown
         const serviceText = this.page.getByText('Service', { exact: true }).first();
@@ -177,7 +284,7 @@ export class NavigatorFilters {
         await serviceText.click();
 
         // Wait for dropdown to open and populate with jurisdiction-specific services
-        await this.page.waitForTimeout(1500);
+        await this.page.waitForTimeout(800);
 
         const searchInput = this.page.getByPlaceholder('Search items');
         await searchInput.waitFor({ state: 'visible', timeout: 5000 });
@@ -192,14 +299,14 @@ export class NavigatorFilters {
         }
         
         // Additional wait after options are loaded
-        await this.page.waitForTimeout(2500);
+        await this.page.waitForTimeout(1000);
 
         // Search for the service
         await searchInput.clear();
         await searchInput.fill(service);
 
         // Wait for search to filter options
-        await this.page.waitForTimeout(1500);
+        await this.page.waitForTimeout(800);
 
         // Find and click the service option
         const option = this.page.getByRole('button', { name: service });
@@ -213,7 +320,7 @@ export class NavigatorFilters {
         }
 
         // Wait for selection to apply
-        await this.page.waitForTimeout(2500);
+        await this.page.waitForTimeout(1000);
         await this.clickOutside();
     }
 
@@ -224,7 +331,7 @@ export class NavigatorFilters {
         await this.clickOutside();
         
         // Additional wait to ensure jurisdiction-based services are loaded
-        await this.page.waitForTimeout(2000);
+        await this.page.waitForTimeout(1000);
         
         // Click on the Service dropdown
         const serviceText = this.page.getByText('Service', { exact: true }).first();
@@ -232,7 +339,7 @@ export class NavigatorFilters {
         await serviceText.click();
 
         // Wait for dropdown to open
-        await this.page.waitForTimeout(1500);
+        await this.page.waitForTimeout(800);
 
         const searchInput = this.page.getByPlaceholder('Search items');
         await searchInput.waitFor({ state: 'visible', timeout: 5000 });
@@ -246,14 +353,14 @@ export class NavigatorFilters {
         }
         
         // Additional wait after options are loaded
-        await this.page.waitForTimeout(2000);
+        await this.page.waitForTimeout(1000);
 
         // Search for the service
         await searchInput.clear();
         await searchInput.fill(service);
 
         // Wait for search to filter options
-        await this.page.waitForTimeout(1500);
+        await this.page.waitForTimeout(800);
 
         // Check if the service option exists
         const option = this.page.getByRole('button', { name: service });
@@ -502,13 +609,13 @@ export class NavigatorFilters {
     // Get available products from dropdown (using working selector)
     async getAvailableProducts(): Promise<string[]> {
         await this.clickOutside();
-        await this.page.waitForTimeout(1000);
+        await this.page.waitForTimeout(600);
         
         // Using working selector from navigator.favorites
         const productLabel = this.page.locator('span.s-input-dropdown-item__item__label:has-text("Product")');
         await productLabel.waitFor({ state: 'visible', timeout: 10000 });
         await productLabel.click();
-        await this.page.waitForTimeout(1000);
+        await this.page.waitForTimeout(600);
 
         // Check if "No options available" is present
         const noOptionsText = await this.page.locator('text="No options available"').isVisible().catch(() => false);

@@ -70,8 +70,88 @@ test.describe('Navigator Filters - Validation Rules', () => {
         await expect(searchButton).toBeEnabled();
     });
 
-    test('Product-Service relationship test - verify correct products for each service', async ({ page }) => {
+    test('Product-Service relationship - Banking service shows correct products', async ({ page }) => {
         const loginPage = new LoginPage(page);
+        const service = 'Banking';
+        
+        // Login
+        await loginPage.navigate();
+        await loginPage.login();
+        await expect(await loginPage.isLoginSuccessful()).toBeTruthy();
+
+        // Navigate to Navigator Compare Licensing page
+        await page.goto('https://platform.test-simmons.com/navigator/compare/licensing');
+        
+        // Wait for the page to load completely
+        await page.waitForLoadState('networkidle');
+        await page.waitForTimeout(1500);
+
+        // Create NavigatorFilters instance for product verification
+        const navigatorFilters = new NavigatorFilters(page);
+
+        const jurisdictions = ['Argentina', 'Austria', 'Belgium', 'Canada', 'Germany', 'France', 'UK'];
+        
+        console.log(`\n========== Testing Service: ${service} ==========`);
+        
+        // Try jurisdictions until we find one that has this service
+        let serviceSelected = false;
+        for (const jurisdiction of jurisdictions) {
+            console.log(`Trying jurisdiction: ${jurisdiction}`);
+            
+            // Select jurisdiction
+            await page.getByText('Jurisdiction', { exact: true }).click();
+            await page.waitForTimeout(200);
+            
+            const searchInput = page.getByPlaceholder('Search items');
+            await searchInput.clear();
+            await searchInput.fill(jurisdiction);
+            await page.waitForTimeout(300);
+            
+            const jurisdictionButton = page.locator(`li [role="button"]:has-text("${jurisdiction}")`).first();
+            const jurisdictionCount = await jurisdictionButton.count();
+            
+            if (jurisdictionCount > 0) {
+                await jurisdictionButton.click();
+                await page.keyboard.press('Escape');
+                
+                // Wait for network requests to complete after jurisdiction selection
+                await page.waitForLoadState('networkidle');
+                await page.waitForTimeout(800);
+                
+                // Check if service is available for this jurisdiction
+                const serviceAvailable = await navigatorFilters.isServiceAvailable(service);
+                
+                if (serviceAvailable) {
+                    // Select the service using the method
+                    await navigatorFilters.selectService(service);
+                    
+                    serviceSelected = true;
+                    console.log(`✓ Service ${service} selected for ${jurisdiction}`);
+                    break;
+                } else {
+                    console.log(`Service ${service} not available for ${jurisdiction}, clearing and trying next...`);
+                    await navigatorFilters.clearAllFilters();
+                    await page.waitForLoadState('networkidle');
+                    await page.waitForTimeout(1000);
+                    await page.keyboard.press('Escape');
+                    await page.waitForTimeout(300);
+                }
+            }
+        }
+        
+        if (!serviceSelected) {
+            throw new Error(`Could not find a jurisdiction with service: ${service}`);
+        }
+        
+        // Verify products match expected list
+        await navigatorFilters.verifyProductOptionsForService(service);
+        
+        console.log(`\n✓ ${service} Service-Product relationship verified successfully`);
+    });
+
+    test('Product-Service relationship - Derivatives & FX service shows correct products', async ({ page }) => {
+        const loginPage = new LoginPage(page);
+        const service = 'Derivatives & FX';
         
         // Login
         await loginPage.navigate();
@@ -88,79 +168,222 @@ test.describe('Navigator Filters - Validation Rules', () => {
         // Create NavigatorFilters instance for product verification
         const navigatorFilters = new NavigatorFilters(page);
 
-        // Test each service and verify its products
-        // Note: Corporate Finance and Funds skipped - not consistently available across test jurisdictions
-        const services = ['Banking', 'Derivatives & FX', 'Lending', 'Securities'];
-        const jurisdictions = ['Austria', 'Belgium', 'Canada', 'Germany', 'France', 'UK'];
+        const jurisdictions = ['Argentina', 'Austria', 'Belgium', 'Canada', 'Germany', 'France', 'UK'];
         
-        for (const service of services) {
-            console.log(`\n========== Testing Service: ${service} ==========`);
+        console.log(`\n========== Testing Service: ${service} ==========`);
+        
+        // Try jurisdictions until we find one that has this service
+        let serviceSelected = false;
+        for (const jurisdiction of jurisdictions) {
+            console.log(`Trying jurisdiction: ${jurisdiction}`);
             
-            // Ensure clean state before starting new service
-            await page.keyboard.press('Escape');
+            // Select jurisdiction
+            await page.getByText('Jurisdiction', { exact: true }).click();
             await page.waitForTimeout(300);
             
-            // Try jurisdictions until we find one that has this service
-            let serviceSelected = false;
-            for (const jurisdiction of jurisdictions) {
-                console.log(`Trying jurisdiction: ${jurisdiction}`);
+            const searchInput = page.getByPlaceholder('Search items');
+            await searchInput.clear();
+            await searchInput.fill(jurisdiction);
+            await page.waitForTimeout(500);
+            
+            const jurisdictionButton = page.locator(`li [role="button"]:has-text("${jurisdiction}")`).first();
+            const jurisdictionCount = await jurisdictionButton.count();
+            
+            if (jurisdictionCount > 0) {
+                await jurisdictionButton.click();
+                await page.keyboard.press('Escape');
                 
-                // Select jurisdiction
-                await page.getByText('Jurisdiction', { exact: true }).click();
-                await page.waitForTimeout(300);
+                // Wait for network requests to complete after jurisdiction selection
+                await page.waitForLoadState('networkidle');
+                await page.waitForTimeout(1000);
                 
-                const searchInput = page.getByPlaceholder('Search items');
-                await searchInput.clear();
-                await searchInput.fill(jurisdiction);
-                await page.waitForTimeout(500);
+                // Check if service is available for this jurisdiction
+                const serviceAvailable = await navigatorFilters.isServiceAvailable(service);
                 
-                const jurisdictionButton = page.locator(`li [role="button"]:has-text("${jurisdiction}")`).first();
-                const jurisdictionCount = await jurisdictionButton.count();
-                
-                if (jurisdictionCount > 0) {
-                    await jurisdictionButton.click();
-                    await page.keyboard.press('Escape');
+                if (serviceAvailable) {
+                    // Select the service using the method
+                    await navigatorFilters.selectService(service);
                     
-                    // Wait for network requests to complete after jurisdiction selection
+                    serviceSelected = true;
+                    console.log(`✓ Service ${service} selected for ${jurisdiction}`);
+                    break;
+                } else {
+                    console.log(`Service ${service} not available for ${jurisdiction}, clearing and trying next...`);
+                    await navigatorFilters.clearAllFilters();
                     await page.waitForLoadState('networkidle');
-                    await page.waitForTimeout(1000);
-                    
-                    // Check if service is available for this jurisdiction
-                    const serviceAvailable = await navigatorFilters.isServiceAvailable(service);
-                    
-                    if (serviceAvailable) {
-                        // Select the service using the method
-                        await navigatorFilters.selectService(service);
-                        
-                        serviceSelected = true;
-                        console.log(`✓ Service ${service} selected for ${jurisdiction}`);
-                        break;
-                    } else {
-                        console.log(`Service ${service} not available for ${jurisdiction}, clearing and trying next...`);
-                        await navigatorFilters.clearAllFilters();
-                        await page.waitForLoadState('networkidle');
-                        await page.waitForTimeout(1500);
-                        // Close any open dropdowns
-                        await page.keyboard.press('Escape');
-                        await page.waitForTimeout(500);
-                    }
+                    await page.waitForTimeout(1500);
+                    await page.keyboard.press('Escape');
+                    await page.waitForTimeout(500);
                 }
             }
-            
-            if (!serviceSelected) {
-                throw new Error(`Could not find a jurisdiction with service: ${service}`);
-            }
-            
-            // Verify products match expected list
-            await navigatorFilters.verifyProductOptionsForService(service);
-            
-            // Clear filters before next service
-            await navigatorFilters.clearAllFilters();
-            await page.waitForLoadState('networkidle');
-            await page.waitForTimeout(1000);
         }
         
-        console.log('\n✓ All Service-Product relationships verified successfully');
+        if (!serviceSelected) {
+            throw new Error(`Could not find a jurisdiction with service: ${service}`);
+        }
+        
+        // Verify products match expected list
+        await navigatorFilters.verifyProductOptionsForService(service);
+        
+        console.log(`\n✓ ${service} Service-Product relationship verified successfully`);
+    });
+
+    test('Product-Service relationship - Lending service shows correct products', async ({ page }) => {
+        const loginPage = new LoginPage(page);
+        const service = 'Lending';
+        
+        // Login
+        await loginPage.navigate();
+        await loginPage.login();
+        await expect(await loginPage.isLoginSuccessful()).toBeTruthy();
+
+        // Navigate to Navigator Compare Licensing page
+        await page.goto('https://platform.test-simmons.com/navigator/compare/licensing');
+        
+        // Wait for the page to load completely
+        await page.waitForLoadState('networkidle');
+        await page.waitForTimeout(1500);
+
+        // Create NavigatorFilters instance for product verification
+        const navigatorFilters = new NavigatorFilters(page);
+
+        const jurisdictions = ['Belgium', 'Germany', 'UK', 'Argentina', 'Austria', 'Canada', 'France'];
+        
+        console.log(`\n========== Testing Service: ${service} ==========`);
+        
+        // Try jurisdictions until we find one that has this service
+        let serviceSelected = false;
+        for (const jurisdiction of jurisdictions) {
+            console.log(`Trying jurisdiction: ${jurisdiction}`);
+            
+            // Select jurisdiction
+            await page.getByText('Jurisdiction', { exact: true }).click();
+            await page.waitForTimeout(200);
+            
+            const searchInput = page.getByPlaceholder('Search items');
+            await searchInput.clear();
+            await searchInput.fill(jurisdiction);
+            await page.waitForTimeout(300);
+            
+            const jurisdictionButton = page.locator(`li [role="button"]:has-text("${jurisdiction}")`).first();
+            const jurisdictionCount = await jurisdictionButton.count();
+            
+            if (jurisdictionCount > 0) {
+                await jurisdictionButton.click();
+                await page.keyboard.press('Escape');
+                
+                // Wait for network requests to complete after jurisdiction selection
+                await page.waitForLoadState('networkidle');
+                await page.waitForTimeout(800);
+                
+                // Check if service is available for this jurisdiction
+                const serviceAvailable = await navigatorFilters.isServiceAvailable(service);
+                
+                if (serviceAvailable) {
+                    // Select the service using the method
+                    await navigatorFilters.selectService(service);
+                    
+                    serviceSelected = true;
+                    console.log(`✓ Service ${service} selected for ${jurisdiction}`);
+                    break;
+                } else {
+                    console.log(`Service ${service} not available for ${jurisdiction}, clearing and trying next...`);
+                    await navigatorFilters.clearAllFilters();
+                    await page.waitForLoadState('networkidle');
+                    await page.waitForTimeout(1000);
+                    await page.keyboard.press('Escape');
+                    await page.waitForTimeout(300);
+                }
+            }
+        }
+        
+        if (!serviceSelected) {
+            throw new Error(`Could not find a jurisdiction with service: ${service}`);
+        }
+        
+        // Verify products match expected list
+        await navigatorFilters.verifyProductOptionsForService(service);
+        
+        console.log(`\n✓ ${service} Service-Product relationship verified successfully`);
+    });
+
+    test('Product-Service relationship - Securities service shows correct products', async ({ page }) => {
+        const loginPage = new LoginPage(page);
+        const service = 'Securities';
+        
+        // Login
+        await loginPage.navigate();
+        await loginPage.login();
+        await expect(await loginPage.isLoginSuccessful()).toBeTruthy();
+
+        // Navigate to Navigator Compare Licensing page
+        await page.goto('https://platform.test-simmons.com/navigator/compare/licensing');
+        
+        // Wait for the page to load completely
+        await page.waitForLoadState('networkidle');
+        await page.waitForTimeout(1500);
+
+        // Create NavigatorFilters instance for product verification
+        const navigatorFilters = new NavigatorFilters(page);
+
+        const jurisdictions = ['Argentina', 'Austria', 'Belgium', 'Canada', 'Germany', 'France', 'UK'];
+        
+        console.log(`\n========== Testing Service: ${service} ==========`);
+        
+        // Try jurisdictions until we find one that has this service
+        let serviceSelected = false;
+        for (const jurisdiction of jurisdictions) {
+            console.log(`Trying jurisdiction: ${jurisdiction}`);
+            
+            // Select jurisdiction
+            await page.getByText('Jurisdiction', { exact: true }).click();
+            await page.waitForTimeout(200);
+            
+            const searchInput = page.getByPlaceholder('Search items');
+            await searchInput.clear();
+            await searchInput.fill(jurisdiction);
+            await page.waitForTimeout(300);
+            
+            const jurisdictionButton = page.locator(`li [role="button"]:has-text("${jurisdiction}")`).first();
+            const jurisdictionCount = await jurisdictionButton.count();
+            
+            if (jurisdictionCount > 0) {
+                await jurisdictionButton.click();
+                await page.keyboard.press('Escape');
+                
+                // Wait for network requests to complete after jurisdiction selection
+                await page.waitForLoadState('networkidle');
+                await page.waitForTimeout(800);
+                
+                // Check if service is available for this jurisdiction
+                const serviceAvailable = await navigatorFilters.isServiceAvailable(service);
+                
+                if (serviceAvailable) {
+                    // Select the service using the method
+                    await navigatorFilters.selectService(service);
+                    
+                    serviceSelected = true;
+                    console.log(`✓ Service ${service} selected for ${jurisdiction}`);
+                    break;
+                } else {
+                    console.log(`Service ${service} not available for ${jurisdiction}, clearing and trying next...`);
+                    await navigatorFilters.clearAllFilters();
+                    await page.waitForLoadState('networkidle');
+                    await page.waitForTimeout(1000);
+                    await page.keyboard.press('Escape');
+                    await page.waitForTimeout(300);
+                }
+            }
+        }
+        
+        if (!serviceSelected) {
+            throw new Error(`Could not find a jurisdiction with service: ${service}`);
+        }
+        
+        // Verify products match expected list
+        await navigatorFilters.verifyProductOptionsForService(service);
+        
+        console.log(`\n✓ ${service} Service-Product relationship verified successfully`);
     });
 
     // NOTE: Activity dropdown requires Product to be selected first
