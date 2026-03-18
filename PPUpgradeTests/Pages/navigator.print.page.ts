@@ -16,7 +16,7 @@ export class NavigatorPrint {
     async navigateToNavigator() {
         await this.page.goto('https://platform.test-simmons.com/navigator/');
         await this.page.waitForLoadState('networkidle');
-        await this.page.waitForTimeout(2000);
+        await this.page.waitForTimeout(1500);
     }
 
     // Click outside to close any open dropdowns
@@ -35,25 +35,25 @@ export class NavigatorPrint {
         await jurisdictionText.click();
 
         // Wait for dropdown to open
-        await this.page.waitForTimeout(1000);
+        await this.page.waitForTimeout(600);
 
         const searchInput = this.page.getByPlaceholder('Search items');
         await searchInput.waitFor({ state: 'visible', timeout: 5000 });
         await searchInput.fill(jurisdiction);
 
         // Wait for search to filter options
-        await this.page.waitForTimeout(800);
+        await this.page.waitForTimeout(500);
 
         const option = this.page.getByRole('button', { name: `${jurisdiction} ${jurisdiction}` });
         await option.waitFor({ state: 'visible', timeout: 10000 });
         await option.click();
 
         // Wait for selection to apply and for services to update
-        await this.page.waitForTimeout(2000);
+        await this.page.waitForTimeout(1200);
         await this.clickOutside();
         
         // Additional waits to ensure services dropdown is populated with jurisdiction-specific options
-        await this.page.waitForTimeout(3000);
+        await this.page.waitForTimeout(1500);
     }
 
     // Select Service filter with fallback options
@@ -61,7 +61,7 @@ export class NavigatorPrint {
         await this.clickOutside();
         
         // Additional wait to ensure jurisdiction-based services are loaded
-        await this.page.waitForTimeout(2000);
+        await this.page.waitForTimeout(1200);
         
         // Click on the Service dropdown
         const serviceText = this.page.getByText('Service', { exact: true }).first();
@@ -69,7 +69,7 @@ export class NavigatorPrint {
         await serviceText.click();
 
         // Wait for dropdown to open and populate with jurisdiction-specific services
-        await this.page.waitForTimeout(1500);
+        await this.page.waitForTimeout(800);
 
         const searchInput = this.page.getByPlaceholder('Search items');
         await searchInput.waitFor({ state: 'visible', timeout: 5000 });
@@ -85,8 +85,8 @@ export class NavigatorPrint {
             console.log('No "No options available" message, or it disappeared quickly');
         }
         
-        // Additional wait after options are loaded - increased for parallel test stability
-        await this.page.waitForTimeout(2500);
+        // Additional wait after options are loaded
+        await this.page.waitForTimeout(1500);
 
         // Try to find the requested service, fallback to alternatives if not available
         const servicesToTry = [
@@ -109,8 +109,8 @@ export class NavigatorPrint {
             await searchInput.clear();
             await searchInput.fill(serviceToTry);
 
-            // Wait for search to filter options - increased for parallel test stability
-            await this.page.waitForTimeout(1500);
+            // Wait for search to filter options
+            await this.page.waitForTimeout(800);
 
             // Check if the option exists
             const option = this.page.getByRole('button', { name: serviceToTry });
@@ -133,8 +133,8 @@ export class NavigatorPrint {
             throw new Error(`Could not select any service from the fallback list`);
         }
 
-        // Wait for selection to apply and filter to update - increased for parallel test stability
-        await this.page.waitForTimeout(2500);
+        // Wait for selection to apply and filter to update
+        await this.page.waitForTimeout(1500);
         await this.clickOutside();
     }
 
