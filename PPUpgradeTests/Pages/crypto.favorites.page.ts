@@ -81,14 +81,14 @@ export class CryptoFavorites {
         ]);
         
         // Wait for platform to load
-        await this.page.waitForTimeout(2000);
+        await this.page.waitForTimeout(1200);
     }
 
     // Navigate to Crypto page
     async navigateToCrypto() {
         await this.page.goto('https://platform.test-simmons.com/crypto/');
         await this.page.waitForLoadState('networkidle');
-        await this.page.waitForTimeout(2000);
+        await this.page.waitForTimeout(1200);
         
         // Click View Crypto Data button if present
         const viewButton = this.page.locator('span.menu-item__text:has-text("View Crypto data")');
@@ -96,7 +96,7 @@ export class CryptoFavorites {
         if (viewButtonCount > 0) {
             await viewButton.waitFor({ state: 'visible', timeout: 10000 });
             await viewButton.click();
-            await this.page.waitForTimeout(2000);
+            await this.page.waitForTimeout(1200);
             console.log('Clicked View Crypto Data button');
         }
     }
@@ -105,7 +105,7 @@ export class CryptoFavorites {
     async clickOutside() {
         await this.page.keyboard.press('Escape').catch(() => {});
         await this.page.locator('body').click({ force: true }).catch(() => {});
-        await this.page.waitForTimeout(300);
+        await this.page.waitForTimeout(200);
     }
 
     // Get random jurisdiction
@@ -131,13 +131,13 @@ export class CryptoFavorites {
         const jurisdictionLabel = this.page.locator(CRYPTO_SELECTORS.jurisdictionLabel);
         await jurisdictionLabel.waitFor({ state: 'visible', timeout: 10000 });
         await jurisdictionLabel.click();
-        await this.page.waitForTimeout(500);
+        await this.page.waitForTimeout(300);
 
         // Type in search field
         const searchInput = this.page.locator(CRYPTO_SELECTORS.jurisdictionInput);
         await searchInput.waitFor({ state: 'visible', timeout: 5000 });
         await searchInput.fill(jurisdiction);
-        await this.page.waitForTimeout(1000);
+        await this.page.waitForTimeout(600);
 
         // Click the matching option - try different selectors
         // First try: button with text containing jurisdiction
@@ -159,7 +159,7 @@ export class CryptoFavorites {
         await option.click();
 
         // Wait for selection to apply
-        await this.page.waitForTimeout(1000);
+        await this.page.waitForTimeout(600);
         console.log(`Selected jurisdiction: ${jurisdiction}`);
     }
 
@@ -174,7 +174,7 @@ export class CryptoFavorites {
         const tokenTypeLabel = this.page.locator(CRYPTO_SELECTORS.tokenTypeLabel);
         await tokenTypeLabel.waitFor({ state: 'visible', timeout: 10000 });
         await tokenTypeLabel.click();
-        await this.page.waitForTimeout(500);
+        await this.page.waitForTimeout(300);
 
         // Click the specific token type - clicking it will automatically unselect "All"
         const option = this.page.locator(`p:has-text("${tokenType}")`).first();
@@ -182,7 +182,7 @@ export class CryptoFavorites {
         await option.click();
 
         // Wait for selection to apply
-        await this.page.waitForTimeout(500);
+        await this.page.waitForTimeout(300);
         console.log(`Selected token type: ${tokenType}`);
         
         // Close the dropdown by clicking outside
@@ -195,14 +195,14 @@ export class CryptoFavorites {
         const searchButton = this.page.locator(CRYPTO_SELECTORS.searchButton);
         await searchButton.waitFor({ state: 'visible', timeout: 10000 });
         await searchButton.click();
-        await this.page.waitForTimeout(1000);
+        await this.page.waitForTimeout(600);
     }
 
     // Wait for results to load
     async waitForResults() {
         // Wait for results to appear - check for search result items or grid content
         await this.page.waitForLoadState('networkidle');
-        await this.page.waitForTimeout(2000);
+        await this.page.waitForTimeout(1200);
         console.log('Results loaded');
     }
 
@@ -221,7 +221,7 @@ export class CryptoFavorites {
         await favoriteButton.waitFor({ state: 'visible', timeout: 10000 });
         await favoriteButton.click();
         console.log('Clicked favorite button');
-        await this.page.waitForTimeout(1000);
+        await this.page.waitForTimeout(600);
     }
 
     // Check if favorite is already saved (heart is filled/yellow)
@@ -237,7 +237,7 @@ export class CryptoFavorites {
         const modal = this.page.locator('h3:has-text("Save Search")');
         await modal.waitFor({ state: 'visible', timeout: 10000 });
         console.log('Save Search modal appeared');
-        await this.page.waitForTimeout(500);
+        await this.page.waitForTimeout(300);
     }
 
     // Enter favorite name
@@ -246,7 +246,7 @@ export class CryptoFavorites {
         await input.waitFor({ state: 'visible', timeout: 5000 });
         await input.fill(name);
         console.log(`Entered favorite name: ${name}`);
-        await this.page.waitForTimeout(500);
+        await this.page.waitForTimeout(300);
     }
 
     // Click Save button in modal
@@ -255,7 +255,7 @@ export class CryptoFavorites {
         await saveButton.waitFor({ state: 'visible', timeout: 5000 });
         await saveButton.click();
         console.log('Clicked Save button');
-        await this.page.waitForTimeout(1000);
+        await this.page.waitForTimeout(600);
     }
 
     // Verify success message
@@ -263,7 +263,7 @@ export class CryptoFavorites {
         const successMessage = this.page.locator('p:has-text("Search saved successfully")');
         await successMessage.waitFor({ state: 'visible', timeout: 10000 });
         console.log('Success message appeared');
-        await this.page.waitForTimeout(1000);
+        await this.page.waitForTimeout(600);
     }
 
     // Verify favorite button is now filled (saved state)
@@ -338,7 +338,7 @@ export class CryptoFavorites {
     // Reload the page
     async reloadPage() {
         await this.page.reload({ waitUntil: 'networkidle' });
-        await this.page.waitForTimeout(2000);
+        await this.page.waitForTimeout(1200);
         console.log('Page reloaded');
     }
 
@@ -346,20 +346,20 @@ export class CryptoFavorites {
     async clickFavoritesDropdownButton() {
         // Wait for the page to be fully loaded
         await this.page.waitForLoadState('networkidle');
-        await this.page.waitForTimeout(3000);
+        await this.page.waitForTimeout(1800);
         
         // Click the chevron SVG icon to open dropdown
         const dropdownButton = this.page.locator('div.s-button-dropdown__buttons > svg[title="Chevron down icon"]').first();
         await dropdownButton.waitFor({ state: 'visible', timeout: 15000 });
         await dropdownButton.click();
         console.log('Clicked favorites dropdown chevron to open dropdown');
-        await this.page.waitForTimeout(1000);
+        await this.page.waitForTimeout(600);
     }
 
     // Wait for favorites dropdown to appear
     async waitForFavoritesDropdown() {
         // After clicking the dropdown button, favorites appear as a list
-        await this.page.waitForTimeout(2000);
+        await this.page.waitForTimeout(1200);
         console.log('Favorites dropdown opened');
     }
 
@@ -405,7 +405,7 @@ export class CryptoFavorites {
             if (count > 0) {
                 await items.first().click();
                 console.log(`Clicked on favorite: ${favoriteName} (using selector: ${selector})`);
-                await this.page.waitForTimeout(2000);
+                await this.page.waitForTimeout(1200);
                 
                 if (clickSearch) {
                     // Click the Search button inside the dropdown to load the favorite
@@ -422,7 +422,7 @@ export class CryptoFavorites {
                         await searchButton.waitFor({ state: 'visible', timeout: 10000 });
                         await searchButton.click();
                         console.log('Clicked Search button inside dropdown to load favorite');
-                        await this.page.waitForTimeout(2000);
+                        await this.page.waitForTimeout(1200);
                     } else {
                         console.log('Search button not found in dropdown, closing dropdown');
                         await this.clickOutside();
@@ -442,12 +442,12 @@ export class CryptoFavorites {
         await searchButton.waitFor({ state: 'visible', timeout: 10000 });
         await searchButton.click();
         console.log('Clicked Search button after selecting favorite');
-        await this.page.waitForTimeout(2000);
+        await this.page.waitForTimeout(1200);
     }
 
     // Verify filters are correctly applied after loading favorite
     async verifyCorrectFilters(expectedJurisdiction: string, expectedTokenType: string) {
-        await this.page.waitForTimeout(3000);
+        await this.page.waitForTimeout(1800);
         
         // Verify jurisdiction appears in search results grid
         const jurisdictionInGrid = this.page.locator(`div.s-grid__item:has-text("${expectedJurisdiction}")`);

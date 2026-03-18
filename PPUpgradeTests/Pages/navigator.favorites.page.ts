@@ -105,20 +105,20 @@ export class NavigatorFavorites {
         ]);
         
         // Wait for platform to load
-        await this.page.waitForTimeout(1000);
+        await this.page.waitForTimeout(600);
     }
 
     // Navigate to Navigator page
     async navigateToNavigator() {
         await this.page.goto('https://platform.test-simmons.com/navigator/');
         await this.page.waitForLoadState('networkidle');
-        await this.page.waitForTimeout(500);
+        await this.page.waitForTimeout(300);
     }
 
     // Click outside to close any open dropdowns
     async clickOutside() {
         await this.page.keyboard.press('Escape').catch(() => {});
-        await this.page.waitForTimeout(300);
+        await this.page.waitForTimeout(200);
     }
 
     // Get random jurisdiction from the list
@@ -146,25 +146,25 @@ export class NavigatorFavorites {
         await jurisdictionText.click();
 
         // Wait for dropdown to open
-        await this.page.waitForTimeout(1000);
+        await this.page.waitForTimeout(600);
 
         const searchInput = this.page.getByPlaceholder('Search items');
         await searchInput.waitFor({ state: 'visible', timeout: 5000 });
         await searchInput.fill(jurisdiction);
 
         // Wait for search to filter options
-        await this.page.waitForTimeout(700);
+        await this.page.waitForTimeout(450);
 
         const option = this.page.getByRole('button', { name: `${jurisdiction} ${jurisdiction}` });
         await option.waitFor({ state: 'visible', timeout: 10000 });
         await option.click();
 
         // Wait for selection to apply and for services to update
-        await this.page.waitForTimeout(1000);
+        await this.page.waitForTimeout(600);
         await this.clickOutside();
         
         // Additional waits to ensure services dropdown is populated with jurisdiction-specific options
-        await this.page.waitForTimeout(800);
+        await this.page.waitForTimeout(500);
     }
 
     // Select Service filter
@@ -175,7 +175,7 @@ export class NavigatorFavorites {
         await this.clickOutside();
         
         // Additional wait to ensure jurisdiction-based services are loaded
-        await this.page.waitForTimeout(2000);
+        await this.page.waitForTimeout(1200);
         
         // Click on the Service dropdown
         const serviceText = this.page.getByText('Service', { exact: true }).first();
@@ -183,7 +183,7 @@ export class NavigatorFavorites {
         await serviceText.click();
 
         // Wait for dropdown to open and populate with jurisdiction-specific services
-        await this.page.waitForTimeout(1500);
+        await this.page.waitForTimeout(900);
 
         const searchInput = this.page.getByPlaceholder('Search items');
         await searchInput.waitFor({ state: 'visible', timeout: 5000 });
@@ -198,14 +198,14 @@ export class NavigatorFavorites {
         }
         
         // Additional wait after options are loaded
-        await this.page.waitForTimeout(1000);
+        await this.page.waitForTimeout(600);
 
         // Search for the service
         await searchInput.clear();
         await searchInput.fill(service);
 
         // Wait for search to filter options
-        await this.page.waitForTimeout(800);
+        await this.page.waitForTimeout(500);
 
         // Find and click the service option
         const option = this.page.getByRole('button', { name: service });
@@ -219,7 +219,7 @@ export class NavigatorFavorites {
         }
 
         // Wait for selection to apply
-        await this.page.waitForTimeout(1000);
+        await this.page.waitForTimeout(600);
         await this.clickOutside();
     }
 
@@ -231,7 +231,7 @@ export class NavigatorFavorites {
     // Click Product dropdown to open it
     async clickProductDropdown() {
         await this.clickOutside();
-        await this.page.waitForTimeout(1000);
+        await this.page.waitForTimeout(600);
         
         // Click on the Product dropdown label
         const productLabel = this.page.locator(NAVIGATOR_SELECTORS.productLabel);
@@ -239,13 +239,13 @@ export class NavigatorFavorites {
         await productLabel.click();
         
         console.log('Opened Product dropdown');
-        await this.page.waitForTimeout(1500);
+        await this.page.waitForTimeout(900);
     }
 
     // Get all available products from the dropdown
     async getAvailableProducts(): Promise<string[]> {
         // Wait for dropdown to populate
-        await this.page.waitForTimeout(1000);
+        await this.page.waitForTimeout(600);
         
         // Check if "No options available" message is present
         const noOptionsMessage = this.page.getByText('No options available');
@@ -313,7 +313,7 @@ export class NavigatorFavorites {
         await expect(searchButton).toBeEnabled();
         await searchButton.click();
         await this.page.waitForLoadState('networkidle');
-        await this.page.waitForTimeout(1000);
+        await this.page.waitForTimeout(600);
     }
 
     // Wait for results to appear
@@ -321,48 +321,48 @@ export class NavigatorFavorites {
         // Wait for the JURISDICTION ANALYSIS section to be visible
         await this.page.getByText('JURISDICTION ANALYSIS').waitFor({ state: 'visible', timeout: 20000 });
         // Brief wait for initial render
-        await this.page.waitForTimeout(500);
+        await this.page.waitForTimeout(300);
     }
 
     // Navigate to Static Views tabs
     async navigateToDefinitions() {
         // Wait for page to stabilize after results load
-        await this.page.waitForTimeout(3000);
+        await this.page.waitForTimeout(1800);
         
         const definitionsTab = this.page.locator('button.static-tab-button', { hasText: 'Definitions' });
         await definitionsTab.waitFor({ state: 'visible', timeout: 20000 });
         await definitionsTab.click();
-        await this.page.waitForTimeout(2000);
+        await this.page.waitForTimeout(1200);
     }
 
     async navigateToStatus() {
         // Wait for page to stabilize after results load
-        await this.page.waitForTimeout(3000);
+        await this.page.waitForTimeout(1800);
         
         const statusTab = this.page.locator('button.static-tab-button', { hasText: 'Status' });
         await statusTab.waitFor({ state: 'visible', timeout: 20000 });
         await statusTab.click();
-        await this.page.waitForTimeout(2000);
+        await this.page.waitForTimeout(1200);
     }
 
     async navigateToLegends() {
         // Wait for page to stabilize after results load
-        await this.page.waitForTimeout(3000);
+        await this.page.waitForTimeout(1800);
         
         const legendsTab = this.page.locator('button.static-tab-button', { hasText: 'Legends' });
         await legendsTab.waitFor({ state: 'visible', timeout: 20000 });
         await legendsTab.click();
-        await this.page.waitForTimeout(2000);
+        await this.page.waitForTimeout(1200);
     }
 
     async navigateToContacts() {
         // Wait for page to stabilize after results load
-        await this.page.waitForTimeout(3000);
+        await this.page.waitForTimeout(1800);
         
         const contactsTab = this.page.locator('button.static-tab-button', { hasText: 'Contacts' });
         await contactsTab.waitFor({ state: 'visible', timeout: 20000 });
         await contactsTab.click();
-        await this.page.waitForTimeout(2000);
+        await this.page.waitForTimeout(1200);
     }
 
     // Generate random favorite name (3-18 characters)
@@ -380,13 +380,13 @@ export class NavigatorFavorites {
         await favoriteButton.waitFor({ state: 'visible', timeout: 10000 });
         await favoriteButton.click();
         console.log('Clicked favorite button');
-        await this.page.waitForTimeout(1000);
+        await this.page.waitForTimeout(600);
     }
 
     // Check if favorite button is already saved (filled/yellow)
     async isFavoriteAlreadySaved(): Promise<boolean> {
         try {
-            await this.page.waitForTimeout(1000);
+            await this.page.waitForTimeout(600);
             const filledFavorite = this.page.locator(NAVIGATOR_SELECTORS.favoriteButtonFilled).first();
             const count = await filledFavorite.count();
             
@@ -409,7 +409,7 @@ export class NavigatorFavorites {
         await modalTitle.waitFor({ state: 'visible', timeout: 10000 });
         await expect(modalTitle).toHaveText('Save Search');
         console.log('Save Search modal appeared');
-        await this.page.waitForTimeout(500);
+        await this.page.waitForTimeout(300);
     }
 
     // Enter favorite name in input field
@@ -419,7 +419,7 @@ export class NavigatorFavorites {
         await nameInput.waitFor({ state: 'visible', timeout: 5000 });
         await nameInput.fill(name);
         console.log(`Entered favorite name: ${name}`);
-        await this.page.waitForTimeout(500);
+        await this.page.waitForTimeout(300);
     }
 
     // Click Save button in modal
@@ -428,7 +428,7 @@ export class NavigatorFavorites {
         await saveButton.waitFor({ state: 'visible', timeout: 5000 });
         await saveButton.click();
         console.log('Clicked Save button');
-        await this.page.waitForTimeout(2000);
+        await this.page.waitForTimeout(1200);
     }
 
     // Verify success message appears
@@ -442,7 +442,7 @@ export class NavigatorFavorites {
     // Verify favorite button is filled (yellow) and disabled
     async verifyFavoriteButtonSaved() {
         // Wait for button to update
-        await this.page.waitForTimeout(1000);
+        await this.page.waitForTimeout(600);
         
         // Check if the filled heart icon is visible
         const filledFavorite = this.page.locator(NAVIGATOR_SELECTORS.favoriteButtonFilled).first();
@@ -565,7 +565,7 @@ export class NavigatorFavorites {
     // Reload the page
     async reloadPage() {
         await this.page.reload({ waitUntil: 'networkidle' });
-        await this.page.waitForTimeout(500);
+        await this.page.waitForTimeout(300);
         console.log('Page reloaded');
     }
 
@@ -576,20 +576,20 @@ export class NavigatorFavorites {
         console.log('Navigator page filters loaded');
         
         // Wait for dynamic content to load
-        await this.page.waitForTimeout(3000);
+        await this.page.waitForTimeout(1800);
         
         // Click the chevron SVG icon to open dropdown
         const dropdownButton = this.page.locator(NAVIGATOR_SELECTORS.favoritesDropdownButton).first();
         await dropdownButton.waitFor({ state: 'visible', timeout: 15000 });
         await dropdownButton.click();
         console.log('Clicked favorites dropdown chevron to open dropdown');
-        await this.page.waitForTimeout(1000);
+        await this.page.waitForTimeout(600);
     }
 
     // Wait for favorites dropdown to appear
     async waitForFavoritesDropdown() {
         // After clicking the dropdown button, favorites appear as a list
-        await this.page.waitForTimeout(1000);
+        await this.page.waitForTimeout(600);
         console.log('Favorites dropdown opened');
     }
 
@@ -635,7 +635,7 @@ export class NavigatorFavorites {
             if (count > 0) {
                 await items.first().click();
                 console.log(`Clicked on favorite: ${favoriteName} (using selector: ${selector})`);
-                await this.page.waitForTimeout(1000);
+                await this.page.waitForTimeout(600);
                 
                 if (clickSearch) {
                     // Click Search button after selecting favorite
@@ -656,7 +656,7 @@ export class NavigatorFavorites {
         await searchButton.click();
         console.log('Clicked Search button after selecting favorite');
         await this.page.waitForLoadState('networkidle');
-        await this.page.waitForTimeout(3000);
+        await this.page.waitForTimeout(1800);
     }
 
     // Verify correct filters are applied after loading favorite
@@ -722,7 +722,7 @@ export class NavigatorFavorites {
         await deleteButton.waitFor({ state: 'visible', timeout: 10000 });
         await deleteButton.click();
         console.log('Clicked Delete button in dropdown');
-        await this.page.waitForTimeout(1000);
+        await this.page.waitForTimeout(600);
     }
 
     // Confirm delete by clicking "Yes, delete" button in popup
@@ -732,7 +732,7 @@ export class NavigatorFavorites {
         await confirmButton.waitFor({ state: 'visible', timeout: 10000 });
         await confirmButton.click();
         console.log('Clicked "Yes, delete" button');
-        await this.page.waitForTimeout(1000);
+        await this.page.waitForTimeout(600);
     }
 
     // Verify delete success message appears
@@ -808,14 +808,14 @@ export class NavigatorFavorites {
         await this.clickProductDropdown();
         
         // Wait for dropdown to populate
-        await this.page.waitForTimeout(1500);
+        await this.page.waitForTimeout(900);
         
         // Search for the product
         const searchInput = this.page.getByPlaceholder('Search items');
         await searchInput.waitFor({ state: 'visible', timeout: 5000 });
         await searchInput.clear();
         await searchInput.fill(product);
-        await this.page.waitForTimeout(1000);
+        await this.page.waitForTimeout(600);
         
         // Find and click the product option
         const option = this.page.getByRole('button', { name: product });
@@ -829,7 +829,7 @@ export class NavigatorFavorites {
         }
         
         // Wait for selection to apply
-        await this.page.waitForTimeout(1500);
+        await this.page.waitForTimeout(900);
         await this.clickOutside();
     }
 
@@ -844,7 +844,7 @@ export class NavigatorFavorites {
         
         // Click Product dropdown to open it
         await this.clickProductDropdown();
-        await this.page.waitForTimeout(1500);
+        await this.page.waitForTimeout(900);
         
         for (const product of productsToUnselect) {
             console.log(`Unselecting: ${product}`);
@@ -854,7 +854,7 @@ export class NavigatorFavorites {
             await searchInput.waitFor({ state: 'visible', timeout: 5000 });
             await searchInput.clear();
             await searchInput.fill(product);
-            await this.page.waitForTimeout(1000);
+            await this.page.waitForTimeout(600);
             
             // Find and click the product option to unselect it
             const option = this.page.getByRole('button', { name: product });
@@ -867,11 +867,11 @@ export class NavigatorFavorites {
                 console.log(`Product ${product} not found in dropdown`);
             }
             
-            await this.page.waitForTimeout(500);
+            await this.page.waitForTimeout(300);
         }
         
         // Close the dropdown
-        await this.page.waitForTimeout(1000);
+        await this.page.waitForTimeout(600);
         await this.clickOutside();
         console.log('Finished unselecting products');
     }
@@ -882,7 +882,7 @@ export class NavigatorFavorites {
         
         // Click Product dropdown to see what's selected
         await this.clickProductDropdown();
-        await this.page.waitForTimeout(1000);
+        await this.page.waitForTimeout(600);
         
         // Check if the expected product is marked as selected
         const selectedProduct = this.page.locator(`li [role="button"]:has-text("${expectedProduct}")`).first();
