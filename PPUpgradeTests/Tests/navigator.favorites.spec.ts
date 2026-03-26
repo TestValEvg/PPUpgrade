@@ -137,6 +137,10 @@ test.describe('Navigator Favorites Tests', () => {
         // Navigate to Definitions tab
         await navigatorFavorites.navigateToDefinitions();
         
+        // Verify Definitions tab is active
+        const definitionsTab = page.locator('button.static-tab-button', { hasText: 'Definitions' });
+        await expect(definitionsTab).toHaveClass(/active/);
+        
         console.log('Navigated to Definitions tab successfully');
         
         // Save as favorite (with retry if already exists)
