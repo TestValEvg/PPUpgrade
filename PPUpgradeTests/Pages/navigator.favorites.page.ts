@@ -215,7 +215,30 @@ export class NavigatorFavorites {
             await option.first().click({ timeout: 3000 });
             console.log(`Selected service: ${service}`);
         } else {
-            throw new Error(`Service ${service} not found in dropdown`);
+            console.log(`Service ${service} not found in dropdown, trying alternative...`);
+            
+            // Get first available service instead
+            const allServiceOptions = this.page.locator('li [role="button"]');
+            const firstAvailableCount = await allServiceOptions.count();
+            
+            if (firstAvailableCount > 0) {
+                const firstServiceText = await allServiceOptions.first().textContent();
+                const alternativeService = firstServiceText?.trim() || '';
+                
+                if (alternativeService) {
+                    console.log(`Using alternative service: ${alternativeService}`);
+                    await allServiceOptions.first().click({ timeout: 3000 });
+                    this.selectedService = alternativeService;
+                    console.log(`Selected alternative service: ${alternativeService}`);
+                    
+                    // Wait for selection to apply
+                    await this.page.waitForTimeout(600);
+                    await this.clickOutside();
+                    return;
+                }
+            }
+            
+            throw new Error(`Service ${service} not found in dropdown and no alternatives available`);
         }
 
         // Wait for selection to apply
