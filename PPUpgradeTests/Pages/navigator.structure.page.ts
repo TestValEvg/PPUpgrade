@@ -99,10 +99,72 @@ export class NavigatorStructure {
         await this.page.waitForTimeout(500);
     }
 
-    // Select "All" services (default selection)
+    // Select a specific service
+    async selectService(service: string) {
+        console.log(`Selecting service: ${service}`);
+        
+        await this.clickOutside();
+        
+        // Click on the Service dropdown
+        const serviceText = this.page.getByText('Service', { exact: true }).first();
+        await serviceText.waitFor({ state: 'visible' });
+        await serviceText.click();
+
+        // Wait for dropdown to open
+        await this.page.waitForTimeout(600);
+
+        const searchInput = this.page.getByPlaceholder('Search items');
+        await searchInput.waitFor({ state: 'visible', timeout: 5000 });
+        
+        // Search for the service
+        await searchInput.clear();
+        await searchInput.fill(service);
+        await this.page.waitForTimeout(450);
+
+        const option = this.page.getByRole('button', { name: service });
+        await option.waitFor({ state: 'visible', timeout: 10000 });
+        await option.click();
+        
+        console.log(`Selected service: ${service}`);
+        await this.page.waitForTimeout(300);
+    }
+
+    // Select all services
     async selectAllServices() {
-        console.log('Keeping All services selected (default)');
-        // No action needed - "All" is selected by default
+        console.log('Selecting all services...');
+        
+        const services = ['Banking', 'Corporate Finance', 'Derivatives & FX', 'Funds', 'Lending', 'Securities'];
+        
+        await this.clickOutside();
+        
+        // Click on the Service dropdown
+        const serviceText = this.page.getByText('Service', { exact: true }).first();
+        await serviceText.waitFor({ state: 'visible' });
+        await serviceText.click();
+
+        // Wait for dropdown to open
+        await this.page.waitForTimeout(600);
+
+        const searchInput = this.page.getByPlaceholder('Search items');
+        await searchInput.waitFor({ state: 'visible', timeout: 5000 });
+
+        for (const service of services) {
+            // Search for the service
+            await searchInput.clear();
+            await searchInput.fill(service);
+            await this.page.waitForTimeout(450);
+
+            const option = this.page.getByRole('button', { name: service });
+            await option.waitFor({ state: 'visible', timeout: 10000 });
+            await option.click();
+            
+            console.log(`Selected service: ${service}`);
+            await this.page.waitForTimeout(300);
+        }
+
+        // Close the dropdown
+        await this.clickOutside();
+        await this.page.waitForTimeout(500);
     }
 
     // Click Search button

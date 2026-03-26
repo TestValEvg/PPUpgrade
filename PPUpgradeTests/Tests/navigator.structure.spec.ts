@@ -25,7 +25,7 @@ test.describe('Navigator Jurisdiction Analysis Structure', () => {
         const jurisdictions = ['Portugal', 'Austria', 'Belgium', 'Germany', 'France'];
         await structurePage.selectJurisdictions(jurisdictions);
         
-        // Keep All services selected (default)
+        // Select all services
         await structurePage.selectAllServices();
         
         // Click Search
@@ -47,7 +47,7 @@ test.describe('Navigator Jurisdiction Analysis Structure', () => {
         const jurisdictions = ['Portugal', 'Austria', 'Belgium', 'Germany', 'France'];
         await structurePage.selectJurisdictions(jurisdictions);
         
-        // Keep All services selected (default)
+        // Select all services
         await structurePage.selectAllServices();
         
         // Click Search
@@ -69,7 +69,7 @@ test.describe('Navigator Jurisdiction Analysis Structure', () => {
         const jurisdictions = ['Portugal', 'Austria', 'Belgium', 'Germany', 'France'];
         await structurePage.selectJurisdictions(jurisdictions);
         
-        // Keep All services selected (default)
+        // Select all services
         await structurePage.selectAllServices();
         
         // Click Search
