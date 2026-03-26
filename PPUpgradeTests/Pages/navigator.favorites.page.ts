@@ -31,7 +31,7 @@ export class NavigatorFavorites {
         'South Africa', 'South Korea', 'Spain', 'Sri Lanka', 'Suriname', 
         'Sweden', 'Switzerland', 'Taiwan', 'Tanzania', 'Thailand', 'Togo', 
         'Trinidad and Tobago', 'Turkey', 'Turks and Caicos Islands', 'Uganda', 
-        'United Kingdom', 'Ukraine', 'Uruguay', 'United States of America', 
+        'United Kingdom', 'Ukraine', 'Uruguay', 'USA', 
         'Venezuela', 'Vietnam', 'Zambia', 'Zimbabwe'
     ];
 
