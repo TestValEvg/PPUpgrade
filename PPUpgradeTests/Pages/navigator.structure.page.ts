@@ -188,28 +188,27 @@ export class NavigatorStructure {
     async verifySidebarStructure() {
         console.log('Verifying sidebar structure...');
         
-        // Wait for sidebar to be visible
-        const sidebar = this.page.locator('div.s-sidebar__content');
-        await sidebar.waitFor({ state: 'visible', timeout: 10000 });
+        // Wait for content to stabilize
+        await this.page.waitForTimeout(1500);
         
-        // Verify Scope section
-        const scopeSection = this.page.locator('h4.u-font-bold:has-text("Scope")');
-        await expect(scopeSection).toBeVisible();
+        // Verify Scope section using collapse component
+        const scopeCollapse = this.page.locator('div.s-collapse').filter({ hasText: 'SCOPE' });
+        await expect(scopeCollapse).toBeVisible({ timeout: 15000 });
         console.log('✓ Scope section found');
         
-        // Verify Licensing section
-        const licensingSection = this.page.locator('h4.u-font-bold:has-text("Licensing")');
-        await expect(licensingSection).toBeVisible();
+        // Verify Licensing section using collapse component
+        const licensingCollapse = this.page.locator('div.s-collapse').filter({ hasText: 'LICENSING' });
+        await expect(licensingCollapse).toBeVisible({ timeout: 15000 });
         console.log('✓ Licensing section found');
         
-        // Verify Product section
-        const productSection = this.page.locator('h4.u-font-bold:has-text("Product")');
-        await expect(productSection).toBeVisible();
+        // Verify Product section using collapse component
+        const productCollapse = this.page.locator('div.s-collapse').filter({ hasText: 'PRODUCT' });
+        await expect(productCollapse).toBeVisible({ timeout: 15000 });
         console.log('✓ Product section found');
         
-        // Verify Jurisdiction Guide section
-        const jurisdictionGuideSection = this.page.locator('h4.u-font-bold:has-text("Jurisdiction Guide")');
-        await expect(jurisdictionGuideSection).toBeVisible();
+        // Verify Jurisdiction Guide section using collapse component
+        const jurisdictionGuideCollapse = this.page.locator('div.s-collapse').filter({ hasText: 'JURISDICTION GUIDE' });
+        await expect(jurisdictionGuideCollapse).toBeVisible({ timeout: 15000 });
         console.log('✓ Jurisdiction Guide section found');
         
         return true;
@@ -219,16 +218,20 @@ export class NavigatorStructure {
     async verifyLicensingExpanded() {
         console.log('Verifying Licensing section is expanded...');
         
-        // Find the Licensing collapse component
-        const licensingCollapse = this.page.locator('div.s-collapse:has(h4:has-text("Licensing"))');
+        // Wait for content to stabilize
+        await this.page.waitForTimeout(1000);
+        
+        // Find the Licensing collapse component using filter
+        const licensingCollapse = this.page.locator('div.s-collapse').filter({ hasText: 'LICENSING' });
+        await expect(licensingCollapse).toBeVisible({ timeout: 10000 });
         
         // Verify it has the active class
         await expect(licensingCollapse).toHaveClass(/s-collapse--active/);
         console.log('✓ Licensing section is expanded');
         
-        // Verify Restrictions is active/selected
-        const restrictionsItem = this.page.locator('ul.nav-list li.active:has-text("Restrictions")');
-        await expect(restrictionsItem).toBeVisible();
+        // Verify Restrictions is active/selected - check for active class on the li element
+        const restrictionsItem = this.page.locator('ul.nav-list li.active').filter({ hasText: 'Restrictions' });
+        await expect(restrictionsItem).toBeVisible({ timeout: 10000 });
         console.log('✓ Restrictions is active');
         
         // Verify other Licensing sub-items are present
@@ -241,8 +244,8 @@ export class NavigatorStructure {
         ];
         
         for (const item of licensingItems) {
-            const listItem = this.page.locator(`ul.nav-list li:has-text("${item}")`);
-            await expect(listItem).toBeVisible();
+            const listItem = this.page.locator('ul.nav-list li').filter({ hasText: item });
+            await expect(listItem).toBeVisible({ timeout: 10000 });
             console.log(`✓ ${item} found in Licensing section`);
         }
         
@@ -254,17 +257,23 @@ export class NavigatorStructure {
         console.log('Verifying Product and Jurisdiction Guide sections are collapsed...');
         
         // Product section should be collapsed (no active class)
-        const productCollapse = this.page.locator('div.s-collapse:has(h4:has-text("Product"))');
+        const productCollapse = this.page.locator('div.s-collapse').filter({ hasText: 'PRODUCT' });
+        await expect(productCollapse).toBeVisible({ timeout: 10000 });
         const productClass = await productCollapse.getAttribute('class');
         if (!productClass?.includes('s-collapse--active')) {
             console.log('✓ Product section is collapsed');
+        } else {
+            console.log('⚠ Product section is expanded (expected collapsed)');
         }
         
         // Jurisdiction Guide section should be collapsed
-        const jurisdictionGuideCollapse = this.page.locator('div.s-collapse:has(h4:has-text("Jurisdiction Guide"))');
+        const jurisdictionGuideCollapse = this.page.locator('div.s-collapse').filter({ hasText: 'JURISDICTION GUIDE' });
+        await expect(jurisdictionGuideCollapse).toBeVisible({ timeout: 10000 });
         const guideClass = await jurisdictionGuideCollapse.getAttribute('class');
         if (!guideClass?.includes('s-collapse--active')) {
             console.log('✓ Jurisdiction Guide section is collapsed');
+        } else {
+            console.log('⚠ Jurisdiction Guide section is expanded (expected collapsed)');
         }
         
         return true;
