@@ -661,12 +661,19 @@ export class NavigatorFavorites {
 
     // Verify correct filters are applied after loading favorite
     async verifyFiltersApplied(): Promise<{ jurisdiction: string; service: string }> {
+        // Wait for page to stabilize after loading favorite
+        await this.page.waitForTimeout(1800);
+        
         // Get selected jurisdiction from the first filter button
-        const jurisdictionText = await this.page.locator('div:nth-of-type(2) > .small span:nth-of-type(2)').first().textContent();
+        const jurisdictionLocator = this.page.locator('div:nth-of-type(2) > .small span:nth-of-type(2)').first();
+        await jurisdictionLocator.waitFor({ state: 'visible', timeout: 10000 }).catch(() => console.log('Jurisdiction filter not found'));
+        const jurisdictionText = await jurisdictionLocator.textContent().catch(() => '');
         const selectedJurisdiction = jurisdictionText?.trim() || '';
         
         // Get selected service from the second filter button
-        const serviceText = await this.page.locator('div:nth-of-type(2) > .small button > span').nth(1).textContent();
+        const serviceLocator = this.page.locator('div:nth-of-type(2) > .small button > span').nth(1);
+        await serviceLocator.waitFor({ state: 'visible', timeout: 10000 }).catch(() => console.log('Service filter not found'));
+        const serviceText = await serviceLocator.textContent().catch(() => '');
         const selectedService = serviceText?.trim() || '';
         
         console.log(`Filters applied - Jurisdiction: ${selectedJurisdiction}, Service: ${selectedService}`);
