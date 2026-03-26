@@ -21,8 +21,8 @@ test.describe('Navigator Jurisdiction Analysis Structure', () => {
     test('User can search with 5 jurisdictions and verify sidebar structure', async () => {
         console.log('Test: Verify sidebar structure with 5 jurisdictions search');
         
-        // Select 5 jurisdictions: Portugal, Austria, Belgium, Germany, UK
-        const jurisdictions = ['Portugal', 'Austria', 'Belgium', 'Germany', 'UK'];
+        // Select 5 jurisdictions: Portugal, Austria, Belgium, Germany, France
+        const jurisdictions = ['Portugal', 'Austria', 'Belgium', 'Germany', 'France'];
         await structurePage.selectJurisdictions(jurisdictions);
         
         // Keep All services selected (default)
@@ -43,8 +43,8 @@ test.describe('Navigator Jurisdiction Analysis Structure', () => {
     test('User can verify Licensing section is expanded with Restrictions active', async () => {
         console.log('Test: Verify Licensing section expanded state');
         
-        // Select 5 jurisdictions: Portugal, Austria, Belgium, Germany, UK
-        const jurisdictions = ['Portugal', 'Austria', 'Belgium', 'Germany', 'UK'];
+        // Select 5 jurisdictions: Portugal, Austria, Belgium, Germany, France
+        const jurisdictions = ['Portugal', 'Austria', 'Belgium', 'Germany', 'France'];
         await structurePage.selectJurisdictions(jurisdictions);
         
         // Keep All services selected (default)
@@ -65,8 +65,8 @@ test.describe('Navigator Jurisdiction Analysis Structure', () => {
     test('User can verify all sidebar sections are present', async () => {
         console.log('Test: Verify all sidebar sections exist');
         
-        // Select 5 jurisdictions: Portugal, Austria, Belgium, Germany, UK
-        const jurisdictions = ['Portugal', 'Austria', 'Belgium', 'Germany', 'UK'];
+        // Select 5 jurisdictions: Portugal, Austria, Belgium, Germany, France
+        const jurisdictions = ['Portugal', 'Austria', 'Belgium', 'Germany', 'France'];
         await structurePage.selectJurisdictions(jurisdictions);
         
         // Keep All services selected (default)
