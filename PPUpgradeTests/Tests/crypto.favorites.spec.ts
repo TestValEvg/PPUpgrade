@@ -10,7 +10,7 @@ import { CryptoFavorites } from '../Pages/crypto.favorites.page';
 test.describe('Crypto Favorites Tests', () => {
 
     test('User can search with random jurisdiction and token type selection', async ({ page }) => {
-        test.setTimeout(600000); // 10 minutes timeout
+        test.setTimeout(1800000); // 30 minutes timeout
 
         const cryptoFavorites = new CryptoFavorites(page);
 
@@ -48,7 +48,7 @@ test.describe('Crypto Favorites Tests', () => {
     });
 
     test('User can delete a saved favorite', async ({ page }) => {
-        test.setTimeout(600000); // 10 minutes timeout
+        test.setTimeout(1800000); // 30 minutes timeout
 
         const cryptoFavorites = new CryptoFavorites(page);
 

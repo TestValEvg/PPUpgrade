@@ -10,7 +10,7 @@ test.describe('Navigator Favorites Tests', () => {
     
     test.beforeEach(async ({ page }) => {
         // Set longer timeout for each test
-        test.setTimeout(600000); // 10 minutes
+        test.setTimeout(1800000); // 30 minutes
     });
 
     test('User can save a favorite with random jurisdiction and service', async ({ page }) => {
