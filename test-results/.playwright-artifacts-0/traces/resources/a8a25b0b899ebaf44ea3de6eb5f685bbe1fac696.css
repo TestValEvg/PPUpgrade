@@ -1,0 +1,11 @@
+.s-favourite-modal__message[data-v-5d030c78] { margin-bottom: 1.4rem; }
+.s-favourite-modal__list[data-v-5d030c78] { list-style: inside; }
+.s-favourite-modal__list__item[data-v-5d030c78] { padding-left: 1.4rem; }
+.favourite-btns[data-v-6374b7ec] { width: 100%; }
+.favourite-btns .s-tooltip[data-v-6374b7ec] { position: inherit; width: auto; }
+[data-v-6374b7ec] .s-button-group button { width: 100%; }
+[data-v-6374b7ec] .s-button-group .s-tooltip { gap: 1rem; width: 100%; }
+[data-v-6374b7ec] .s-button-group .s-tooltip button { width: 100%; }
+[data-v-6374b7ec] .s-dropdown { overflow-y: hidden; min-width: 240px; }
+[data-v-6374b7ec] .s-dropdown__container { max-height: 30vh; }
+[data-v-6374b7ec] .s-dropdown-item__content { min-width: 0px; }

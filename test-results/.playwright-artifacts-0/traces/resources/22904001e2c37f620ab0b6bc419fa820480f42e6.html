@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<head>    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+      <meta name="ulp-version" content="1.107.0">
+    
+    
+    
+    <meta name="robots" content="noindex, nofollow">
+    
+    
+    <link rel="stylesheet" href="https://cdn.auth0.com/ulp/react-components/1.184.0/css/main_wcag_compliant.cdn.min.css">
+    <style id="custom-styles-container">
+      
+        
+
+
+
+
+        
+          :root, .af-custom-form-container .af-form {
+    --primary-color: #FA535E;
+  }
+        
+      
+
+        
+          :root, .af-custom-form-container .af-form {
+    --button-font-color: #ffffff;
+  }
+        
+      
+
+        
+          :root {
+    --secondary-button-border-color: #c9cace;
+    --social-button-border-color: #c9cace;
+    --radio-button-border-color: #c9cace;
+  }
+        
+      
+
+        
+          :root {
+    --secondary-button-text-color: #1e212a;
+  }
+        
+      
+
+        
+      
+
+        
+          :root {
+    --link-color: #000000;
+  }
+        
+      
+
+        
+          :root {
+    --title-font-color: #1e212a;
+  }
+        
+      
+
+        
+          :root {
+    --font-default-color: #1e212a;
+  }
+        
+      
+
+        
+          :root {
+    --widget-background-color: #ffffff;
+  }
+        
+      
+
+        
+          :root {
+    --box-border-color: #c9cace;
+  }
+        
+      
+
+        
+          :root {
+    --font-light-color: #65676e;
+  }
+        
+      
+
+        
+          :root {
+    --input-text-color: #000000;
+  }
+        
+      
+
+        
+          :root {
+    --input-border-color: #c9cace;
+    --border-default-color: #c9cace;
+  }
+        
+      
+
+        
+          :root {
+    --input-background-color: #ffffff;
+  }
+        
+      
+
+        
+          :root {
+    --icon-default-color: #65676e;
+  }
+        
+      
+
+        
+          :root {
+    --error-color: #d03c38;
+    --error-text-color: #ffffff;
+  }
+        
+      
+
+        
+          :root {
+    --success-color: #13a688;
+  }
+        
+      
+
+        
+          :root {
+    --base-focus-color: #FD515B;
+    --transparency-focus-color: rgba(253,81,91, 0.15);
+  }
+        
+      
+
+        
+          :root {
+    --base-hover-color: #000000;
+    --transparency-hover-color: rgba(0,0,0, var(--hover-transparency-value));
+  }
+        
+      
+
+        
+          :root {
+    --ulp-captcha-widget-theme: light;
+  }
+        
+      
+
+
+
+
+        
+          @font-face {
+    font-family: 'ULP Custom';
+    font-style: normal;
+    font-weight: var(--font-default-weight);
+    src: local('ULP Custom'), url('https://use.typekit.net/af/0b9bd1/00000000000000007735a704/30/l?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=n3&v=3') format('woff');
+  }
+
+  body {
+    --font-family: 'ULP Custom', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, sans-serif;
+  }
+        
+      
+
+        
+          html, :root, .af-custom-form-container .af-form {
+    font-size: 16px;
+    --default-font-size: 16px;
+  }
+        
+      
+
+        
+          body {
+    --title-font-size: 1.5rem;
+    --title-font-weight: var(--font-default-weight);
+  }
+        
+      
+
+        
+          .c96f6cc16 {
+    font-size: 0.875rem;
+    font-weight: var(--font-default-weight);
+  }
+        
+      
+
+        
+          .c08d530b7 {
+    font-size: 0.875rem;
+    font-weight: var(--font-default-weight);
+  }
+  .ulp-passkey-benefit-heading {
+    font-size: 1.025rem;
+  }
+        
+      
+
+        
+          .c1bf36816, .c0523864c {
+    font-size: 1rem;
+    font-weight: var(--font-default-weight);
+  }
+        
+      
+
+        
+          body {
+    --ulp-label-font-size: 1rem;
+    --ulp-label-font-weight: var(--font-default-weight);
+  }
+        
+      
+
+        
+          .c1d6a1ff5, .ce28ca859, [id^='ulp-container-'] a {
+    font-size: 0.875rem;
+    font-weight: var(--font-default-weight) !important;
+  }
+        
+      
+
+        
+          .ce28ca859, .c1d6a1ff5 {
+      text-decoration: underline;
+    }
+        
+      
+
+
+
+
+        
+          :root {
+    --button-border-width: 1px;
+    --social-button-border-width: 1px;
+    --radio-border-width: 1px;
+  }
+        
+      
+
+        
+          body {
+    --button-border-radius: 0px;
+    --radio-border-radius: 0px;
+  }
+        
+      
+
+        
+          :root {
+    --input-border-width: 1px;
+  }
+        
+      
+
+        
+          body {
+    --input-border-radius: 0px;
+  }
+
+  .af-custom-form-container .af-form {
+    --border-radius: 0px;
+  }
+        
+      
+
+        
+          :root {
+    --border-radius-outer: 0px;
+  }
+        
+      
+
+        
+          :root {
+    --box-border-width: 0px;
+  }
+        
+      
+
+        
+          body {
+    --shadow-component-outer: none;
+  }
+        
+      
+
+
+
+
+        
+          
+      .cf8253932 {
+        display: none;
+      }
+
+      body {
+        --header-title-spacing: 0;
+      }
+    
+        
+      
+
+        
+          
+    .cf8253932 {
+      content: url('https://www.simmons-simmons.com/favicon-96x96.png');
+    }
+  
+        
+      
+
+        
+          body {
+    --logo-height: 59px;
+  }
+  .cf8253932 {
+    height: var(--logo-height);
+  }
+  
+        
+      
+
+        
+          
+    body {
+      --header-alignment: left;
+    }
+  
+        
+      
+
+        
+          .cf4e1c609 {
+    display: flex;
+    flex-direction: column;
+  }
+  .cf4e1c609 form, .cf4e1c609 > .cfb57e75b {
+    margin: 0;
+    order: 3;
+  }
+  .cf4e1c609 ._alternate-action, .cf4e1c609 #ulp-container-form-footer-start, .cf4e1c609 #ulp-container-form-footer-end {
+    order: 4;
+  }
+  .cf4e1c609 > .switch-to-password-container {
+    display: flex;
+    flex-direction: column;
+    order: -1;
+  }
+  .cf4e1c609 > .c4360eec2 {
+    order: 2;
+    margin-bottom: 24px;
+  }
+  .cf4e1c609 > .switch-to-password-container > .c4360eec2 {
+    order: 4;
+    margin-bottom: 24px;
+  }
+  .cf4e1c609 > .switch-to-password-container > .c4360eec2 + form {
+    margin-top: -24px;
+  }
+  .cf4e1c609 .cac797627 {
+    order: 1;
+    margin-top: 0;
+  }
+  .cf4e1c609 > .c51d3f9ca {
+    margin-bottom: 12px;
+    order: 3;
+  }
+        
+      
+
+
+
+
+        
+          .c4628171d {
+    --page-background-alignment: right;
+  }
+        
+      
+
+        
+          body {
+    --page-background-color: #FD515B;
+  }
+        
+      
+
+        
+          
+        
+      
+
+
+
+
+      
+    </style>
+    <style>
+    /* By default, hide features for javascript-disabled browsing */
+    /* We use !important to override any css with higher specificity */
+    /* It is also overriden by the styles in <noscript> in the header file */
+    .no-js {
+      clip: rect(0 0 0 0);
+      clip-path: inset(50%);
+      height: 1px;
+      overflow: hidden;
+      position: absolute;
+      white-space: nowrap;
+      width: 1px;
+    }
+  </style>
+  <noscript>
+    <style>
+      /* We use !important to override the default for js enabled */
+      /* If the display should be other than block, it should be defined specifically here */
+      .js-required { display: none !important; }
+      .no-js {
+        clip: auto;
+        clip-path: none;
+        height: auto;
+        overflow: auto;
+        position: static;
+        white-space: normal;
+        width: 100%;
+      }
+      .no-js-container {
+        width: var(--prompt-width);
+      }
+    </style>
+  </noscript>
+    
+<style>
+    @import url(https://fonts.googleapis.com/css?family=Merriweather:300,400,400i,700,700i);
+  </style>
+  <link rel="stylesheet"
+        href="https://assets.contentstack.io/v3/assets/blt3de4d56151f717f2/blte6ff0a490009ffb7/auth0.css">
+  <title>Sign in | Product Platform</title>
+</head>
+
+<body class="_widget-auto-layout ce">
+  <section class="splitPageLayout">
+    <div class="ce-base ce-component splitPageLayout__background">
+      <div class="image__wrap">
+        <img src="https://images.contentstack.io/v3/assets/blt3de4d56151f717f2/bltcf5105ddf8503ff0/68498f9d2fcbad71106643ca/split-page-layout-bg.jpg"
+             alt="" class="image__img">
+      </div>
+    </div>
+
+    <div class="u-gridContainer">
+      <div class="ce-base ce-component splitPageLayout__header">
+        <div class="splitPageLayout__logoWrapper"><svg viewBox="0 0 469 134"
+               xmlns="http://www.w3.org/2000/svg" focusable="false"
+               class="logo_svg splitPageLayout__logo" aria-label="Simmons and Simmons logo">
+            <title>Simmons + Simmons</title>
+            <path d="M202.9 22.2v36H192V28c0-11.8-1.4-18.3-10-18.3-7.6 0-13.1 6.8-13.1 16.7v31.8H158V28c0-11.8-1.4-18.3-10-18.3-7.6 0-13.1 6.8-13.1 16.7v31.8H124V1.7H135v6.5C138.9 3 144 .4 150 .4c8 0 13.2 3.5 16 9.5C170.4 3 177.4.4 184 .4 196.8.4 203 8.6 203 22.2M293.5 22.2v36h-10.8V28c0-11.8-1.4-18.3-10.1-18.3-7.6 0-13.1 6.8-13.1 16.7v31.8h-10.8V28c0-11.8-1.4-18.3-10.1-18.3-7.6 0-13.1 6.8-13.1 16.7v31.8h-10.8V1.7h10.8v6.5c4-5.3 9.2-7.8 15.3-7.8C248.7.4 254 4 256.7 10 261 3 268 .4 274.7.4c12.7 0 18.8 8.2 18.8 21.8M313.3 29.8c0 13 5.9 20.5 16.2 20.5 10.3 0 16.2-7.4 16.2-20.5 0-12.7-6.3-20-16.2-20-10 0-16.2 7.3-16.2 20m43.6.2c0 17.3-10 29.5-27.4 29.5C312.3 59.5 302 47 302 30 302 13 312.5.4 329.5.4 346.2.4 357 13.4 357 30M413 22.2v36h-10.8V26c0-9.9-2-16.2-11-16.2-8.2 0-14.2 6.8-14.2 16.6v32H366V1.6H377v7.4c4.2-6 10.2-8.7 16.5-8.7C406.2.4 413 8.6 413 22.2M467.4 9l-6.5 6.7a23 23 0 0 0-16.2-6.3c-7.4 0-11.4 2.8-11.4 7.1 0 4.7 3.3 6.3 14.3 8 13.6 2.3 21 6.4 21 17.5 0 10.2-8.5 17.5-24.2 17.5-11.2 0-20-3.8-25.5-10l7-6.9a24.1 24.1 0 0 0 18.3 7.8c9.2 0 13.3-3.2 13.3-7.9 0-4.6-2.3-7-15.8-9-13.3-2.1-19.2-7.5-19.2-16.5 0-10.3 9-16.6 22.2-16.6 10.3 0 17.5 3.5 22.7 8.7M89.5 9L83 15.8a23 23 0 0 0-16.3-6.3c-7.4 0-11.4 2.8-11.4 7.1 0 4.7 3.4 6.3 14.3 8 13.7 2.3 21 6.4 21 17.5 0 10.2-8.4 17.5-24.1 17.5-11.3 0-20-3.8-25.6-10l7-6.9a24.1 24.1 0 0 0 18.4 7.8c9.2 0 13.3-3.2 13.3-7.9 0-4.6-2.4-7-15.8-9C50.5 31.3 44.5 26 44.5 17 44.5 6.7 53.6.4 66.7.4 77.1.4 84.3 4 89.5 9.1M100.7 132.3h10.9V75.8h-10.9zM202.9 96.2v36H192v-30.1c0-11.8-1.4-18.3-10-18.3-7.6 0-13.1 6.8-13.1 16.7v31.8H158V102c0-11.8-1.4-18.3-10-18.3-7.6 0-13.1 6.8-13.1 16.7v31.8H124V75.8H135v6.5c4-5.3 9.2-7.8 15.2-7.8 8 0 13.2 3.4 16 9.5 4.4-7 11.4-9.5 18-9.5 12.7 0 18.8 8.2 18.8 21.7M293.5 96.2v36h-10.8v-30.1c0-11.8-1.4-18.3-10.1-18.3-7.6 0-13.1 6.8-13.1 16.7v31.8h-10.8V102c0-11.8-1.4-18.3-10.1-18.3-7.6 0-13.1 6.8-13.1 16.7v31.8h-10.8V75.8h10.8v6.5c4-5.3 9.2-7.8 15.3-7.8 7.9 0 13.2 3.4 15.9 9.5 4.4-7 11.4-9.5 18-9.5 12.7 0 18.8 8.2 18.8 21.7M313.3 103.8c0 13.1 5.9 20.6 16.2 20.6 10.3 0 16.2-7.5 16.2-20.6 0-12.7-6.3-20-16.2-20-10 0-16.2 7.3-16.2 20m43.6.2c0 17.4-10 29.6-27.4 29.6-17.2 0-27.5-12.7-27.5-29.6 0-17 10.5-29.5 27.5-29.5 16.7 0 27.4 13 27.4 29.5M413 96.2v36h-10.8V100c0-9.8-2-16.1-11-16.1-8.2 0-14.2 6.8-14.2 16.5v32H366V75.8H377V83c4.2-6 10.2-8.6 16.5-8.6 12.7 0 19.5 8.2 19.5 21.7M467.4 83.1l-6.5 6.6a23 23 0 0 0-16.2-6.2c-7.4 0-11.4 2.8-11.4 7.1 0 4.7 3.3 6.3 14.3 8 13.6 2.3 21 6.4 21 17.4 0 10.2-8.5 17.6-24.2 17.6-11.2 0-20-3.8-25.5-10l7-6.9a24.1 24.1 0 0 0 18.3 7.8c9.2 0 13.3-3.3 13.3-8 0-4.6-2.3-7-15.8-9-13.3-2-19.2-7.5-19.2-16.5 0-10.3 9-16.5 22.2-16.5 10.3 0 17.5 3.4 22.7 8.6M89.5 83.1L83 89.7a23 23 0 0 0-16.3-6.2c-7.4 0-11.4 2.8-11.4 7.1 0 4.7 3.4 6.3 14.3 8 13.7 2.3 21 6.4 21 17.4 0 10.2-8.4 17.6-24.1 17.6-11.3 0-20-3.8-25.6-10l7-6.9a24.1 24.1 0 0 0 18.4 7.8c9.2 0 13.3-3.3 13.3-8 0-4.6-2.4-7-15.8-9-13.3-2-19.3-7.5-19.3-16.5 0-10.3 9.1-16.5 22.2-16.5 10.4 0 17.6 3.4 22.8 8.6M25.9 64.1h16.8v8H26v17.2h-8.7V72H.4v-7.9h16.8V46.8H26zM100.7 58.2h10.9V1.7h-10.9z"
+                  class="fill"></path>
+          </svg></div>
+        <button class="splitPageLayout__closeButton" id="ss-exit-button"><span
+                class="u-ctaLabel">Exit</span><svg xmlns="http://www.w3.org/2000/svg"
+               fill="currentColor" viewBox="0 0 24 24" aria-label="Close Icon">
+            <path
+                  d="m13.597 14.543.948-.948L20 19.052l-.948.948-5.455-5.457Zm6.394-9.598L4.95 19.998 4 19.046l7.05-7.054-7.043-7.04.951-.945 7.037 7.04L19.045 4l.946.945Z">
+            </path>
+          </svg></button>
+      </div>
+      <div class="splitPageLayout__grid">
+        <div class="ce-base ce-component splitPageLayout__content">
+          <h2 class="splitPageLayout__strapline">
+            Unlock exclusive content, training and events.
+          </h2>
+
+          
+
+          
+
+          
+        </div>
+
+        <div class="splitPageLayout__form">
+          <div class="splitPageLayout__formInner"><main class="_widget login-id">
+  <section class="c9e066889 _prompt-box-outer c24a36674">
+    <div class="c92d3ab88 c6874f767">
+      
+    
+      
+        
+          
+        
+      
+    
+      <div class="c6073dbf5">
+        <header class="c43ec3b8e c61efee76">
+          <div title="simmons-test-qa" id="custom-prompt-logo" style="width: auto !important; height: 60px !important; position: static !important; margin: auto !important; padding: 0 !important; background-color: transparent !important; background-position: center !important; background-size: contain !important; background-repeat: no-repeat !important"></div>
+        
+          <img class="cf8253932 c89a9c367" id="prompt-logo-center" src="https://www.simmons-simmons.com/favicon-96x96.png" alt="simmons-test-qa">
+        
+          
+            <h1 class="cff04dc99 c2602ef40">Sign in to your account</h1>
+          
+        
+          <div class="c96f6cc16 c11e6ef8b">
+            <p class="cc7961e78 c08a24f93">Sign in to continue to Simmons &amp; Simmons</p>
+          </div>
+        </header>
+      
+        <div class="c08d530b7 cf4e1c609">
+          
+        
+          
+            <div class="c9b445085 cfb57e75b">
+              <div class="cecec4753">
+                
+              
+                
+              
+                
+                  
+                    <form method="POST" class="ccf7a9d0d _form-login-id" data-form-primary="true" data-disable-html-validations="true">
+                      
+                    
+                      <input type="hidden" name="state" value="hKFo2SA0VTdIeWZqRmNqdzY3RklSSmozbVFHbGl6bjNlV0Z3ZaFur3VuaXZlcnNhbC1sb2dpbqN0aWTZIENKWlAtWGZ6eU9QSVJzRF9hSEdreTRGRVJveExwMHNno2NpZNkgelp2bVNOY0FGZllicDQ4UWJKSThQcGJ5SWxVbHVDUHg">
+                    
+                      
+                    
+                      
+                    
+                      <div class="c9b445085 cfb57e75b">
+                        <div class="cecec4753">
+                          
+                        
+                          
+                            
+                              <div class="input-wrapper _input-wrapper">
+                                <div class="c757b6d73 cbbcc2557 text c2318be70 ulp-field" data-action-text="" data-alternate-action-text="">
+                                  <label id="username-label" class="c77b7fe5a cf24f1e66 c23380ab5" for="username">
+                                    Email address
+                                  
+                                    <span class="required" aria-hidden="true">*</span>
+                                  </label>
+                                
+                                  <input class="input c4f6eeeac cc352ae75" inputMode="email" name="username" id="username" type="text" aria-labelledby="username-label" aria-required="true" value="" required autoComplete="email" autoCapitalize="none" spellCheck="false" autoFocus>
+                                </div>
+                              
+                                
+                                  <div id="error-cs-username-required" class="ulp-error-info aria-error-check" data-ulp-validation-function="ulpRequiredFunction" data-ulp-validation-event-listeners="blur,change,input,focus" data-ulp-validation-target="username" aria-live="polite" aria-atomic="true">
+                                    Please enter an email address
+                                  </div>
+                                
+                              
+                                
+                              
+                                
+                                  <div id="error-cs-email-invalid" class="ulp-error-info aria-error-check" data-ulp-validation-function="ulpEmailValidationFunction" data-ulp-validation-event-listeners="blur,change,input,focus" data-ulp-validation-target="username" aria-live="polite" aria-atomic="true">Email is not valid.</div>
+                                
+                              
+                                
+                              
+                                
+                                  <div id="error-cs-pattern-mismatch" class="ulp-error-info aria-error-check" data-ulp-validation-function="ulpPatternCheckFunction" data-ulp-validation-event-listeners="blur,change,input,focus" data-ulp-validation-target="username" aria-live="polite" aria-atomic="true"></div>
+                                
+                              
+                                
+                              </div>
+                            
+                          
+                        
+                          
+                        
+                          
+                        </div>
+                      </div>
+                    
+                      
+                    
+                      <input class="hide" type="password" autoComplete="off" tabindex="-1" aria-hidden="true">
+                    
+                      <input type="hidden" id="js-available" name="js-available" value="false">
+                    
+                      <input type="hidden" id="webauthn-available" name="webauthn-available" value="false">
+                    
+                      <input type="hidden" id="is-brave" name="is-brave" value="false">
+                    
+                      <input type="hidden" id="webauthn-platform-available" name="webauthn-platform-available" value="false">
+                    
+                      
+                    
+                      <div class="cb114345b">
+                        
+                          <button type="submit" name="action" value="default" class="c1bf36816 c43bb2a83 ccc73019a cc7efafee _button-login-id" data-action-button-primary="true">CONTINUE</button>
+                        
+                      </div>
+                    </form>
+                  
+                
+              </div>
+            </div>
+          
+        
+          
+        
+          
+            <div class="ulp-alternate-action  _alternate-action __s16nu9">
+              <p class="cc7961e78 c08a24f93 c6b24be24">Don&#39;t have an account?
+                <a class="ce28ca859 c05fa8133" href="/u/signup/identifier?state=hKFo2SA0VTdIeWZqRmNqdzY3RklSSmozbVFHbGl6bjNlV0Z3ZaFur3VuaXZlcnNhbC1sb2dpbqN0aWTZIENKWlAtWGZ6eU9QSVJzRF9hSEdreTRGRVJveExwMHNno2NpZNkgelp2bVNOY0FGZllicDQ4UWJKSThQcGJ5SWxVbHVDUHg">Sign up here</a>
+              </p>
+            </div>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        </div>
+      </div>
+    </div>
+  
+    
+  </section>
+</main>
+<script id="client-scripts">
+window.ulpFlags = {"custom_prompts_passkeys":false,"enable_ulp_numeric_input_mode":true,"enable_ulp_wcag_compliance":true,"enable_ulp_rtl_support":false,"disable_ulp_form_submission_fix":false};!function(){var e,t,S,T,L,F,k,P,n,R,N,I,q,O,j,r,a,i={exports:function(e,t){return"object"==typeof e.ulpFlags&&null!==e.ulpFlags?e.ulpFlags:{}}}.exports(window,document),o=((e={}).exports=function(n,l){var r={},a={};function u(e,t){if(e.classList)return e.classList.add(t);var n=e.className.split(" ");-1===n.indexOf(t)&&(n.push(t),e.className=n.join(" "))}function i(e,t,n,r){return e.addEventListener(t,n,r)}function o(e){return"string"==typeof e}function c(e,t){return o(e)?l.querySelector(e):e.querySelector(t)}function s(e,t){var n=o(e)?l.querySelectorAll(e):e.querySelectorAll(t);return Array.prototype.slice.call(n)}function f(e,t){if(e.classList)return e.classList.remove(t);var n=e.className.split(" "),r=n.indexOf(t);-1!==r&&(n.splice(r,1),e.className=n.join(" "))}function d(e,t){return e.getAttribute(t)}function p(e,t,n){return e.setAttribute(t,n)}function h(e){return e.remove()}var e=["text","number","email","password","tel","url"],t="select,textarea,"+e.map(function(e){return'input[type="'+e+'"]'}).join(",");return{addClass:u,toggleClass:function(e,t,n){if(!0===n||!1===n)return r=e,a=t,!0!==n?f(r,a):u(r,a);var r,a;if(e.classList)return e.classList.toggle(t);var i=e.className.split(" "),o=i.indexOf(t);-1!==o?i.splice(o,1):i.push(t),e.className=i.join(" ")},hasClass:function(e,t){return e.classList?e.classList.contains(t):-1!==e.className.split(" ").indexOf(t)},addClickListener:function(e,t){return i(e,"click",t)},addEventListener:i,getAttribute:d,hasAttribute:function(e,t){return e.hasAttribute(t)},getElementById:function(e){return l.getElementById(e)},getParent:function(e){return e.parentNode},isString:o,loadScript:function(e,t){var n=l.createElement("script");for(var r in t)r.startsWith("data-")?n.dataset[r.replace("data-","")]=t[r]:n[r]=t[r];n.src=e,l.body.appendChild(n)},removeScript:function(e){l.querySelectorAll('script[src="'+e+'"]').forEach(function(e){e.remove()})},poll:function(e){var i=e.interval||2e3,t=e.url||n.location.href,o=e.condition||function(){return!0},u=e.onSuccess||function(){},c=e.onError||function(){};return setTimeout(function r(){if(l.hidden)return setTimeout(r,i);var a=new XMLHttpRequest;return a.open("GET",t),a.setRequestHeader("Accept","application/json"),a.onload=function(){if(200===a.status){var e="application/json"===a.getResponseHeader("Content-Type").split(";")[0]?JSON.parse(a.responseText):a.responseText;return o(e)?u():setTimeout(r,i)}if(429!==a.status)return c({status:a.status,responseText:a.responseText});var t=1e3*Number.parseInt(a.getResponseHeader("X-RateLimit-Reset")),n=t-(new Date).getTime();return setTimeout(r,i<n?n:i)},a.send()},i)},querySelector:c,querySelectorAll:s,removeClass:f,removeElement:h,setAttribute:p,removeAttribute:function(e,t){return e.removeAttribute(t)},swapAttributes:function(e,t,n){var r=d(e,t),a=d(e,n);p(e,n,r),p(e,t,a)},setGlobalFlag:function(e,t){r[e]=!!t},getGlobalFlag:function(e){return!!r[e]},setSubmittedForm:function(e,t){a[e]=t},getSubmittedForm:function(e){return a[e]},preventFormSubmit:function(e){e.stopPropagation(),e.preventDefault()},getUlpFields:function(e){var t=[];return s(e,'input[name^="ulp-"], textarea[name^="ulp-"], select[name^="ulp-"]').forEach(function(e){t.push({name:d(e,"name"),value:e.value})}),t},appendUlpFieldsToForm:function(n,e){e&&e.length&&(s(n,'input[type="hidden"][name^="ulp-"], textarea[name^="ulp-"], select[name^="ulp-"]').forEach(function(e){h(e)}),e.forEach(function(e){var t=l.createElement("input");p(t,"type","hidden"),p(t,"name",e.name),p(t,"value",e.value),n.appendChild(t)}))},matchMedia:function(e){return"function"!=typeof n.matchMedia&&n.matchMedia(e).matches},dispatchEvent:function(e,t,n){var r;"function"!=typeof Event?(r=l.createEvent("Event")).initCustomEvent(t,n,!1):r=new Event(t,{bubbles:n}),e.dispatchEvent(r)},timeoutPromise:function(e,a){return new Promise(function(t,n){var r=setTimeout(function(){n(new Error("timeoutPromise: promise timed out"))},e);a.then(function(e){clearTimeout(r),t(e)},function(e){clearTimeout(r),n(e)})})},createMutationObserver:function(e){return"undefined"==typeof MutationObserver?null:new MutationObserver(e)},consoleWarn:function(){(console.warn||console.log).apply(console,arguments)},getConfigJson:function(e){try{var t=c(e);if(!t)return null;var n=t.value;return n?JSON.parse(n):null}catch(e){return null}},getCSSVariable:function(e){return getComputedStyle(l.documentElement).getPropertyValue(e)},removeAndTrimString:function(e,t){var n=new RegExp(t,"g"),r=e.replace(n,"");return r=r.replace(/\s+/g,"  ").trim()},htmlEncode:function(e){var t=l.createTextNode(e),n=l.createElement("span");return n.appendChild(t),n.innerHTML||""},cleanServerErrorMessage:function(e,t){0<e.length&&0<t.length&&t.forEach(function(e){h(e)})},arrayFrom:function(e){return Array.prototype.slice.call(e)},arrayIncludes:function(e,t){return-1!==e.indexOf(t)},stringStartsWith:function(e,t){return 0===e.indexOf(t)},stringEndsWith:function(e,t){return-1!==e.indexOf(t,e.length-t.length)},setTimeout:setTimeout,globalWindow:n,SUPPORTED_INPUT_TYPES:e,ELEMENT_TYPE_SELECTOR:t,RUN_INIT:!0}},e.exports)(window,document),u=function(){var e={};function g(e){if(!("string"==typeof e||e instanceof String)){var t=typeof e;throw null===e?t="null":"object"===t&&(t=e.constructor.name),new TypeError("Expected a string but received a "+t)}}function b(e,t){var n,r;g(e),r="object"==typeof t?(n=t.min||0,t.max):(n=t,arguments[2]);var a=encodeURI(e).split(/%..|./).length-1;return n<=a&&(void 0===r||a<=r)}function w(e,t){for(var n in void 0===e&&(e={}),t)void 0===e[n]&&(e[n]=t[n]);return e}var y={require_tld:!0,allow_underscores:!1,allow_trailing_dot:!1,allow_numeric_tld:!1,allow_wildcard:!1,ignore_max_length:!1},t="(?:[0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])",n="("+t+"[.]){3}"+t,r=new RegExp("^"+n+"$"),a="(?:[0-9a-fA-F]{1,4})",i=new RegExp("^((?:"+a+":){7}(?:"+a+"|:)|(?:"+a+":){6}(?:"+n+"|:"+a+"|:)|(?:"+a+":){5}(?::"+n+"|(:"+a+"){1,2}|:)|(?:"+a+":){4}(?:(:"+a+"){0,1}:"+n+"|(:"+a+"){1,3}|:)|(?:"+a+":){3}(?:(:"+a+"){0,2}:"+n+"|(:"+a+"){1,4}|:)|(?:"+a+":){2}(?:(:"+a+"){0,3}:"+n+"|(:"+a+"){1,5}|:)|(?:"+a+":){1}(?:(:"+a+"){0,4}:"+n+"|(:"+a+"){1,6}|:)|(?::((?::"+a+"){0,5}:"+n+"|(?::"+a+"){1,7}|:)))(%[0-9a-zA-Z-.:]{1,})?$");function _(e,t){return void 0===t&&(t=""),g(e),(t=String(t))?"4"===t?r.test(e):"6"===t&&i.test(e):_(e,4)||_(e,6)}var E={allow_display_name:!1,allow_underscores:!1,require_display_name:!1,allow_utf8_local_part:!0,require_tld:!0,blacklisted_chars:"",ignore_max_length:!1,host_blacklist:[],host_whitelist:[]},x=/^([^\x00-\x1F\x7F-\x9F\cX]+)</i,A=/^[a-z\d!#\$%&'\*\+\-\/=\?\^_`{\|}~]+$/i,C=/^[a-z\d]+$/,S=/^([\s\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e]|(\\[\x01-\x09\x0b\x0c\x0d-\x7f]))*$/i,T=/^[a-z\d!#\$%&'\*\+\-\/=\?\^_`{\|}~\u00A1-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+$/i,L=/^([\s\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|(\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*$/i,F=254;function u(e,t,n,r,a){if(g(e),e=e.trim(),(t=w(t,E)).require_display_name||t.allow_display_name){var i=e.match(x);if(i){var o=i[1];if(e=e.replace(o,"").replace(/(^<|>$)/g,""),a(o," ")&&(o=o.slice(0,-1)),!function(e){var t=e.replace(/^"(.+)"$/,"$1");if(!t.trim())return!1;if(/[\.";<>]/.test(t)){if(t===e)return!1;if(t.split('"').length!==t.split('\\"').length)return!1}return!0}(o))return!1}else if(t.require_display_name)return!1}if(!t.ignore_max_length&&e.length>F)return!1;var u=e.split("@"),c=u.pop(),l=c.toLowerCase();if(n(t.host_blacklist,l))return!1;if(0<t.host_whitelist.length&&!n(t.host_whitelist,l))return!1;var s=u.join("@");if(t.domain_specific_validation&&("gmail.com"===l||"googlemail.com"===l)){var f=(s=s.toLowerCase()).split("+")[0];if(!b(f.replace(/\./g,""),{min:6,max:30}))return!1;for(var d=f.split("."),p=0;p<d.length;p++)if(!C.test(d[p]))return!1}if(!(!1!==t.ignore_max_length||b(s,{max:64})&&b(c,{max:254})))return!1;if(!function(e,t){g(e),(t=w(t,y)).allow_trailing_dot&&"."===e[e.length-1]&&(e=e.substring(0,e.length-1)),!0===t.allow_wildcard&&0===e.indexOf("*.")&&(e=e.substring(2));var n=e.split("."),r=n[n.length-1];if(t.require_tld){if(n.length<2)return!1;if(!t.allow_numeric_tld&&!/^([a-z\u00A1-\u00A8\u00AA-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]{2,}|xn[a-z0-9-]{2,})$/i.test(r))return!1;if(/\s/.test(r))return!1}return!(!t.allow_numeric_tld&&/^\d+$/.test(r))&&n.every(function(e){return!(63<e.length&&!t.ignore_max_length||!/^[a-z_\u00a1-\uffff0-9-]+$/i.test(e)||/[\uff01-\uff5e]/.test(e)||/^-|-$/.test(e)||!t.allow_underscores&&/_/.test(e))})}(c,{require_tld:t.require_tld,ignore_max_length:t.ignore_max_length,allow_underscores:t.allow_underscores})){if(!t.allow_ip_domain)return!1;if(!_(c)){if(!r(c,"[")||!a(c,"]"))return!1;var h=c.slice(1,-1);if(0===h.length||!_(h))return!1}}if('"'===s[0])return s=s.slice(1,s.length-1),t.allow_utf8_local_part?L.test(s):S.test(s);for(var m=t.allow_utf8_local_part?T:A,v=(d=s.split("."),0);v<d.length;v++)if(!m.test(d[v]))return!1;return!t.blacklisted_chars||-1===s.search(new RegExp("["+t.blacklisted_chars+"]+","g"))}return e.exports=function(r,a,n,i,o){return{ulpRequiredFunction:function(e,t){return!t||!!e.value},ulpPasswordPolicyFunction:function(e,t){if(r&&r.ulpFlags&&r.ulpFlags.disable_ulp_form_submission_fix)return!0;if(!e||"password"!==e.name)return!0;if(!a.querySelector(".c6d9a185f.c7032a319"))return!0;if(!e.value)return!0;var n=e.classList&&e.classList.contains("c81565497");return!t&&!n||!n},ulpEmailValidationFunction:function(e,t){return!t||!e.value||!!u(e.value,void 0,n,i,o)},ulpPatternCheckFunction:function(e,t){return!t||!e.value||function(e){if("password"===e.name)return!0;var t=e.getAttribute("pattern");return!t||null!==e.value.match(t)}(e)}}},e.exports}()(window,document,o.arrayIncludes,o.stringStartsWith,o.stringEndsWith),c={exports:function(e,t){for(var i="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_",s=new Uint8Array(256),o=0;o<i.length;o++)s[i.charCodeAt(o)]=o;function u(e){var t,n=new Uint8Array(e),r=n.length,a="";for(t=0;t<r;t+=3)a+=i[n[t]>>2],a+=i[(3&n[t])<<4|n[t+1]>>4],a+=i[(15&n[t+1])<<2|n[t+2]>>6],a+=i[63&n[t+2]];return r%3==2?a=a.substring(0,a.length-1):r%3==1&&(a=a.substring(0,a.length-2)),a}function n(){return navigator&&navigator.credentials&&"undefined"!=typeof PublicKeyCredential}return{base64URLEncode:u,base64URLDecode:function(e){var t,n,r,a,i,o=.75*e.length,u=e.length,c=0,l=new Uint8Array(o);for(t=0;t<u;t+=4)n=s[e.charCodeAt(t)],r=s[e.charCodeAt(t+1)],a=s[e.charCodeAt(t+2)],i=s[e.charCodeAt(t+3)],l[c++]=n<<2|r>>4,l[c++]=(15&r)<<4|a>>2,l[c++]=(3&a)<<6|63&i;return l.buffer},publicKeyCredentialToJSON:function e(t){if(t instanceof Array){var n=[];for(o=0;o<t.length;o+=1)n.push(e(t[o]));return n}if(t instanceof ArrayBuffer)return u(t);if(t instanceof Object){var r={};for(var a in t)r[a]=e(t[a]);return r}return t},str2ab:function(e){for(var t=new ArrayBuffer(e.length),n=new Uint8Array(t),r=0,a=e.length;r<a;r++)n[r]=e.charCodeAt(r);return t},isWebAuthnAvailable:n,isWebauthnPlatformAuthenticatorAvailableAsync:function(e){return n()?e(1e3,PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable()):Promise.resolve(!1)}}}}.exports(window,document);({exports:function(e,r,a,t){var n=e(".c6fe4abdb"),i=e("#alert-trigger"),o=e(".cbcd1ca13"),u=e(".c3c11c4f1"),c=!1;i&&u&&n&&t(n,function(e){var t=e.target===i,n=u.contains(e.target);return t&&!c?(r(o,"show"),void(c=!0)):t&&c||c&&!n?(a(o,"show"),void(c=!1)):void 0})}}).exports(o.querySelector,o.addClass,o.removeClass,o.addClickListener),(S="recaptcha_v2",T="recaptcha_enterprise",L="hcaptcha",F="friendly_captcha",k="arkose",P="auth0_v2",(t={}).exports=function(i,u,c,l,s,a,f,d,e){if(!e.enable_ulp_rtl_support){var p=500,h=3,m=0,v=c("div[data-captcha-sitekey]"),g=c(".ulp-captcha-client-error"),n=g?g.innerHTML:"",b=c("div[data-captcha-sitekey] input");if(v){var t=_(),r=E();t&&r&&function(){var e="captchaCallback_"+Math.floor(1000001*Math.random()),t=_(),n={async:!0,defer:!0},r=function(e,t,n,r){switch(_()){case S:return"https://www.recaptcha.net/recaptcha/api.js?render=explicit&hl="+e+"&onload="+t;case T:return"https://www.recaptcha.net/recaptcha/enterprise.js?render=explicit&hl="+e+"&onload="+t;case L:return"https://js.hcaptcha.com/1/api.js?render=explicit&hl="+e+"&onload="+t;case F:return"https://cdn.jsdelivr.net/npm/friendly-challenge@0.9.14/widget.min.js";case k:return"https://"+n+".arkoselabs.com/v2/"+r+"/api.js";case P:return"https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload="+t}}(y(),e,v?v.getAttribute("data-captcha-client-subdomain"):null,E());if(t===k||t===P){n["data-callback"]=e;var o=!(n.onerror=function(){if(m<h)return u(r),i(r,n),void m++;u(r),x("BYPASS_CAPTCHA")}),a=function(e){o=!0;try{if(!e||"function"!=typeof e.run||"function"!=typeof e.setConfig)return void A("INVALID_CREDENTIALS");r=e,a=c('form[data-form-primary="true"]'),i=function(e){var t=b?b.value:"";t&&""!==t||(e.preventDefault(),e.stopPropagation(),setTimeout(function(){r.run()},p))},a&&(a.addEventListener("submit",i,!0),r.setConfig({onCompleted:function(e){if(!e||!e.token)return a&&a.removeEventListener("submit",i,!0),void A("INVALID_CREDENTIALS");x(e.token),a&&(a.removeEventListener("submit",i,!0),a.requestSubmit?a.requestSubmit():a.submit())},onError:function(n){return fetch("https://status.arkoselabs.com/api/v2/status.json").then(function(e){return e.json()}).then(function(e){var t=e.status.indicator;return"none"===t}).catch(function(e){return!1}).then(function(e){if(e&&m<h)return r.reset(),new Promise(function(e){setTimeout(function(){e(r.run())},p),m++});var t=n&&n.ca183e020?n.ca183e020:"RUNTIME_ERROR";g.innerHTML=g.innerHTML.replace("#{errorCode}",d(t)),l(v,"ca183e020"),s(g,"hide"),x("BYPASS_CAPTCHA"),a.removeEventListener("submit",i,!0)})}}))}catch(e){A("INIT_ERROR")}var r,a,i};t===P&&(a=function(){C()}),window[e]=a,t===k&&(n.onload=function(){setTimeout(function(){o||A("INVALID_CREDENTIALS")},250)})}else window[e]=function(){delete window[e],C()},t===F&&(l(w(),"frc-captcha"),f(w(),"data-sitekey",E()),n.onload=window[e]);i(r,n)}()}}function o(){switch(_()){case S:return window.grecaptcha;case T:return window.grecaptcha.enterprise;case L:return window.hcaptcha;case F:return window.friendlyChallenge;case k:return window.arkose;case P:return window.turnstile}}function w(){return c(function(){switch(_()){case S:case T:return"#ulp-recaptcha";case L:return"#ulp-hcaptcha";case F:return"#ulp-friendly-captcha";case k:return"#ulp-arkose";case P:return"#ulp-auth0-v2-captcha"}}())}function y(){return v?v.getAttribute("data-captcha-lang"):null}function _(){return v?v.getAttribute("data-captcha-provider"):null}function E(){return v?v.getAttribute("data-captcha-sitekey"):null}function x(e){return b.value=e}function A(e){if(g&&v){g.innerHTML=n.replace("#{errorCode}",d(e||"INIT_ERROR")),l(v,"ca183e020"),s(g,"hide");var t=c("#error-element-captcha");t&&l(t,"hide")}}function C(){var e=o(),t=a("--ulp-captcha-widget-theme");if(t=t?t.trim():"light",_()===F)"dark"===t&&l(c(".frc-captcha"),"dark"),(r=e.autoWidget).opts.language=y(),r.opts.doneCallback=function(e){x(e)};else{var n={sitekey:E(),theme:t,"expired-callback":function(){x(""),l(v,"ca183e020"),e.reset(r)},callback:function(e){x(e),s(v,"ca183e020")}};_()===P&&(n.language=y(),n.retry="never",n.size="flexible",n["response-field"]=!1,n["error-callback"]=function(e){return console.error("ERROR: Auth Challenge Error Code",e),x(""),m<h?(m++,o().reset(r)):(g.innerHTML=g.innerHTML.replace("#{errorCode}",d(e)),l(v,"ca183e020"),s(g,"hide")),!0});var r=e.render(w(),n)}}},t.exports)(o.loadScript,o.removeScript,o.querySelector,o.addClass,o.removeClass,o.getCSSVariable,o.setAttribute,o.htmlEncode,i),(R="recaptcha_v2",N="recaptcha_enterprise",I="hcaptcha",q="friendly_captcha",O="arkose",j="auth0_v2",(n={}).exports=function(i,u,c,l,s,a,f,d,e){if(e.enable_ulp_rtl_support){var p=500,h=3,m=0,v=c("div[data-captcha-sitekey]"),g=c(".ulp-captcha-client-error"),n=g?g.innerHTML:"",b=c("div[data-captcha-sitekey] input");if(v){var t=_(),r=E();t&&r&&function(){var e="captchaCallback_"+Math.floor(1000001*Math.random()),t=_(),n={async:!0,defer:!0},r=function(e,t,n,r){switch(_()){case R:return"https://www.recaptcha.net/recaptcha/api.js?render=explicit&hl="+e+"&onload="+t;case N:return"https://www.recaptcha.net/recaptcha/enterprise.js?render=explicit&hl="+e+"&onload="+t;case I:return"https://js.hcaptcha.com/1/api.js?render=explicit&hl="+e+"&onload="+t;case q:return"https://cdn.jsdelivr.net/npm/friendly-challenge@0.9.14/widget.min.js";case O:return"https://"+n+".arkoselabs.com/v2/"+r+"/api.js";case j:return"https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload="+t}}(y(),e,v?v.getAttribute("data-captcha-client-subdomain"):null,E());if(t===O||t===j){n["data-callback"]=e;var o=!(n.onerror=function(){if(m<h)return u(r),i(r,n),void m++;u(r),x("BYPASS_CAPTCHA")}),a=function(e){o=!0;try{if(!e||"function"!=typeof e.run||"function"!=typeof e.setConfig)return void A("INVALID_CREDENTIALS");r=e,a=c('form[data-form-primary="true"]'),i=function(e){var t=b?b.value:"";t&&""!==t||(e.preventDefault(),e.stopPropagation(),setTimeout(function(){r.run()},p))},a&&(a.addEventListener("submit",i,!0),r.setConfig({language:y(),onCompleted:function(e){if(!e||!e.token)return a&&a.removeEventListener("submit",i,!0),void A("INVALID_CREDENTIALS");x(e.token),a&&(a.removeEventListener("submit",i,!0),a.requestSubmit?a.requestSubmit():a.submit())},onError:function(n){return fetch("https://status.arkoselabs.com/api/v2/status.json").then(function(e){return e.json()}).then(function(e){var t=e.status.indicator;return"none"===t}).catch(function(e){return!1}).then(function(e){if(e&&m<h)return r.reset(),new Promise(function(e){setTimeout(function(){e(r.run())},p),m++});var t=n&&n.ca183e020?n.ca183e020:"RUNTIME_ERROR";g.innerHTML=g.innerHTML.replace("#{errorCode}",d(t)),l(v,"ca183e020"),s(g,"hide"),x("BYPASS_CAPTCHA"),a.removeEventListener("submit",i,!0)})}}))}catch(e){A("INIT_ERROR")}var r,a,i};t===j&&(a=function(){C()}),window[e]=a,t===O&&(n.onload=function(){setTimeout(function(){o||A("INVALID_CREDENTIALS")},250)})}else window[e]=function(){delete window[e],C()},t===q&&(l(w(),"frc-captcha"),f(w(),"data-sitekey",E()),f(w(),"data-lang",y()),n.onload=window[e]);i(r,n)}()}}function o(){switch(_()){case R:return window.grecaptcha;case N:return window.grecaptcha.enterprise;case I:return window.hcaptcha;case q:return window.friendlyChallenge;case O:return window.arkose;case j:return window.turnstile}}function w(){return c(function(){switch(_()){case R:case N:return"#ulp-recaptcha";case I:return"#ulp-hcaptcha";case q:return"#ulp-friendly-captcha";case O:return"#ulp-arkose";case j:return"#ulp-auth0-v2-captcha"}}())}function y(){return v?v.getAttribute("data-captcha-lang"):null}function _(){return v?v.getAttribute("data-captcha-provider"):null}function E(){return v?v.getAttribute("data-captcha-sitekey"):null}function x(e){return b.value=e}function A(e){if(g&&v){g.innerHTML=n.replace("#{errorCode}",d(e||"INIT_ERROR")),l(v,"ca183e020"),s(g,"hide");var t=c("#error-element-captcha");t&&l(t,"hide")}}function C(){var e=o(),t=a("--ulp-captcha-widget-theme");if(t=t?t.trim():"light",_()===q)"dark"===t&&l(c(".frc-captcha"),"dark"),(r=e.autoWidget).opts.language=y(),r.opts.doneCallback=function(e){x(e)};else{var n={sitekey:E(),theme:t,"expired-callback":function(){x(""),l(v,"ca183e020"),e.reset(r)},callback:function(e){x(e),s(v,"ca183e020")}};_()===j&&(n.language=y(),n.retry="never",n.size="flexible",n["response-field"]=!1,n["error-callback"]=function(e){return console.error("ERROR: Auth Challenge Error Code",e),x(""),m<h?(m++,o().reset(r)):(g.innerHTML=g.innerHTML.replace("#{errorCode}",d(e)),l(v,"ca183e020"),s(g,"hide")),!0});var r=e.render(w(),n)}}},n.exports)(o.loadScript,o.removeScript,o.querySelector,o.addClass,o.removeClass,o.getCSSVariable,o.setAttribute,o.htmlEncode,i),((r={}).exports=function(r,e,a,i,o,u,c,l,n,s,t){if(!t.enable_ulp_wcag_compliance){if(r("body._simple-labels"))return e(".c77b7fe5a.no-js").forEach(function(e){o(e,"no-js")}),void e(".c77b7fe5a.js-required").forEach(function(e){i(e,"hide")});e(".c757b6d73:not(.cdff7bc4a):not(disabled)").forEach(function(e){i(e,"c5348cf6a");var t,n=r(e,".input");n.value&&i(e,"cbc77bc77"),a(e,"change",f),a(n,"blur",f),a(n,"animationstart",d),t=n,c(function(){t.value&&l(t,"change",!0)},100)})}function f(e){var t=e.target,n=u(t);t.value||s(t,"data-autofilled")?i(n,"cbc77bc77"):o(n,"cbc77bc77")}function d(e){var t=e.target;"onAutoFillStart"===e.animationName&&(n(t,"data-autofilled",!0),l(e.target,"change",!0),a(t,"keyup",p,{once:!0}))}function p(e){var t=e.target;n(t,"data-autofilled","")}},r.exports)(o.querySelector,o.querySelectorAll,o.addEventListener,o.addClass,o.removeClass,o.getParent,o.setTimeout,o.dispatchEvent,o.setAttribute,o.getAttribute,i),{exports:function(e,t,r,a,i,o,u,c){function n(e){var t=r("submitted"),n=i("submittedForm");a("submitted",!0),o("submittedForm",e.currentTarget),t&&n&&n===e.currentTarget?u(e):"apple"===c(e.target,"data-provider")&&setTimeout(function(){a("submitted",!1)},2e3)}var l=e("form");l&&l.forEach(function(e){t(e,"submit",n)})}}.exports(o.querySelectorAll,o.addEventListener,o.getGlobalFlag,o.setGlobalFlag,o.getSubmittedForm,o.setSubmittedForm,o.preventFormSubmit,o.getAttribute),{exports:function(t,e,n){var r=t("form._form-detect-browser-capabilities"),a=t("main.login-id"),i=t("main.signup-with-passkeys"),o=t("div#passkey-detect-browser-capabilities");if(r||a||i||o){var u=e.isWebAuthnAvailable();t("#webauthn-available").value=u?"true":"false",t("#js-available").value="true",navigator.brave?navigator.brave.isBrave().then(function(e){t("#is-brave").value=e,c()}):c()}function c(){u?e.isWebauthnPlatformAuthenticatorAvailableAsync(n).then(function(e){t("#webauthn-platform-available").value=e?"true":"false",r&&r.submit()}).catch(function(e){t("#webauthn-platform-available").value="false",r&&r.submit()}):(t("#webauthn-platform-available").value="false",r&&r.submit())}}}.exports(o.querySelector,c,o.timeoutPromise),function(){var e={};function s(e,a,n,t,r,i,o,u,c){var l="user-initiated-passkey-challenge",s=a("#allow-passkeys");if(s&&s.value){var f=r("#passkey-config-json");if(f){var d=a(".passkey-begin-button"),p=n.isWebauthnPlatformAuthenticatorAvailableAsync(t),h=a("#username"),m=f,v=new AbortController;m.publicKey.challenge=n.base64URLDecode(m.publicKey.challenge);var g=a('form[data-form-primary="true"]');d&&e(d,function(e){d.disabled=!0,v.abort(l),navigator.credentials.get(m).then(function(e){var r=_(e);p.then(function(e){if(r.isUserVerifyingPlatformAuthenticatorAvailable=e,y(JSON.stringify(r)),c.custom_prompts_passkeys){var t=g?o(g):[];if(t.length){var n=a("form._form-passkey-challenge");u(n,t)}}b()})}).catch(function(e){w(e)})}),window.PublicKeyCredential&&window.PublicKeyCredential.isConditionalMediationAvailable&&window.PublicKeyCredential.isConditionalMediationAvailable().then(function(e){if(e){var t=Object.assign({},m,{mediation:"conditional",signal:v.signal});navigator.credentials.get(t).then(function(e){h.blur();var r=_(e);p.then(function(e){if(r.isUserVerifyingPlatformAuthenticatorAvailable=e,y(JSON.stringify(r)),c.custom_prompts_passkeys){var t=g?o(g):[];if(t.length){var n=a("form._form-passkey-challenge");u(n,t)}}b()})}).catch(function(e){e!==l&&"AbortError"!==e.name&&i("autofill UI error",e)})}}).catch(function(){})}}function b(){a("form._form-passkey-challenge").submit()}function w(e){var t;a("#action").value="showError::"+(t=e,JSON.stringify({name:t.name,message:t.message,stack:t.stack})),a("form._form-passkey-challenge").submit()}function y(e){a("#passkey").value=e}function _(e){var t={id:e.id,rawId:n.base64URLEncode(e.rawId),type:e.type,response:{clientDataJSON:n.base64URLEncode(e.response.clientDataJSON),authenticatorData:n.base64URLEncode(e.response.authenticatorData),signature:n.base64URLEncode(e.response.signature),userHandle:e.response.userHandle?n.base64URLEncode(e.response.userHandle):null}};return e.authenticatorAttachment&&(t.authenticatorAttachment=e.authenticatorAttachment),t}}return e.exports=function(e,t,n,r,a,i,o,u,c,l){return e(window,"load",function(e){s(t,n,r,a,i,o,u,c,l)}),{configurePasskeys:s}},e.exports}()(o.addEventListener,o.addClickListener,o.querySelector,c,o.timeoutPromise,o.getConfigJson,o.consoleWarn,o.getUlpFields,o.appendUlpFieldsToForm,i),{exports:function(t,e,n){var r=e(".passkey-hidden-ui"),a=navigator.userAgent.toLowerCase(),i=!!window.safari||a.match(/safari/)&&!a.match(/chrome/)&&!a.match(/chromium/);!r||r.length<=0||(i?r.forEach(function(e){t(e,"passkey-hidden-ui")}):window.PublicKeyCredential&&window.PublicKeyCredential.isConditionalMediationAvailable&&window.PublicKeyCredential.isConditionalMediationAvailable().then(function(e){e?r.forEach(function(e){n(e)}):r.forEach(function(e){t(e,"passkey-hidden-ui")})}).catch(function(e){r.forEach(function(e){t(e,"passkey-hidden-ui")})}))}}.exports(o.removeClass,o.querySelectorAll,o.removeElement),{exports:function(n,e,r,a,i,o,u,c,l,t,s,f){if(f.enable_ulp_wcag_compliance){var d=e("[id^='ulp-container-']");if(d&&d.length){var p=t(_);if(p)for(var h=0;h<d.length;h++)p.observe(d[h],{childList:!0,subtree:!0})}_()}function m(e){var t=e.target,n=o(t);t.value||c(t,"data-autofilled")?a(n,"cbc77bc77"):i(n,"cbc77bc77")}function v(e){var t=e.target,n=o(t);a(n,"focus"),y(t,n)}function g(e){var t=e.target,n=o(t);i(n,"focus"),m(e),y(t,n)}function b(e){var t=e.target;l(t,"data-autofilled","")}function w(e){var t=e.target;"onAutoFillStart"===e.animationName&&(l(t,"data-autofilled",!0),dispatchEvent(e.target,"change",!0),r(t,"keyup",b,{once:!0}))}function y(e,t){e.value?a(t,"cbc77bc77"):i(t,"cbc77bc77")}function _(){e(".ulp-field").forEach(function(e){if(!u(e,"c5348cf6a")){var t=n(e,s);t&&(a(e,"c5348cf6a"),y(t,e),setTimeout(function(){y(t,e)},50),t===document.activeElement&&a(e,"focus"),r(t,"change",m),r(t,"focus",v),r(t,"blur",g),r(t,"animationstart",w))}})}}}.exports(o.querySelector,o.querySelectorAll,o.addEventListener,o.addClass,o.removeClass,o.getParent,o.hasClass,o.getAttribute,o.setAttribute,o.createMutationObserver,o.ELEMENT_TYPE_SELECTOR,i),{exports:function(n,e,r,a,i,o,u,t,c,l){if(!l.enable_ulp_wcag_compliance){var s=e("[id^='ulp-container-']");if(s&&s.length){var f=t(g);if(f)for(var d=0;d<s.length;d++)f.observe(s[d],{childList:!0,subtree:!0});g()}}function p(e){var t=e.target,n=o(t);t.value?a(n,"cbc77bc77"):i(n,"cbc77bc77")}function h(e){var t=e.target,n=o(t);a(n,"focus"),v(t,n)}function m(e){var t=e.target,n=o(t);i(n,"focus"),v(t,n)}function v(e,t){e.value?a(t,"cbc77bc77"):i(t,"cbc77bc77")}function g(){e("[id^='ulp-container-'] .ulp-field").forEach(function(e){if(!u(e,"c5348cf6a")){var t=n(e,c);t&&(a(e,"c5348cf6a"),v(t,e),setTimeout(function(){v(t,e)},50),t===document.activeElement&&a(e,"focus"),r(t,"change",p),r(t,"focus",h),r(t,"blur",m))}})}}}.exports(o.querySelector,o.querySelectorAll,o.addEventListener,o.addClass,o.removeClass,o.getParent,o.hasClass,o.createMutationObserver,o.ELEMENT_TYPE_SELECTOR,i),{exports:function(r,o,a,i,u,c,l,s,f,d,p,h,t,m,v,e,n,g,b,w,y){if(w.enable_ulp_wcag_compliance){var _=!1,E=e+',input[type="checkbox"]';return P(),[E,x,A,C,S,T,F,L,k,P]}function x(e){var t=u(e,"data-ulp-validation-function"),n=i(e);return{functionName:t,element:r(n,E),parent:n}}function A(e){var a=[],i=[];return o(e,"[data-ulp-validation-function]").forEach(function(e){var t=x(e),n=[];if(t.element){if("input"===t.element.tagName.toLowerCase()){var r=u(t.element,"type");"checkbox"!==r&&-1===v.indexOf(r)&&n.push("Unsupported input type: "+r)}}else n.push("Could not find element");h[t.functionName]||n.push("Could not find function with name: "+t.functionName),n.length?i=i.concat(n):a.push(e)}),i.length&&t(i.join("\r\n")),a}function C(e,t,n){var r=x(e),a=(0,h[r.functionName])(r.element,t,n);a?s(e,"ulp-validator-error")&&(d(e,"ulp-validator-error"),l(e,"data-is-error")):s(e,"ulp-validator-error")||(f(e,"ulp-validator-error"),c(e,"data-is-error",!0));var i=o(r.parent,".ulp-validator-error");return p(r.parent,"ulp-error",!!i.length),a}function S(t){var n=x(t),e=(u(t,"data-ulp-validation-event-listeners")||"").replace(/\s/g,"").split(",").filter(function(e){return!!e});e.length&&e.forEach(function(e){a(n.element,e,function(){C(t,_,e)})})}function T(e,t,n){_=!0;var r=n.filter(function(e){return!C(e,_,"submit")});if(w.disable_ulp_form_submission_fix){if(!r.length)return t.submitter&&"default"==u(t.submitter,"value")&&c(t.submitter,"disabled",!0),void e.submit();m(t);var a=x(r[0]);return a.element.focus({preventScroll:!0}),void a.parent.scrollIntoView({behavior:"smooth"})}var i=y&&y("invalidPasswordPolicy");if(!r.length&&!i)return t.submitter&&"default"==u(t.submitter,"value")&&c(t.submitter,"disabled",!0),void e.submit();if(m(t),r.length){var o=x(r[0]);o.element.focus({preventScroll:!0}),o.parent.scrollIntoView({behavior:"smooth"})}}function L(){var t=r('form[data-form-primary="true"]'),n=A(t);0!==n.length&&(n.forEach(function(e){S(e)}),a(t,"submit",function(e){T(t,e,n)}))}function F(){var n=r('form[data-form-primary="true"]'),e=o('form[data-form-secondary="true"]');n&&e.length&&e.forEach(function(t){a(t,"submit",function(){var e=g(n);e.length&&b(t,e)})})}function k(){if(n)for(var e in n)n.hasOwnProperty(e)&&(h[e]=n[e])}function P(){var e=r("form[data-disable-html-validations]");e&&(k(),c(e,"novalidate",""),L(),w.custom_prompts_passkeys&&F())}}}.exports(o.querySelector,o.querySelectorAll,o.addEventListener,o.getParent,o.getAttribute,o.setAttribute,o.removeAttribute,o.hasClass,o.addClass,o.removeClass,o.toggleClass,o.globalWindow,o.consoleWarn,o.preventFormSubmit,o.SUPPORTED_INPUT_TYPES,o.ELEMENT_TYPE_SELECTOR,u,o.getUlpFields,o.appendUlpFieldsToForm,i,o.getGlobalFlag),{exports:function(r,o,a,i,u,c,l,t,s,f,e,n){if(!n.enable_ulp_wcag_compliance){var d=!1,p=e+',input[type="checkbox"]';return y(),[p,h,m,v,g,b,w,y]}function h(e){var t=u(e,"data-ulp-validation-function"),n=i(e);return{functionName:t,element:r(n,p),parent:n}}function m(e){var a=[],i=[];return o(e,"[data-ulp-validation-function]").forEach(function(e){var t=h(e),n=[];if(t.element){if("input"===t.element.tagName.toLowerCase()){var r=u(t.element,"type");"checkbox"!==r&&-1===f.indexOf(r)&&n.push("Unsupported input type: "+r)}}else n.push("Could not find element");l[t.functionName]||n.push("Could not find function with name: "+t.functionName),n.length?i=i.concat(n):a.push(e)}),i.length&&t(i.join("\r\n")),a}function v(e,t,n){var r=h(e),a=(0,l[r.functionName])(r.element,t,n);c(e,"ulp-validator-error",!a);var i=o(r.parent,".ulp-validator-error");return c(r.parent,"ulp-error",!!i.length),a}function g(t){var n=h(t),e=(u(t,"data-ulp-validation-event-listeners")||"").replace(/\s/g,"").split(",").filter(function(e){return!!e});e.length&&e.forEach(function(e){a(n.element,e,function(){v(t,d,e)})})}function b(e,t,n){d=!0;var r=n.filter(function(e){return!v(e,d,"submit")});if(r.length){s(t);var a=h(r[0]);a.element.focus({preventScroll:!0}),a.parent.scrollIntoView({behavior:"smooth"})}else e.submit()}function w(){var t=r('form[data-form-primary="true"]'),n=m(t);0!==n.length&&(n.forEach(function(e){g(e)}),a(t,"submit",function(e){b(t,e,n)}))}function y(){var e=o("[id^='ulp-container-']");e&&e.length&&w()}}}.exports(o.querySelector,o.querySelectorAll,o.addEventListener,o.getParent,o.getAttribute,o.toggleClass,o.globalWindow,o.consoleWarn,o.preventFormSubmit,o.SUPPORTED_INPUT_TYPES,o.ELEMENT_TYPE_SELECTOR,i),{exports:function(e,t,n){function r(n){t(n,"click",function(e){e.preventDefault();var t=document.createElement("input");t.name="action",t.type="hidden",t.value=n.value,n.form.appendChild(t),n.form.submit(),n.form.removeChild(t)})}function a(){e('form button[type="submit"][formnovalidate], form input[type="submit"][formnovalidate]').forEach(function(e){r(e)})}return n&&a(),[a,r]}}.exports(o.querySelectorAll,o.addEventListener,o.RUN_INIT),((a={}).exports=function(o,e,u,c,l,s,t,f,n){if(n.enable_ulp_wcag_compliance){var r=e('[class*="aria-error-check"]');if(r&&r.length){var a=t(function(e){e&&e.length&&e.map(function(e){if(e.target&&u(e.target,"aria-error-check")){var t=o('[id="'+c(e.target,"data-ulp-validation-target")+'"');if(t){var n=c(t,"aria-describedby");c(e.target,"data-is-error")?(r=t,a=n,i=e.target.id,a&&-1!==a.search(i)||l(r,"aria-describedby",a?a+" "+i:i),l(r,"aria-invalid",!0)):function(e,t,n){if(t){var r=f(t,n);r.length?l(e,"aria-describedby",r):(s(e,"aria-invalid"),s(e,"aria-describedby"))}else s(e,"aria-invalid"),s(e,"aria-describedby")}(t,n,e.target.id)}}var r,a,i})});a&&r.map(function(e){a.observe(e,{attributes:!0,attributeFilter:["class","data-is-error"]})})}}},a.exports)(o.querySelector,o.querySelectorAll,o.hasClass,o.getAttribute,o.setAttribute,o.removeAttribute,o.createMutationObserver,o.removeAndTrimString,i)}();
+</script>
+</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TYPEKIT Font - ff-real-text -->
+  <script>
+    (function (d) {
+      var config = {
+        kitId: 'uqu2ikr',
+        scriptTimeout: 3000,
+        async: true
+      },
+        h = d.documentElement, t = setTimeout(function () { h.className = h.className.replace(/\bwf-loading\b/g, "") + " wf-inactive"; }, config.scriptTimeout), tk = d.createElement("script"), f = false, s = d.getElementsByTagName("script")[0], a; h.className += " wf-loading"; tk.src = 'https://use.typekit.net/' + config.kitId + '.js'; tk.async = true; tk.onload = tk.onreadystatechange = function () { a = this.readyState; if (f || a && a != "complete" && a != "loaded") return; f = true; clearTimeout(t); try { Typekit.load(config); } catch (e) { } }; s.parentNode.insertBefore(tk, s);
+    })(document);
+  </script>
+  <!-- /TYPEKIT Font - ff-real-text -->
+
+  <script>
+    // Exit button handling
+    (function () {
+      // If the referrer is NOT from the same domain e.g. NOT login.dev-simmons.com
+      if (!document.referrer.includes(window.location.hostname)) {
+        // Store referrer in session storage
+        sessionStorage.setItem('ss-referrer', document.referrer);
+      }
+
+      // Add "go back" handler to EXIT button
+      document.getElementById('ss-exit-button').addEventListener('click', function () {
+        // Retrieve the original referrer from session storage
+        const originalReferrer = sessionStorage.getItem('ss-referrer');
+
+        window.location.href = originalReferrer || 'https://web2.test-simmons.com';
+      });
+    })();
+    // /Exit button handling
+
+    // Text hiding
+    (function () {
+      const hiddenText = [
+        'Enter your password for Simmons & Simmons',
+        'Log in to continue to Simmons & Simmons',
+        'Sign in to continue to Simmons & Simmons',
+        'Set your password to continue to Simmons & Simmons',
+        'Sign Up to continue to Simmons & Simmons'
+      ];
+
+      // Hide all paragraphs with "hiddenText"
+      document.querySelectorAll('p').forEach(paragraph => {
+        if (hiddenText.includes(paragraph.textContent.trim())) {
+          paragraph.style.display = 'none';
+        }
+      });
+    })();
+    // /Text hiding
+  </script>
+</body>
+
+</html>

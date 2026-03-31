@@ -1,0 +1,1 @@
+{"query":"query GetAllSavedSearchesByUser($user: String!) {\n  savedSearches(\n    where: { user: { equals: $user } }\n  ) {\n    id\n    name\n    user\n    reference\n    createdAt\n    updatedAt\n    filters\n  }\n}\n","variables":{"user":"waad|11FAGyDH53UEvTm7BBXZI3bk8_lThbeqeuNtlm3jWrk"}}

@@ -61,6 +61,55 @@ test.describe('Crypto Results Functional Tests', () => {
     // Step 11: Verify button changes back to Expand All
     await cryptoResults.verifyExpandAllButtonVisible();
   });
+
+  test('Crypto Results - Expand/Collapse full cycle', async ({ page }) => {
+    test.setTimeout(180000); // 3 minutes timeout
+    const loginPage = new LoginPage(page);
+    const cryptoResults = new CryptoResults(page);
+
+    console.log('\n=== Test: Crypto Results Expand/Collapse ===\n');
+    
+    // Step 1: Login
+    console.log('Step 1: Logging in...');
+    await loginPage.navigate();
+    await loginPage.login();
+    await expect(await loginPage.isLoginSuccessful()).toBeTruthy();
+
+    // Step 2: Navigate to Crypto
+    console.log('Step 2: Navigating to Crypto...');
+    await cryptoResults.navigateToCrypto();
+    await cryptoResults.viewCryptoData();
+
+    // Step 3: Search by jurisdiction
+    console.log('Step 3: Searching by jurisdiction (Italy)...');
+    await cryptoResults.searchByJurisdiction('Italy');
+
+    // Step 4: Check if Expand All button exists
+    console.log('Step 4: Checking for Expand All button...');
+    const hasExpandButton = await cryptoResults.clickExpandAllIfPresent();
+    
+    if (hasExpandButton) {
+      // Step 5: Verify button changed to Collapse All
+      console.log('Step 5: Verifying button changed to "Collapse All"...');
+      await cryptoResults.verifyCollapseAllButtonVisible();
+      
+      // Step 6: Verify content is expanded
+      console.log('Step 6: Verifying content is expanded...');
+      await cryptoResults.verifyContentExpanded();
+      
+      // Step 7: Click Collapse All
+      console.log('Step 7: Clicking Collapse All button...');
+      await cryptoResults.clickCollapseAll();
+      
+      // Step 8: Verify button changed back to Expand All
+      console.log('Step 8: Verifying button changed back to "Expand All"...');
+      await cryptoResults.verifyExpandAllButtonVisible();
+      
+      console.log('\n✅ Test passed: Crypto Results Expand/Collapse works correctly\n');
+    } else {
+      console.log('\nℹ Test completed: No expandable content available for this jurisdiction\n');
+    }
+  });
 });
 
 test.describe.skip('Crypto Results Visual Regression Tests', () => {

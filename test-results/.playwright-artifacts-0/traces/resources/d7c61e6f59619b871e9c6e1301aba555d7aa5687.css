@@ -1,0 +1,5 @@
+.plus-minus-toggle[data-v-d3d4f37f] { cursor: pointer; height: 1.4rem; position: absolute; right: 0.25rem; top: 1rem; width: 1.4rem; z-index: 1; }
+.plus-minus-toggle[data-v-d3d4f37f]::before, .plus-minus-toggle[data-v-d3d4f37f]::after { background: var(--c-black-60); content: ""; height: 3px; left: 0px; position: absolute; top: 0px; transition: transform 0.4s; width: 0.8em; }
+.plus-minus-toggle[data-v-d3d4f37f]::after { transform-origin: center center; }
+.plus-minus-toggle.collapsed[data-v-d3d4f37f]::after { transform: rotate(90deg); }
+.plus-minus-toggle.collapsed[data-v-d3d4f37f]::before { transform: rotate(180deg); }

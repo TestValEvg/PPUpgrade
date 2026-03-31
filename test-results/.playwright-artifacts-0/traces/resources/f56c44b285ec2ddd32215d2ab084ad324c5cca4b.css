@@ -1,0 +1,2 @@
+.s-input[data-v-27f7a056] { appearance: none; background-color: var(--c-input-default-bg); border-radius: unset; border: 1px solid rgb(var(--c-border-default)); color: var(--c-input-text); display: block; font-family: inherit; outline: 0px; padding: 5px 4px 4px 9px; transition: border-color 0.25s, background-color 0.25s; }
+.s-input[data-v-27f7a056]::placeholder { color: var(--c-input-placeholder); font-style: italic; }

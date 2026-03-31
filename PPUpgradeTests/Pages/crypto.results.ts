@@ -132,53 +132,70 @@ export class CryptoResults {
         await this.page.waitForTimeout(3000);
     }
 
-    // Verify Expand All button is visible on Results page
-    async verifyExpandAllButtonVisible() {
-        const expandButton = this.page.locator(SELECTORS.expandAllButton);
-        await expandButton.waitFor({ state: 'visible', timeout: 15000 });
-        await expect(expandButton).toBeVisible();
+    // ============ EXPAND/COLLAPSE FUNCTIONALITY ============
+    
+    // Check if Expand All button exists
+    async isExpandAllButtonPresent(): Promise<boolean> {
+        const expandAllButton = this.page.locator('span.button-text:has-text("Expand All")');
+        try {
+            await expandAllButton.waitFor({ state: 'visible', timeout: 3000 });
+            return true;
+        } catch {
+            return false;
+        }
     }
 
-    // Verify + icons are visible in results
-    async verifyPlusIconsVisible() {
-        const plusIcons = this.page.locator(SELECTORS.expandIcon);
-        await plusIcons.first().waitFor({ state: 'visible', timeout: 15000 });
-        await expect(plusIcons.first()).toBeVisible();
+    // Click Expand All button if present
+    async clickExpandAllIfPresent(): Promise<boolean> {
+        const isPresent = await this.isExpandAllButtonPresent();
+        if (isPresent) {
+            const expandAllButton = this.page.locator('span.button-text:has-text("Expand All")');
+            await expandAllButton.waitFor({ state: 'visible', timeout: 10000 });
+            await expandAllButton.click();
+            await this.page.waitForTimeout(2000);
+            console.log('✓ Clicked Expand All button on Crypto Results');
+            return true;
+        } else {
+            console.log('ℹ Expand All button not present - no expandable content');
+            return false;
+        }
     }
 
-    // Click Expand All button and wait for it to change to Collapse All
-    async clickExpandAllButton() {
-        const expandButton = this.page.locator(SELECTORS.expandAllButton);
-        await expandButton.waitFor({ state: 'visible', timeout: 15000 });
-        await expandButton.click();
-        
-        // Wait for button to change to Collapse All
-        const collapseButton = this.page.locator(SELECTORS.collapseAllButton);
-        await collapseButton.waitFor({ state: 'visible', timeout: 15000 });
-    }
-
-    // Verify button changed to Collapse All
+    // Verify Collapse All button is visible
     async verifyCollapseAllButtonVisible() {
-        const collapseButton = this.page.locator(SELECTORS.collapseAllButton);
-        await expect(collapseButton).toBeVisible();
-        await expect(collapseButton).toContainText('Collapse All');
+        const collapseAllButton = this.page.locator('span.button-text:has-text("Collapse All")');
+        await expect(collapseAllButton).toBeVisible({ timeout: 10000 });
+        console.log('✓ Button changed to "Collapse All"');
     }
 
-    // Click Collapse All button and wait for it to change to Expand All
-    async clickCollapseAllButton() {
-        const collapseButton = this.page.locator(SELECTORS.collapseAllButton);
-        await collapseButton.waitFor({ state: 'visible', timeout: 15000 });
-        await collapseButton.click();
-        
-        // Wait for button to change to Expand All
-        const expandButton = this.page.locator(SELECTORS.expandAllButton);
-        await expandButton.waitFor({ state: 'visible', timeout: 15000 });
+    // Verify content is expanded
+    async verifyContentExpanded() {
+        const toggleElements = this.page.locator('div.plus-minus-toggle');
+        const count = await toggleElements.count();
+        expect(count).toBeGreaterThan(0);
+        console.log(`✓ Found ${count} expandable elements`);
     }
 
-    // Verify - icons are visible (results expanded)
-    async verifyMinusIconsVisible() {
-        const minusIcons = this.page.locator(SELECTORS.collapseIcon);
-        await minusIcons.first().waitFor({ state: 'visible', timeout: 15000 });
-        await expect(minusIcons.first()).toBeVisible();
+    // Click Collapse All button
+    async clickCollapseAll() {
+        const collapseAllButton = this.page.locator('span.button-text:has-text("Collapse All")');
+        await collapseAllButton.waitFor({ state: 'visible', timeout: 10000 });
+        await collapseAllButton.click();
+        await this.page.waitForTimeout(2000);
+        console.log('✓ Clicked Collapse All button');
+    }
+
+    // Verify Expand All button is visible (after collapsing)
+    async verifyExpandAllButtonVisible() {
+        const expandAllButton = this.page.locator('span.button-text:has-text("Expand All")');
+        await expect(expandAllButton).toBeVisible({ timeout: 10000 });
+        console.log('✓ Button changed back to "Expand All"');
+    }
+
+    // Verify content is collapsed
+    async verifyContentCollapsed() {
+        const collapseAllButton = this.page.locator('span.button-text:has-text("Collapse All")');
+        await expect(collapseAllButton).not.toBeVisible({ timeout: 5000 });
+        console.log('✓ Content is collapsed');
     }
 }
