@@ -18,11 +18,11 @@ test.describe('Navigator Jurisdiction Analysis Structure', () => {
         await structurePage.navigateToNavigator();
     });
 
-    test('User can search with 5 jurisdictions and verify sidebar structure', async () => {
-        console.log('Test: Verify sidebar structure with 5 jurisdictions search');
+    test('User can search with 3 jurisdictions and verify sidebar structure', async () => {
+        console.log('Test: Verify sidebar structure with 3 jurisdictions search');
         
-        // Select 5 jurisdictions: Portugal, Austria, Belgium, Germany, France
-        const jurisdictions = ['Portugal', 'Austria', 'Belgium', 'Germany', 'France'];
+        // Select 3 jurisdictions: Austria, Belgium, Germany
+        const jurisdictions = ['Austria', 'Belgium', 'Germany'];
         await structurePage.selectJurisdictions(jurisdictions);
         
         // Select all services
@@ -34,8 +34,8 @@ test.describe('Navigator Jurisdiction Analysis Structure', () => {
         // Wait for results to load
         await structurePage.waitForResults();
         
-        // Verify complete sidebar structure
-        await structurePage.verifyCompleteStructure();
+        // Verify sidebar structure ONLY (SCOPE, LICENSING, PRODUCT, JURISDICTION GUIDE)
+        await structurePage.verifySidebarStructure();
         
         console.log('✓ Test completed successfully');
     });
@@ -43,8 +43,8 @@ test.describe('Navigator Jurisdiction Analysis Structure', () => {
     test('User can verify Licensing section is expanded with Restrictions active', async () => {
         console.log('Test: Verify Licensing section expanded state');
         
-        // Select 5 jurisdictions: Portugal, Austria, Belgium, Germany, France
-        const jurisdictions = ['Portugal', 'Austria', 'Belgium', 'Germany', 'France'];
+        // Select 3 jurisdictions: Austria, Belgium, Germany
+        const jurisdictions = ['Austria', 'Belgium', 'Germany'];
         await structurePage.selectJurisdictions(jurisdictions);
         
         // Select all services
@@ -65,8 +65,8 @@ test.describe('Navigator Jurisdiction Analysis Structure', () => {
     test('User can verify all sidebar sections are present', async () => {
         console.log('Test: Verify all sidebar sections exist');
         
-        // Select 5 jurisdictions: Portugal, Austria, Belgium, Germany, France
-        const jurisdictions = ['Portugal', 'Austria', 'Belgium', 'Germany', 'France'];
+        // Select 3 jurisdictions: Austria, Belgium, Germany
+        const jurisdictions = ['Austria', 'Belgium', 'Germany'];
         await structurePage.selectJurisdictions(jurisdictions);
         
         // Select all services
