@@ -1,82 +1,68 @@
-<testsuites id="" name="" tests="1" failures="0" skipped="0" errors="0" time="119.94197300000002">
-<testsuite name="Tests\navigator.filters.spec.ts" timestamp="2026-03-09T13:30:40.233Z" hostname="Google Chrome" tests="1" failures="0" skipped="0" time="118.692" errors="0">
-<testcase name="Navigator Filters - Validation Rules › Product-Service relationship test - verify correct products for each service" classname="Tests\navigator.filters.spec.ts" time="118.692">
+<testsuites id="" name="" tests="3" failures="0" skipped="0" errors="0" time="95.27196400000001">
+<testsuite name="Tests\navigator.expand-collapse.spec.ts" timestamp="2026-03-31T08:08:53.526Z" hostname="Google Chrome" tests="3" failures="0" skipped="0" time="93.788" errors="0">
+<testcase name="Navigator Expand/Collapse Tests › should expand all content and verify button changes to Collapse All" classname="Tests\navigator.expand-collapse.spec.ts" time="28.822">
 <system-out>
 <![CDATA[
-========== Testing Service: Banking ==========
-Trying jurisdiction: Austria
-Checking if service "Banking" is available
-Service "Banking" available: true
-Selecting service: Banking
-Service options loaded after jurisdiction filter applied
-Selected service: Banking
-✓ Service Banking selected for Austria
-Available products found: [ [32m'Deposits'[39m, [32m'FX'[39m, [32m'Guarantees and Commitments'[39m, [32m'Payments'[39m ]
-✓ Verified: All expected products available for Banking
-  Expected: Deposits, FX, Guarantees and Commitments, Payments
-  Found: Deposits, FX, Guarantees and Commitments, Payments
-Cleared all filters
+=== Test: Expand All Functionality ===
 
-========== Testing Service: Derivatives & FX ==========
-Trying jurisdiction: Austria
-Checking if service "Derivatives & FX" is available
-Service "Derivatives & FX" available: true
-Selecting service: Derivatives & FX
-Service options loaded after jurisdiction filter applied
-Selected service: Derivatives & FX
-✓ Service Derivatives & FX selected for Austria
-Available products found: [
-  [32m'Financial Derivatives'[39m,
-  [32m'Credit Derivatives'[39m,
-  [32m'Equity Derivatives'[39m,
-  [32m'Exotic Derivatives'[39m,
-  [32m'Contracts for Differences'[39m,
-  [32m'Commodity derivatives - Cash Settled Commodity Derivatives'[39m,
-  [32m'Commodity derivatives - Non Traded Commodity Derivatives'[39m,
-  [32m'Commodity derivatives - Traded Commodity Derivatives'[39m
-]
-✓ Verified: All expected products available for Derivatives & FX
-  Expected: Financial Derivatives, Credit Derivatives, Equity Derivatives, Exotic Derivatives, Contracts for Differences, Commodity derivatives - Cash Settled Commodity Derivatives, Commodity derivatives - Non Traded Commodity Derivatives, Commodity derivatives - Traded Commodity Derivatives
-  Found: Financial Derivatives, Credit Derivatives, Equity Derivatives, Exotic Derivatives, Contracts for Differences, Commodity derivatives - Cash Settled Commodity Derivatives, Commodity derivatives - Non Traded Commodity Derivatives, Commodity derivatives - Traded Commodity Derivatives
-Cleared all filters
+Step 1: Selecting jurisdiction...
+Step 2: Selecting service...
+Step 3: Clicking Search button...
+Step 4: Waiting for results...
+Step 5: Clicking Expand All button...
+✓ Clicked Expand All button
+Step 6: Verifying button changed to "Collapse All"...
+✓ Button changed to "Collapse All"
+Step 7: Verifying content is expanded...
+✓ Found 73 toggle elements (expanded state)
 
-========== Testing Service: Lending ==========
-Trying jurisdiction: Austria
-Checking if service "Lending" is available
-Service "Lending" available: true
-Selecting service: Lending
-Service options loaded after jurisdiction filter applied
-Selected service: Lending
-✓ Service Lending selected for Austria
-Available products found: [
-  [32m'Lending'[39m,
-  [32m'Secondary Market Loans (Secondary Market Loan Activities)'[39m
-]
-✓ Verified: All expected products available for Lending
-  Expected: Lending, Secondary Market Loans (Secondary Market Loan Activities)
-  Found: Lending, Secondary Market Loans (Secondary Market Loan Activities)
-Cleared all filters
+✅ Test passed: Expand All functionality works correctly
 
-========== Testing Service: Securities ==========
-Trying jurisdiction: Austria
-Checking if service "Securities" is available
-Service "Securities" available: true
-Selecting service: Securities
-Service options loaded after jurisdiction filter applied
-Selected service: Securities
-✓ Service Securities selected for Austria
-Available products found: [
-  [32m'Closed Ended Funds'[39m,
-  [32m'Equity Securities'[39m,
-  [32m'Debt Securities'[39m,
-  [32m'Linked Products'[39m
-]
-✓ Verified: All expected products available for Securities
-  Expected: Closed Ended Funds, Equity Securities, Debt Securities, Linked Products
-  Found: Closed Ended Funds, Equity Securities, Debt Securities, Linked Products
-Cleared all filters
+]]>
+</system-out>
+</testcase>
+<testcase name="Navigator Expand/Collapse Tests › should collapse all content after expanding and verify button changes to Expand All" classname="Tests\navigator.expand-collapse.spec.ts" time="30.518">
+<system-out>
+<![CDATA[
+=== Test: Expand/Collapse Full Cycle ===
 
-✓ All Service-Product relationships verified successfully
+Setup: Creating search...
+Expanding all content...
+✓ Clicked Expand All button
+✓ Button changed to "Collapse All"
+Step 1: Clicking Collapse All button...
+✓ Clicked Collapse All button
+Step 2: Verifying button changed back to "Expand All"...
+✓ Button changed to "Expand All"
+Step 3: Verifying content is collapsed...
+✓ Found 69 toggle elements (collapsed state)
+
+✅ Test passed: Collapse All functionality works correctly
+
+]]>
+</system-out>
+</testcase>
+<testcase name="Navigator Expand/Collapse Tests › should expand and collapse multiple times consistently" classname="Tests\navigator.expand-collapse.spec.ts" time="34.448">
+<system-out>
+<![CDATA[
+=== Test: Multiple Expand/Collapse Cycles ===
+
+Setup: Creating search...
+Cycle 1: Expanding...
+✓ Clicked Expand All button
+✓ Button changed to "Collapse All"
+Cycle 1: Collapsing...
+✓ Clicked Collapse All button
+✓ Button changed to "Expand All"
+Cycle 2: Expanding again...
+✓ Clicked Expand All button
+✓ Button changed to "Collapse All"
+Cycle 2: Collapsing again...
+✓ Clicked Collapse All button
+✓ Button changed to "Expand All"
+
+✅ Test passed: Multiple expand/collapse cycles work consistently
+
 ]]>
 </system-out>
 </testcase>

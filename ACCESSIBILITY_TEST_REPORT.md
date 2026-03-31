@@ -4,8 +4,8 @@
 
 - **Pages Tested**: 1
 - **Compliant Pages**: 0/1
-- **Total Violations**: 5
-  - Critical: 2
+- **Total Violations**: 6
+  - Critical: 3
   - Serious: 3
 - **WCAG 2.1 AA Compliance**: ❌ FAIL
 
@@ -15,7 +15,7 @@
 
 | Page | Status | Violations | Critical | Serious | Moderate | Minor |
 |------|--------|-----------|----------|---------|----------|-------|
-| Crypto Results Page | ❌ | 5 | 2 | 3 | 0 | 0 |
+| Crypto Results Page | ❌ | 6 | 3 | 3 | 0 | 0 |
 
 ---
 
@@ -38,21 +38,28 @@
 - **Affected Elements**: 9
 - **Learn More**: [aria-required-parent](https://dequeuniversity.com/rules/axe/4.11/aria-required-parent?application=playwright)
 
-#### 3. Elements must meet minimum color contrast ratio thresholds
+#### 3. ARIA attributes must conform to valid values
+
+- **Impact**: CRITICAL
+- **Rule ID**: aria-valid-attr-value
+- **Affected Elements**: 4
+- **Learn More**: [aria-valid-attr-value](https://dequeuniversity.com/rules/axe/4.11/aria-valid-attr-value?application=playwright)
+
+#### 4. Elements must meet minimum color contrast ratio thresholds
 
 - **Impact**: SERIOUS
 - **Rule ID**: color-contrast
 - **Affected Elements**: 2
 - **Learn More**: [color-contrast](https://dequeuniversity.com/rules/axe/4.11/color-contrast?application=playwright)
 
-#### 4. <ul> and <ol> must only directly contain <li>, <script> or <template> elements
+#### 5. <ul> and <ol> must only directly contain <li>, <script> or <template> elements
 
 - **Impact**: SERIOUS
 - **Rule ID**: list
 - **Affected Elements**: 1
 - **Learn More**: [list](https://dequeuniversity.com/rules/axe/4.11/list?application=playwright)
 
-#### 5. Interactive controls must not be nested
+#### 6. Interactive controls must not be nested
 
 - **Impact**: SERIOUS
 - **Rule ID**: nested-interactive
