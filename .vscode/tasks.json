@@ -1,0 +1,18 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Run Quarterly Tests (TEST env)",
+			"type": "shell",
+			"command": "node",
+			"args": [
+				"node_modules/@playwright/test/cli.js",
+				"test",
+				"--grep",
+				"quarterly",
+				"--workers=1"
+			],
+			"isBackground": false
+		}
+	]
+}

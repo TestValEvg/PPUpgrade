@@ -115,3 +115,7 @@ dist
 .yarn/install-state.gz
 .pnp.*
 no_ci_cd/Part_E_HAR_Files/*.json
+
+# Playwright generated reports and test output
+playwright-report/
+test-results/
