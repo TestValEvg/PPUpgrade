@@ -14,7 +14,7 @@ export class NavigatorPrint {
 
     // Navigate to Navigator page
     async navigateToNavigator() {
-        await this.page.goto('https://platform.test-simmons.com/navigator/');
+        await this.page.goto('https://platform.uat-simmons.com/navigator/');
         await this.page.waitForLoadState('networkidle');
         await this.page.waitForTimeout(1500);
     }

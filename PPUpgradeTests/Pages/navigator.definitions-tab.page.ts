@@ -222,4 +222,134 @@ export class NavigatorDefinitionsTab {
             console.log('⚠ Definitions tab content may not be fully loaded');
         }
     }
+
+    // Verify table headers persist (Jurisdiction, Term, Description)
+    async verifyTableHeaders() {
+        const headerRow = this.page.locator('tr.s-table__row th.s-table__header--flag-label, tr.s-table__row th.s-table__header--html');
+        await headerRow.first().waitFor({ state: 'visible', timeout: 10000 });
+        
+        const headerCount = await headerRow.count();
+        expect(headerCount).toBe(3);
+        
+        // Verify Jurisdiction header (1st column)
+        const jurisdictionHeader = this.page.locator('th.s-table__header--flag-label span.s-table__header-label').filter({ hasText: 'Jurisdiction' });
+        await expect(jurisdictionHeader).toBeVisible();
+        
+        // Verify Term header (2nd column)
+        const termHeader = this.page.locator('th.s-table__header--html span.s-table__header-label').filter({ hasText: 'Term' });
+        await expect(termHeader).toBeVisible();
+        
+        // Verify Description header (3rd column)
+        const descriptionHeader = this.page.locator('th.s-table__header--html span.s-table__header-label').filter({ hasText: 'Description' });
+        await expect(descriptionHeader).toBeVisible();
+        
+        console.log('✓ Verified table headers: Jurisdiction, Term, Description');
+    }
+
+    // Get all definition rows
+    async getDefinitionRows() {
+        const rows = this.page.locator('tbody tr');
+        await rows.first().waitFor({ state: 'visible', timeout: 10000 });
+        return rows;
+    }
+
+    // Click on a definition row
+    async clickDefinitionRow(index: number) {
+        const rows = await this.getDefinitionRows();
+        const rowCount = await rows.count();
+        
+        if (index < rowCount) {
+            await rows.nth(index).click();
+            await this.page.waitForTimeout(1000);
+            console.log(`✓ Clicked definition row ${index + 1}`);
+        } else {
+            console.log(`⚠ Row index ${index} is out of range (total rows: ${rowCount})`);
+        }
+    }
+
+    // Get the count of definition rows
+    async getDefinitionRowCount(): Promise<number> {
+        const rows = await this.getDefinitionRows();
+        return await rows.count();
+    }
+
+    // Click jurisdiction column search icon in the table (not the top filter)
+    async clickJurisdictionSearchIcon() {
+        // Target the search icon specifically within the table header, not the top filter bar
+        const table = this.page.locator('table.s-table');
+        const jurisdictionHeader = table.locator('thead th.s-table__header--flag-label');
+        const searchIcon = jurisdictionHeader.locator('svg.s-icon-search');
+        await searchIcon.waitFor({ state: 'visible', timeout: 10000 });
+        await searchIcon.click();
+        await this.page.waitForTimeout(1000);
+        console.log('✓ Clicked jurisdiction search icon in table header');
+    }
+
+    // Open jurisdiction filter dropdown
+    async openJurisdictionDropdown() {
+        // After clicking search icon, click the dropdown box to open it
+        const dropdownBox = this.page.locator('div.s-input-dropdown__box[role="button"][tabindex="0"]').first();
+        await dropdownBox.waitFor({ state: 'visible', timeout: 10000 });
+        await dropdownBox.click();
+        await this.page.waitForTimeout(1000);
+        console.log('✓ Opened jurisdiction dropdown');
+    }
+
+    // Search for jurisdiction in the filter panel
+    async searchJurisdictionInDropdown(jurisdiction: string) {
+        // After clicking search icon, a filter panel appears - find the input field
+        await this.page.waitForTimeout(1000);
+        const searchInput = this.page.locator('input[type="text"]').first();
+        await searchInput.waitFor({ state: 'visible', timeout: 5000 });
+        await searchInput.click();
+        await searchInput.fill(jurisdiction);
+        await this.page.waitForTimeout(1000);
+        console.log(`✓ Entered "${jurisdiction}" in jurisdiction filter panel`);
+    }
+
+    // Select jurisdiction from filter panel list
+    async selectJurisdictionFromList(jurisdiction: string) {
+        // Wait for filter panel to appear, then click on the jurisdiction
+        await this.page.waitForTimeout(1500);
+        // Look for jurisdiction text in the filter panel (e.g., "Canada")
+        const jurisdictionItem = this.page.locator('text=' + jurisdiction).first();
+        await jurisdictionItem.waitFor({ state: 'visible', timeout: 10000 });
+        await jurisdictionItem.click();
+        await this.page.waitForTimeout(1000);
+        console.log(`✓ Selected "${jurisdiction}" from filter panel`);
+    }
+
+    // Click Apply button in the jurisdiction filter panel
+    async clickApplyButton() {
+        // Click the red Apply button in the jurisdiction filter panel
+        const applyButton = this.page.getByRole('button', { name: 'Apply' }).first();
+        await applyButton.waitFor({ state: 'visible', timeout: 10000 });
+        await applyButton.click();
+        await this.page.waitForTimeout(2000);
+        console.log('✓ Clicked Apply button in filter panel');
+    }
+
+    // Verify only selected jurisdiction is visible in results
+    async verifyOnlyJurisdictionVisible(jurisdiction: string) {
+        await this.page.waitForTimeout(1500);
+        
+        const jurisdictionCells = this.page.locator('tbody tr td').first();
+        const visibleRows = this.page.locator('tbody tr');
+        const rowCount = await visibleRows.count();
+        
+        // Check a sample of rows to verify they all contain the expected jurisdiction
+        const samplesToCheck = Math.min(rowCount, 10);
+        
+        for (let i = 0; i < samplesToCheck; i++) {
+            const row = visibleRows.nth(i);
+            const firstCell = row.locator('td').first();
+            const cellText = await firstCell.textContent();
+            
+            if (cellText && !cellText.includes(jurisdiction)) {
+                throw new Error(`Found row with jurisdiction "${cellText}" instead of "${jurisdiction}"`);
+            }
+        }
+        
+        console.log(`✓ Verified only "${jurisdiction}" is visible in jurisdiction column (checked ${samplesToCheck} rows)`);
+    }
 }

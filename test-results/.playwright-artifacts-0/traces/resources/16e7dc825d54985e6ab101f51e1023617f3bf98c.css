@@ -1,9 +1,0 @@
-.s-pagination[data-v-ddcaef3f] { list-style-type: none; padding: 0px; margin: 0px; display: flex; align-items: center; min-height: 35px; }
-.s-pagination__item[data-v-ddcaef3f] { display: flex; align-items: center; margin: 0px 0.4rem; background-color: var(--c-grey-200); transition: background-color 0.5s ease-in-out; }
-.s-pagination__item > .has-icon[data-v-ddcaef3f] { display: flex; justify-content: center; flex-direction: row; }
-.s-pagination__item > .has-icon .icon[data-v-ddcaef3f] { display: flex; }
-.s-pagination__item .active[data-v-ddcaef3f] { background-color: var(--c-grey-200); border-color: var(--ss-charcoal-300); color: var(--ss-charcoal); font-size: 0.8rem; font-weight: 900; }
-.s-pagination__arrows[data-v-ddcaef3f] { display: flex; align-items: center; }
-.s-pagination--right[data-v-ddcaef3f] { justify-content: flex-end; }
-.s-pagination--left[data-v-ddcaef3f] { justify-content: flex-start; }
-.s-pagination--centre[data-v-ddcaef3f] { justify-content: center; }

@@ -12,7 +12,7 @@ import * as fs from 'fs';
 test.describe('Navigator Quarterly Update - Download DOCX Status Table', () => {
     
     test('Download DOCX for status table (Portrait)', async ({ page }) => {
-        test.setTimeout(240000); // 4 minutes timeout
+        test.setTimeout(480000); // 8 minutes timeout for TEST environment
         
         const quarterlyUpdate = new NavigatorQuarterlyUpdate(page);
         const downloadPage = new DownloadQuarterlyUpdate(page);
@@ -26,7 +26,7 @@ test.describe('Navigator Quarterly Update - Download DOCX Status Table', () => {
         console.log('✓ Login successful');
 
         console.log('Step 2: Navigating to Navigator page...');
-        await page.goto('https://platform.dev-simmons.com/navigator/');
+        await page.goto('https://platform.test-simmons.com/navigator/', { waitUntil: 'networkidle' });
         await page.waitForLoadState('networkidle');
         await page.waitForTimeout(2000);
         
@@ -49,7 +49,7 @@ test.describe('Navigator Quarterly Update - Download DOCX Status Table', () => {
         console.log('Step 6: Verifying navigation to report-builder...');
         await newPage.waitForLoadState('networkidle');
         await newPage.waitForTimeout(2000);
-        expect(newPage.url()).toBe('https://platform.dev-simmons.com/navigator/quarterly-update/report-builder');
+        expect(newPage.url()).toBe('https://platform.test-simmons.com/navigator/quarterly-update/report-builder');
         console.log('✓ On report-builder page');
 
         console.log('Step 7: Selecting Extract Status Tables option...');
@@ -82,18 +82,31 @@ test.describe('Navigator Quarterly Update - Download DOCX Status Table', () => {
         await newPage.waitForTimeout(500);
         console.log('✓ All jurisdictions selected');
         
-        await newPage.keyboard.press('Escape');
-        await newPage.waitForTimeout(1000);
+        // Close dropdown by clicking on Jurisdictions title (avoids scrolling)
+        const jurisdictionsTitle = newPage.locator('h3.report-builder-step__title:has-text("Jurisdictions")');
+        await jurisdictionsTitle.click();
+        await newPage.waitForTimeout(2000);
         console.log('✓ Jurisdictions dropdown closed');
 
-        console.log('Step 11: Selecting all change types...');
-        const changeTypeSelectAll = newPage.locator('button.s-button.ghost:has-text("Select all")').last();
-        await changeTypeSelectAll.scrollIntoViewIfNeeded();
-        await changeTypeSelectAll.click();
+        // Step 11: Select change types by clicking cards
+        console.log('Step 11: Selecting change types...');
+        const changeTypeTitle = newPage.locator('h3.report-builder-step__title:has-text("Change type")');
+        await changeTypeTitle.scrollIntoViewIfNeeded();
         await newPage.waitForTimeout(1000);
-        console.log('✓ All change types selected');
+        
+        const changesCard = newPage.locator('div.s-option-card').filter({ hasText: /^Changes$/ });
+        await changesCard.waitFor({ state: 'visible', timeout: 10000 });
+        await changesCard.click({ force: true });
+        await newPage.waitForTimeout(500);
+        console.log('✓ Changes selected');
+        
+        const forthcomingCard = newPage.locator('div.s-option-card').filter({ hasText: 'Forthcoming Changes' });
+        await forthcomingCard.waitFor({ state: 'visible', timeout: 10000 });
+        await forthcomingCard.click({ force: true });
+        await newPage.waitForTimeout(500);
+        console.log('✓ Forthcoming Changes selected');
 
-        console.log('Step 12: Selecting February 2026 timeframe...');
+        console.log('Step 11: Selecting February 2026 timeframe...');
         const februaryPill = newPage.locator('button.report-builder-timeframe__pill:has-text("February 2026")');
         await februaryPill.scrollIntoViewIfNeeded();
         await februaryPill.click();
@@ -101,37 +114,37 @@ test.describe('Navigator Quarterly Update - Download DOCX Status Table', () => {
         await expect(februaryPill).toHaveClass(/report-builder-timeframe__pill--active/);
         console.log('✓ February 2026 selected');
 
-        console.log('Step 13: Generating status table...');
+        console.log('Step 12: Generating status table...');
         const generateButton = newPage.locator('button:has(span.button-text:has-text("Generate report"))');
         await generateButton.click();
         console.log('✓ Generate report clicked');
 
-        console.log('Step 14: Waiting for status table generation...');
-        await newPage.waitForURL('**/status-table-results', { timeout: 180000 });
+        console.log('Step 13: Waiting for status table generation...');
+        await newPage.waitForURL('**/status-table-results', { timeout: 360000 });
         console.log('✓ Status table generated');
 
-        // Step 15: Download DOCX (Portrait)
-        console.log('Step 15: Clicking Download DOCX button (Portrait)...');
+        // Step 14: Download DOCX (Portrait)
+        console.log('Step 14: Clicking Download DOCX button (Portrait)...');
         const downloadPromise = newPage.waitForEvent('download');
         const downloadButton = newPage.locator('span.button-text:has-text("Download DOCX")').first();
         await downloadButton.click();
         console.log('✓ Download DOCX button clicked');
 
-        // Step 16: Wait for download to complete
-        console.log('Step 16: Waiting for download to complete...');
+        // Step 15: Wait for download to complete
+        console.log('Step 15: Waiting for download to complete...');
         const download = await downloadPromise;
         const downloadPath = path.join('C:\\Users\\evghenia.valicova\\Downloads', download.suggestedFilename());
         await download.saveAs(downloadPath);
         console.log(`✓ File downloaded to: ${downloadPath}`);
 
-        // Step 17: Verify success message
-        console.log('Step 17: Verifying success message...');
+        // Step 16: Verify success message
+        console.log('Step 16: Verifying success message...');
         const successMessage = newPage.locator('p:has-text("DOCX file downloaded successfully.")');
         await expect(successMessage).toBeVisible({ timeout: 10000 });
         console.log('✓ Success message displayed');
 
-        // Step 18: Verify file exists
-        console.log('Step 18: Verifying file exists...');
+        // Step 17: Verify file exists
+        console.log('Step 17: Verifying file exists...');
         await newPage.waitForTimeout(2000);
         expect(fs.existsSync(downloadPath)).toBeTruthy();
         console.log('✓ File exists in Downloads folder');
@@ -140,7 +153,7 @@ test.describe('Navigator Quarterly Update - Download DOCX Status Table', () => {
     });
 
     test('Download DOCX for status table (Landscape)', async ({ page }) => {
-        test.setTimeout(240000); // 4 minutes timeout
+        test.setTimeout(480000); // 8 minutes timeout for TEST environment
         
         const quarterlyUpdate = new NavigatorQuarterlyUpdate(page);
         const downloadPage = new DownloadQuarterlyUpdate(page);
@@ -154,7 +167,7 @@ test.describe('Navigator Quarterly Update - Download DOCX Status Table', () => {
         console.log('✓ Login successful');
 
         console.log('Step 2: Navigating to Navigator page...');
-        await page.goto('https://platform.dev-simmons.com/navigator/');
+        await page.goto('https://platform.test-simmons.com/navigator/');
         await page.waitForLoadState('networkidle');
         await page.waitForTimeout(2000);
         
@@ -177,7 +190,7 @@ test.describe('Navigator Quarterly Update - Download DOCX Status Table', () => {
         console.log('Step 6: Verifying navigation to report-builder...');
         await newPage.waitForLoadState('networkidle');
         await newPage.waitForTimeout(2000);
-        expect(newPage.url()).toBe('https://platform.dev-simmons.com/navigator/quarterly-update/report-builder');
+        expect(newPage.url()).toBe('https://platform.test-simmons.com/navigator/quarterly-update/report-builder');
         console.log('✓ On report-builder page');
 
         console.log('Step 7: Selecting Extract Status Tables option...');
@@ -210,18 +223,31 @@ test.describe('Navigator Quarterly Update - Download DOCX Status Table', () => {
         await newPage.waitForTimeout(500);
         console.log('✓ All jurisdictions selected');
         
-        await newPage.keyboard.press('Escape');
-        await newPage.waitForTimeout(1000);
+        // Close dropdown by clicking on Jurisdictions title (avoids scrolling)
+        const jurisdictionsTitle = newPage.locator('h3.report-builder-step__title:has-text("Jurisdictions")');
+        await jurisdictionsTitle.click();
+        await newPage.waitForTimeout(2000);
         console.log('✓ Jurisdictions dropdown closed');
 
-        console.log('Step 11: Selecting all change types...');
-        const changeTypeSelectAll = newPage.locator('button.s-button.ghost:has-text("Select all")').last();
-        await changeTypeSelectAll.scrollIntoViewIfNeeded();
-        await changeTypeSelectAll.click();
+        // Step 11: Select change types by clicking cards
+        console.log('Step 11: Selecting change types...');
+        const changeTypeTitle = newPage.locator('h3.report-builder-step__title:has-text("Change type")');
+        await changeTypeTitle.scrollIntoViewIfNeeded();
         await newPage.waitForTimeout(1000);
-        console.log('✓ All change types selected');
+        
+        const changesCard = newPage.locator('div.s-option-card').filter({ hasText: /^Changes$/ });
+        await changesCard.waitFor({ state: 'visible', timeout: 10000 });
+        await changesCard.click({ force: true });
+        await newPage.waitForTimeout(500);
+        console.log('✓ Changes selected');
+        
+        const forthcomingCard = newPage.locator('div.s-option-card').filter({ hasText: 'Forthcoming Changes' });
+        await forthcomingCard.waitFor({ state: 'visible', timeout: 10000 });
+        await forthcomingCard.click({ force: true });
+        await newPage.waitForTimeout(500);
+        console.log('✓ Forthcoming Changes selected');
 
-        console.log('Step 12: Selecting February 2026 timeframe...');
+        console.log('Step 11: Selecting February 2026 timeframe...');
         const februaryPill = newPage.locator('button.report-builder-timeframe__pill:has-text("February 2026")');
         await februaryPill.scrollIntoViewIfNeeded();
         await februaryPill.click();
@@ -229,16 +255,16 @@ test.describe('Navigator Quarterly Update - Download DOCX Status Table', () => {
         await expect(februaryPill).toHaveClass(/report-builder-timeframe__pill--active/);
         console.log('✓ February 2026 selected');
 
-        console.log('Step 13: Generating status table...');
+        console.log('Step 12: Generating status table...');
         const generateButton = newPage.locator('button:has(span.button-text:has-text("Generate report"))');
         await generateButton.click();
         console.log('✓ Generate report clicked');
 
-        console.log('Step 14: Waiting for status table generation...');
-        await newPage.waitForURL('**/status-table-results', { timeout: 180000 });
+        console.log('Step 13: Waiting for status table generation...');
+        await newPage.waitForURL('**/status-table-results', { timeout: 360000 });
         console.log('✓ Status table generated');
 
-        // Step 15: Download DOCX (Landscape)
+        // Step 14: Download DOCX (Landscape)
         console.log('Step 15: Clicking Download DOCX (Landscape) button...');
         const downloadPromise = newPage.waitForEvent('download');
         const downloadButton = newPage.locator('span.button-text:has-text("Download DOCX (Landscape)")');
@@ -271,7 +297,7 @@ test.describe('Navigator Quarterly Update - Download DOCX Status Table', () => {
 test.describe('Navigator Quarterly Update - Download PDF Status Table', () => {
     
     test('Download PDF for status table', async ({ page }) => {
-        test.setTimeout(240000); // 4 minutes timeout
+        test.setTimeout(480000); // 8 minutes timeout for TEST environment
         
         const quarterlyUpdate = new NavigatorQuarterlyUpdate(page);
 
@@ -284,7 +310,7 @@ test.describe('Navigator Quarterly Update - Download PDF Status Table', () => {
         console.log('✓ Login successful');
 
         console.log('Step 2: Navigating to Navigator page...');
-        await page.goto('https://platform.dev-simmons.com/navigator/');
+        await page.goto('https://platform.test-simmons.com/navigator/');
         await page.waitForLoadState('networkidle');
         await page.waitForTimeout(2000);
         
@@ -307,7 +333,7 @@ test.describe('Navigator Quarterly Update - Download PDF Status Table', () => {
         console.log('Step 6: Verifying navigation to report-builder...');
         await newPage.waitForLoadState('networkidle');
         await newPage.waitForTimeout(2000);
-        expect(newPage.url()).toBe('https://platform.dev-simmons.com/navigator/quarterly-update/report-builder');
+        expect(newPage.url()).toBe('https://platform.test-simmons.com/navigator/quarterly-update/report-builder');
         console.log('✓ On report-builder page');
 
         console.log('Step 7: Selecting Extract Status Tables option...');
@@ -340,18 +366,31 @@ test.describe('Navigator Quarterly Update - Download PDF Status Table', () => {
         await newPage.waitForTimeout(500);
         console.log('✓ All jurisdictions selected');
         
-        await newPage.keyboard.press('Escape');
-        await newPage.waitForTimeout(1000);
+        // Close dropdown by clicking on Jurisdictions title (avoids scrolling)
+        const jurisdictionsTitle = newPage.locator('h3.report-builder-step__title:has-text("Jurisdictions")');
+        await jurisdictionsTitle.click();
+        await newPage.waitForTimeout(2000);
         console.log('✓ Jurisdictions dropdown closed');
 
-        console.log('Step 11: Selecting all change types...');
-        const changeTypeSelectAll = newPage.locator('button.s-button.ghost:has-text("Select all")').last();
-        await changeTypeSelectAll.scrollIntoViewIfNeeded();
-        await changeTypeSelectAll.click();
+        // Step 11: Select change types by clicking cards
+        console.log('Step 11: Selecting change types...');
+        const changeTypeTitle = newPage.locator('h3.report-builder-step__title:has-text("Change type")');
+        await changeTypeTitle.scrollIntoViewIfNeeded();
         await newPage.waitForTimeout(1000);
-        console.log('✓ All change types selected');
+        
+        const changesCard = newPage.locator('div.s-option-card').filter({ hasText: /^Changes$/ });
+        await changesCard.waitFor({ state: 'visible', timeout: 10000 });
+        await changesCard.click({ force: true });
+        await newPage.waitForTimeout(500);
+        console.log('✓ Changes selected');
+        
+        const forthcomingCard = newPage.locator('div.s-option-card').filter({ hasText: 'Forthcoming Changes' });
+        await forthcomingCard.waitFor({ state: 'visible', timeout: 10000 });
+        await forthcomingCard.click({ force: true });
+        await newPage.waitForTimeout(500);
+        console.log('✓ Forthcoming Changes selected');
 
-        console.log('Step 12: Selecting February 2026 timeframe...');
+        console.log('Step 11: Selecting February 2026 timeframe...');
         const februaryPill = newPage.locator('button.report-builder-timeframe__pill:has-text("February 2026")');
         await februaryPill.scrollIntoViewIfNeeded();
         await februaryPill.click();
@@ -359,16 +398,16 @@ test.describe('Navigator Quarterly Update - Download PDF Status Table', () => {
         await expect(februaryPill).toHaveClass(/report-builder-timeframe__pill--active/);
         console.log('✓ February 2026 selected');
 
-        console.log('Step 13: Generating status table...');
+        console.log('Step 12: Generating status table...');
         const generateButton = newPage.locator('button:has(span.button-text:has-text("Generate report"))');
         await generateButton.click();
         console.log('✓ Generate report clicked');
 
-        console.log('Step 14: Waiting for status table generation...');
-        await newPage.waitForURL('**/status-table-results', { timeout: 180000 });
+        console.log('Step 13: Waiting for status table generation...');
+        await newPage.waitForURL('**/status-table-results', { timeout: 360000 });
         console.log('✓ Status table generated');
 
-        // Step 15: Click Download PDF button (opens Chrome print preview)
+        // Step 14: Click Download PDF button (opens Chrome print preview)
         console.log('Step 15: Clicking Download PDF button...');
         const pdfButton = newPage.locator('span.button-text:has-text("Download PDF")').first();
         
@@ -392,7 +431,7 @@ test.describe('Navigator Quarterly Update - Download PDF Status Table', () => {
 test.describe('Navigator Quarterly Update - Download Report Files', () => {
     
     test('Download DOCX for custom report', async ({ page }) => {
-        test.setTimeout(240000); // 4 minutes timeout
+        test.setTimeout(480000); // 8 minutes timeout for TEST environment
         
         const quarterlyUpdate = new NavigatorQuarterlyUpdate(page);
 
@@ -405,7 +444,7 @@ test.describe('Navigator Quarterly Update - Download Report Files', () => {
         console.log('✓ Login successful');
 
         console.log('Step 2: Navigating to Navigator page...');
-        await page.goto('https://platform.dev-simmons.com/navigator/');
+        await page.goto('https://platform.test-simmons.com/navigator/');
         await page.waitForLoadState('networkidle');
         await page.waitForTimeout(2000);
         
@@ -428,7 +467,7 @@ test.describe('Navigator Quarterly Update - Download Report Files', () => {
         console.log('Step 6: Verifying navigation to report-builder...');
         await newPage.waitForLoadState('networkidle');
         await newPage.waitForTimeout(2000);
-        expect(newPage.url()).toBe('https://platform.dev-simmons.com/navigator/quarterly-update/report-builder');
+        expect(newPage.url()).toBe('https://platform.test-simmons.com/navigator/quarterly-update/report-builder');
         console.log('✓ On report-builder page');
 
         // Don't select Extract Status Tables - use default report type
@@ -456,15 +495,28 @@ test.describe('Navigator Quarterly Update - Download Report Files', () => {
         await newPage.waitForTimeout(500);
         console.log('✓ All jurisdictions selected');
         
-        await newPage.keyboard.press('Escape');
-        await newPage.waitForTimeout(500);
+        // Close dropdown by clicking on Jurisdictions title (avoids scrolling)
+        const jurisdictionsTitle = newPage.locator('h3.report-builder-step__title:has-text("Jurisdictions")');
+        await jurisdictionsTitle.click();
+        await newPage.waitForTimeout(2000);
 
-        console.log('Step 10: Selecting all change types...');
-        const changeTypeSelectAll = newPage.locator('button.s-button.ghost:has-text("Select all")').last();
-        await changeTypeSelectAll.scrollIntoViewIfNeeded();
-        await changeTypeSelectAll.click();
+        // Step 10: Select change types by clicking cards
+        console.log('Step 10: Selecting change types...');
+        const changeTypeTitle = newPage.locator('h3.report-builder-step__title:has-text("Change type")');
+        await changeTypeTitle.scrollIntoViewIfNeeded();
         await newPage.waitForTimeout(1000);
-        console.log('✓ All change types selected');
+        
+        const changesCard = newPage.locator('div.s-option-card').filter({ hasText: /^Changes$/ });
+        await changesCard.waitFor({ state: 'visible', timeout: 10000 });
+        await changesCard.click({ force: true });
+        await newPage.waitForTimeout(500);
+        console.log('✓ Changes selected');
+        
+        const forthcomingCard = newPage.locator('div.s-option-card').filter({ hasText: 'Forthcoming Changes' });
+        await forthcomingCard.waitFor({ state: 'visible', timeout: 10000 });
+        await forthcomingCard.click({ force: true });
+        await newPage.waitForTimeout(500);
+        console.log('✓ Forthcoming Changes selected');
 
         console.log('Step 11: Selecting February 2026 timeframe...');
         const februaryPill = newPage.locator('button.report-builder-timeframe__pill:has-text("February 2026")');
@@ -481,7 +533,7 @@ test.describe('Navigator Quarterly Update - Download Report Files', () => {
         console.log('✓ Generate report clicked');
 
         console.log('Step 13: Waiting for report generation...');
-        await newPage.waitForURL('**/report-results', { timeout: 180000 });
+        await newPage.waitForURL('**/report-results', { timeout: 360000 });
         await newPage.waitForTimeout(2000);
         console.log('✓ Report generated');
 
@@ -533,7 +585,7 @@ test.describe('Navigator Quarterly Update - Download Report Files', () => {
     });
 
     test('Download PDF for custom report', async ({ page }) => {
-        test.setTimeout(240000); // 4 minutes timeout
+        test.setTimeout(480000); // 8 minutes timeout for TEST environment
         
         const quarterlyUpdate = new NavigatorQuarterlyUpdate(page);
 
@@ -546,7 +598,7 @@ test.describe('Navigator Quarterly Update - Download Report Files', () => {
         console.log('✓ Login successful');
 
         console.log('Step 2: Navigating to Navigator page...');
-        await page.goto('https://platform.dev-simmons.com/navigator/');
+        await page.goto('https://platform.test-simmons.com/navigator/');
         await page.waitForLoadState('networkidle');
         await page.waitForTimeout(2000);
         
@@ -569,7 +621,7 @@ test.describe('Navigator Quarterly Update - Download Report Files', () => {
         console.log('Step 6: Verifying navigation to report-builder...');
         await newPage.waitForLoadState('networkidle');
         await newPage.waitForTimeout(2000);
-        expect(newPage.url()).toBe('https://platform.dev-simmons.com/navigator/quarterly-update/report-builder');
+        expect(newPage.url()).toBe('https://platform.test-simmons.com/navigator/quarterly-update/report-builder');
         console.log('✓ On report-builder page');
 
         console.log('Step 7: Selecting all services...');
@@ -596,15 +648,28 @@ test.describe('Navigator Quarterly Update - Download Report Files', () => {
         await newPage.waitForTimeout(500);
         console.log('✓ All jurisdictions selected');
         
-        await newPage.keyboard.press('Escape');
-        await newPage.waitForTimeout(500);
+        // Close dropdown by clicking on Jurisdictions title (avoids scrolling)
+        const jurisdictionsTitle = newPage.locator('h3.report-builder-step__title:has-text("Jurisdictions")');
+        await jurisdictionsTitle.click();
+        await newPage.waitForTimeout(2000);
 
-        console.log('Step 10: Selecting all change types...');
-        const changeTypeSelectAll = newPage.locator('button.s-button.ghost:has-text("Select all")').last();
-        await changeTypeSelectAll.scrollIntoViewIfNeeded();
-        await changeTypeSelectAll.click();
+        // Step 10: Select change types by clicking cards
+        console.log('Step 10: Selecting change types...');
+        const changeTypeTitle = newPage.locator('h3.report-builder-step__title:has-text("Change type")');
+        await changeTypeTitle.scrollIntoViewIfNeeded();
         await newPage.waitForTimeout(1000);
-        console.log('✓ All change types selected');
+        
+        const changesCard = newPage.locator('div.s-option-card').filter({ hasText: /^Changes$/ });
+        await changesCard.waitFor({ state: 'visible', timeout: 10000 });
+        await changesCard.click({ force: true });
+        await newPage.waitForTimeout(500);
+        console.log('✓ Changes selected');
+        
+        const forthcomingCard = newPage.locator('div.s-option-card').filter({ hasText: 'Forthcoming Changes' });
+        await forthcomingCard.waitFor({ state: 'visible', timeout: 10000 });
+        await forthcomingCard.click({ force: true });
+        await newPage.waitForTimeout(500);
+        console.log('✓ Forthcoming Changes selected');
 
         console.log('Step 11: Selecting February 2026 timeframe...');
         const februaryPill = newPage.locator('button.report-builder-timeframe__pill:has-text("February 2026")');
@@ -621,7 +686,7 @@ test.describe('Navigator Quarterly Update - Download Report Files', () => {
         console.log('✓ Generate report clicked');
 
         console.log('Step 13: Waiting for report generation...');
-        await newPage.waitForURL('**/report-results', { timeout: 180000 });
+        await newPage.waitForURL('**/report-results', { timeout: 360000 });
         await newPage.waitForTimeout(2000);
         console.log('✓ Report generated');
 

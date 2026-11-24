@@ -1,1 +1,0 @@
-{"errors":[{"message":"Variable \"$locationIds\" of required type \"[String!]!\" was not provided."},{"message":"Variable \"$tokenTypeIds\" of required type \"[String!]!\" was not provided."},{"message":"Variable \"$categoryIds\" of required type \"[String!]!\" was not provided."},{"message":"Variable \"$subCategoryIds\" of required type \"[String!]!\" was not provided."}]}

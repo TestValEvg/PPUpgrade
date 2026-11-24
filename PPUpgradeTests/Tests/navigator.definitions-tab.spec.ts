@@ -105,4 +105,84 @@ test.describe('Navigator Definitions Tab - Expand/Collapse Tests', () => {
         
         console.log('\n✅ Test passed: Definitions tab content loads successfully\n');
     });
+
+    test('should verify table headers persist after clicking definition rows', async () => {
+        console.log('\n=== Test: Definitions Tab - Headers Persist After Clicking Rows ===\n');
+        
+        // Setup: Create search
+        console.log('Setup: Creating search with Canada + Banking...');
+        await navigatorPage.selectJurisdiction('Canada');
+        await navigatorPage.selectService('Banking');
+        await navigatorPage.clickSearch();
+        await navigatorPage.waitForResults();
+        
+        // Navigate to Definitions tab
+        console.log('Navigating to Definitions tab...');
+        await navigatorPage.navigateToDefinitionsTab();
+        await navigatorPage.verifyTabContentLoaded();
+        
+        // Step 1: Verify initial table headers
+        console.log('Step 1: Verifying initial table headers...');
+        await navigatorPage.verifyTableHeaders();
+        
+        // Step 2: Get definition row count
+        const rowCount = await navigatorPage.getDefinitionRowCount();
+        console.log(`Found ${rowCount} definition rows`);
+        
+        // Step 3: Click on each definition row and verify headers persist
+        const rowsToTest = Math.min(rowCount, 5); // Test up to 5 rows to avoid excessive test time
+        
+        for (let i = 0; i < rowsToTest; i++) {
+            console.log(`\nStep ${3 + i + 1}: Clicking definition row ${i + 1} and verifying headers...`);
+            await navigatorPage.clickDefinitionRow(i);
+            await navigatorPage.verifyTableHeaders();
+        }
+        
+        console.log(`\n✅ Test passed: Table headers (Jurisdiction, Term, Description) persist after clicking ${rowsToTest} definition rows\n`);
+    });
+
+    test.skip('should search by jurisdiction on Definitions tab and verify filtered results', async () => {
+        console.log('\n=== Test: Definitions Tab - Jurisdiction Column Search ===\n');
+        
+        // Setup: Create search
+        console.log('Setup: Creating search with Canada + Banking...');
+        await navigatorPage.selectJurisdiction('Canada');
+        await navigatorPage.selectService('Banking');
+        await navigatorPage.clickSearch();
+        await navigatorPage.waitForResults();
+        
+        // Navigate to Definitions tab
+        console.log('Navigating to Definitions tab...');
+        await navigatorPage.navigateToDefinitionsTab();
+        await navigatorPage.verifyTabContentLoaded();
+        
+        // Step 1: Click a few definition rows (without checking headers)
+        console.log('Step 1: Clicking some definition rows...');
+        const rowCount = await navigatorPage.getDefinitionRowCount();
+        console.log(`Found ${rowCount} definition rows`);
+        
+        const rowsToClick = Math.min(rowCount, 3);
+        for (let i = 0; i < rowsToClick; i++) {
+            await navigatorPage.clickDefinitionRow(i);
+        }
+        
+        // Step 2: Click jurisdiction search icon (opens filter panel)
+        console.log('Step 2: Clicking jurisdiction search icon...');
+        await navigatorPage.clickJurisdictionSearchIcon();
+        
+        // Step 3: Select Canada from the filter list
+        const searchJurisdiction = 'Canada';
+        console.log(`Step 3: Selecting "${searchJurisdiction}" from filter panel...`);
+        await navigatorPage.selectJurisdictionFromList(searchJurisdiction);
+        
+        // Step 4: Click Apply button
+        console.log('Step 4: Clicking Apply button...');
+        await navigatorPage.clickApplyButton();
+        
+        // Step 5: Verify only Canada is visible in jurisdiction column
+        console.log('Step 5: Verifying only Canada is visible in jurisdiction column...');
+        await navigatorPage.verifyOnlyJurisdictionVisible(searchJurisdiction);
+        
+        console.log(`\n✅ Test passed: Jurisdiction column search successfully filtered to show only "${searchJurisdiction}"\n`);
+    });
 });

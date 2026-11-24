@@ -46,11 +46,11 @@ test.describe('Navigator Print Tests', () => {
         // Navigate to Navigator page 
         await navigatorPrint.navigateToNavigator();
 
-        // Select Jurisdiction: Argentina
-        await navigatorPrint.selectJurisdiction('Argentina');
+        // Select Jurisdiction: Austria
+        await navigatorPrint.selectJurisdiction('Austria');
 
-        // Select Service: Corporate Finance
-        await navigatorPrint.selectService('Corporate Finance');
+        // Select Service: Derivatives & FX
+        await navigatorPrint.selectService('Derivatives & FX');
 
         // Click Search button
         await navigatorPrint.clickSearch();
@@ -80,11 +80,11 @@ test.describe('Navigator Print Tests', () => {
         // Navigate to Navigator page
         await navigatorPrint.navigateToNavigator();
 
-        // Select Jurisdiction: Argentina
-        await navigatorPrint.selectJurisdiction('Argentina');
+        // Select Jurisdiction: Australia
+        await navigatorPrint.selectJurisdiction('Australia');
 
-        // Select Service: Corporate Finance
-        await navigatorPrint.selectService('Corporate Finance');
+        // Select Service: Funds
+        await navigatorPrint.selectService('Funds');
 
         // Click Search button
         await navigatorPrint.clickSearch();
@@ -119,11 +119,11 @@ test.describe('Navigator Print Tests', () => {
         // Verify Print/Export button is disabled before search
         await navigatorPrint.verifyPrintButtonDisabled();
 
-        // Select Jurisdiction: Argentina
-        await navigatorPrint.selectJurisdiction('Argentina');
+        // Select Jurisdiction: Belgium
+        await navigatorPrint.selectJurisdiction('Belgium');
 
-        // Select Service: Corporate Finance
-        await navigatorPrint.selectService('Corporate Finance');
+        // Select Service: Banking
+        await navigatorPrint.selectService('Banking');
 
         // Perform a search
         await navigatorPrint.clickSearch();
@@ -152,13 +152,13 @@ test.describe('Navigator Print Tests', () => {
         // Navigate to Navigator page
         await navigatorPrint.navigateToNavigator();
 
-        // Select multiple Jurisdictions: Argentina and Austria
-        await navigatorPrint.selectJurisdiction('Argentina');
-        await navigatorPrint.selectJurisdiction('Austria');
+        // Select multiple Jurisdictions: Germany and France
+        await navigatorPrint.selectJurisdiction('Germany');
+        await navigatorPrint.selectJurisdiction('France');
 
-        // Select multiple Services: Corporate Finance and Derivatives
-        await navigatorPrint.selectService('Corporate Finance');
-        await navigatorPrint.selectService('Derivatives');
+        // Select multiple Services: Banking and Derivatives & FX
+        await navigatorPrint.selectService('Banking');
+        await navigatorPrint.selectService('Derivatives & FX');
 
         // Perform a search
         await navigatorPrint.clickSearch();
@@ -181,8 +181,8 @@ test.describe('Navigator Print Tests', () => {
         // Click on Select jurisdiction dropdown in print dialog
         await page.getByRole('button', { name: 'Select jurisdiction...' }).click();
 
-        // Select one of the previously selected jurisdictions (Argentina)
-        await page.getByRole('button', { name: 'Argentina Argentina' }).click();
+        // Select one of the previously selected jurisdictions (Germany)
+        await page.getByRole('button', { name: 'Germany Germany' }).click();
 
         // Close the jurisdiction dropdown by clicking on the header
         await page.getByRole('heading', { name: 'Printable PDF Selection' }).click();
@@ -195,11 +195,11 @@ test.describe('Navigator Print Tests', () => {
         // Verify the selected services are displayed
         await expect(
             page.locator('p.u-font-semibold:has-text("Services included:")').locator('..').locator('p').nth(1)
-        ).toContainText('Corporate Finance');
+        ).toContainText('Banking');
         
         await expect(
             page.locator('p.u-font-semibold:has-text("Services included:")').locator('..').locator('p').nth(1)
-        ).toContainText('Derivatives');
+        ).toContainText('Derivatives & FX');
     });
 
     test('Print button is accessible in Definitions tab', async ({ page }) => {
@@ -211,11 +211,11 @@ test.describe('Navigator Print Tests', () => {
         await loginPage.login();
         await expect(await loginPage.isLoginSuccessful()).toBeTruthy();
 
-        // Navigate to Navigator page (platform1.test-simmons.com - temporary URL)
+        // Navigate to Navigator page
         await navigatorPrint.navigateToNavigator();
 
-        // Select Jurisdiction: Argentina
-        await navigatorPrint.selectJurisdiction('Argentina');
+        // Select Jurisdiction: Canada
+        await navigatorPrint.selectJurisdiction('Canada');
 
         // Select Service: Corporate Finance
         await navigatorPrint.selectService('Corporate Finance');
@@ -256,14 +256,14 @@ test.describe('Navigator Print Tests', () => {
         await loginPage.login();
         await expect(await loginPage.isLoginSuccessful()).toBeTruthy();
 
-        // Navigate to Navigator page (platform1.test-simmons.com - temporary URL)
+        // Navigate to Navigator page
         await navigatorPrint.navigateToNavigator();
 
-        // Select Jurisdiction: Argentina
-        await navigatorPrint.selectJurisdiction('Argentina');
+        // Select Jurisdiction: Spain
+        await navigatorPrint.selectJurisdiction('Spain');
 
-        // Select Service: Banking
-        await navigatorPrint.selectService('Banking');
+        // Select Service: Funds
+        await navigatorPrint.selectService('Funds');
 
         // Click Search button
         await navigatorPrint.clickSearch();
@@ -306,11 +306,11 @@ test.describe('Navigator Print Tests', () => {
         // Navigate to Navigator page
         await navigatorPrint.navigateToNavigator();
 
-        // Select Jurisdiction: Argentina
-        await navigatorPrint.selectJurisdiction('Argentina');
+        // Select Jurisdiction: Italy
+        await navigatorPrint.selectJurisdiction('Italy');
 
-        // Select Service: Corporate Finance
-        await navigatorPrint.selectService('Corporate Finance');
+        // Select Service: Banking
+        await navigatorPrint.selectService('Banking');
 
         // Click Search button
         await navigatorPrint.clickSearch();
@@ -346,11 +346,11 @@ test.describe('Navigator Print Tests', () => {
         // Navigate to Navigator page
         await navigatorPrint.navigateToNavigator();
 
-        // Select Jurisdiction: Argentina
-        await navigatorPrint.selectJurisdiction('Argentina');
+        // Select Jurisdiction: Brazil
+        await navigatorPrint.selectJurisdiction('Brazil');
 
-        // Select Service: Banking
-        await navigatorPrint.selectService('Banking');
+        // Select Service: Derivatives & FX
+        await navigatorPrint.selectService('Derivatives & FX');
 
         // Click Search button
         await navigatorPrint.clickSearch();
@@ -383,11 +383,11 @@ test.describe('Navigator Print Tests', () => {
         await loginPage.login();
         await expect(await loginPage.isLoginSuccessful()).toBeTruthy();
 
-        // Navigate to Navigator page (platform1.test-simmons.com - temporary URL)
+        // Navigate to Navigator page
         await navigatorPrint.navigateToNavigator();
 
-        // Select Jurisdiction: Argentina
-        const jurisdictionName = 'Argentina';
+        // Select Jurisdiction: Germany
+        const jurisdictionName = 'Germany';
         await navigatorPrint.selectJurisdiction(jurisdictionName);
 
         // Select Service: Corporate Finance
@@ -454,9 +454,9 @@ test.describe('Navigator Print Tests', () => {
         console.log(`Decoded PDF URL: ${decodedPdfUrl}`);
 
         // Verify PDF URL contains the API endpoint
-        expect(decodedPdfUrl).toContain('https://api.test-simmons.com/reports/pp/navigator/export-audit/');
+        expect(decodedPdfUrl).toContain('https://api.uat-simmons.com/reports/pp/navigator/export-audit/');
 
-        // Verify PDF URL contains jurisdiction name (Argentina)
+        // Verify PDF URL contains jurisdiction name (Germany)
         expect(decodedPdfUrl).toContain(jurisdictionName);
 
         // Verify PDF URL contains cycle name (e.g., "February 2024")
@@ -479,12 +479,12 @@ test.describe('Navigator Print Tests', () => {
         // Navigate to Navigator page
         await navigatorPrint.navigateToNavigator();
 
-        // Select Jurisdiction: Argentina
-        const jurisdictionName = 'Argentina';
+        // Select Jurisdiction: Austria
+        const jurisdictionName = 'Austria';
         await navigatorPrint.selectJurisdiction(jurisdictionName);
 
-        // Select Service: Corporate Finance
-        await navigatorPrint.selectService('Corporate Finance');
+        // Select Service: Funds
+        await navigatorPrint.selectService('Funds');
 
         // Click Search button
         await navigatorPrint.clickSearch();
@@ -517,8 +517,8 @@ test.describe('Navigator Print Tests', () => {
         console.log(`PDF URL: ${pdfURL}`);
 
         // Verify PDF URL is accessible and correct
-        expect(pdfURL).toContain('api.test-simmons.com/reports/pp/navigator/export-audit/');
-        expect(pdfURL).toContain('Argentina');
+        expect(pdfURL).toContain('api.uat-simmons.com/reports/pp/navigator/export-audit/');
+        expect(pdfURL).toContain('Austria');
         expect(pdfURL).toContain('.pdf');
 
         // Wait for the PDF page to load

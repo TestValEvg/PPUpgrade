@@ -3,14 +3,14 @@ import { NavigatorQuarterlyUpdate } from '../Pages/navigator.quarterly-update.pa
 
 /**
  * Navigator Quarterly Update Tests
- * Using DEV environment: https://platform.dev-simmons.com
+ * Using DEV environment: https://platform.test-simmons.com
  * NOTE: Will be switched to test environment in future
  */
 
 test.describe('Navigator Quarterly Update - Access and Navigation', () => {
     
     test('User can access Quarterly Update reporting page', async ({ page }) => {
-        test.setTimeout(120000); // 2 minutes timeout
+        test.setTimeout(240000); // 4 minutes timeout for TEST environment
         
         const quarterlyUpdate = new NavigatorQuarterlyUpdate(page);
 
@@ -24,7 +24,7 @@ test.describe('Navigator Quarterly Update - Access and Navigation', () => {
 
         // Step 2: Navigate to Navigator page first
         console.log('Step 2: Navigating to Navigator page...');
-        await page.goto(`https://platform.dev-simmons.com/navigator/`);
+        await page.goto(`https://platform.test-simmons.com/navigator/`);
         await page.waitForLoadState('networkidle');
         await page.waitForTimeout(2000);
         console.log('✓ On Navigator page');
@@ -67,7 +67,7 @@ test.describe('Navigator Quarterly Update - Access and Navigation', () => {
 
         // Step 2: Navigate to Navigator page
         console.log('Step 2: Navigating to Navigator page...');
-        await page.goto(`https://platform.dev-simmons.com/navigator/`);
+        await page.goto(`https://platform.test-simmons.com/navigator/`);
         await page.waitForLoadState('networkidle');
         await page.waitForTimeout(2000);
         console.log('✓ On Navigator page');
@@ -137,7 +137,7 @@ test.describe('Navigator Quarterly Update - Dashboard Metrics', () => {
 
         // Step 2: Navigate to Navigator page
         console.log('Step 2: Navigating to Navigator page...');
-        await page.goto(`https://platform.dev-simmons.com/navigator/`);
+        await page.goto(`https://platform.test-simmons.com/navigator/`);
         await page.waitForLoadState('networkidle');
         await page.waitForTimeout(2000);
         
@@ -207,7 +207,7 @@ test.describe('Navigator Quarterly Update - Custom Report Builder', () => {
 
         // Step 2: Navigate to Navigator page
         console.log('Step 2: Navigating to Navigator page...');
-        await page.goto('https://platform.dev-simmons.com/navigator/');
+        await page.goto('https://platform.test-simmons.com/navigator/');
         await page.waitForLoadState('networkidle');
         await page.waitForTimeout(2000);
         
@@ -238,7 +238,7 @@ test.describe('Navigator Quarterly Update - Custom Report Builder', () => {
         await newPage.waitForTimeout(2000);
         const currentUrl = newPage.url();
         console.log(`Current URL: ${currentUrl}`);
-        expect(currentUrl).toBe('https://platform.dev-simmons.com/navigator/quarterly-update/report-builder');
+        expect(currentUrl).toBe('https://platform.test-simmons.com/navigator/quarterly-update/report-builder');
         console.log('✓ Navigated to report-builder in same tab');
         console.log('✓ Test completed successfully');
     });
@@ -258,7 +258,7 @@ test.describe('Navigator Quarterly Update - Custom Report Builder', () => {
 
         // Step 2: Navigate directly to report-builder page
         console.log('Step 2: Navigating to report-builder page...');
-        await page.goto('https://platform.dev-simmons.com/navigator/');
+        await page.goto('https://platform.test-simmons.com/navigator/');
         await page.waitForLoadState('networkidle');
         await page.waitForTimeout(2000);
         
@@ -302,7 +302,7 @@ test.describe('Navigator Quarterly Update - Custom Report Builder', () => {
 
         // Step 2: Navigate to report-builder
         console.log('Step 2: Navigating to report-builder...');
-        await page.goto('https://platform.dev-simmons.com/navigator/');
+        await page.goto('https://platform.test-simmons.com/navigator/');
         await page.waitForLoadState('networkidle');
         await page.waitForTimeout(2000);
         
@@ -392,7 +392,7 @@ test.describe('Navigator Quarterly Update - Custom Report Builder', () => {
 
         // Step 2: Navigate to report-builder
         console.log('Step 2: Navigating to report-builder...');
-        await page.goto('https://platform.dev-simmons.com/navigator/');
+        await page.goto('https://platform.test-simmons.com/navigator/');
         await page.waitForLoadState('networkidle');
         await page.waitForTimeout(2000);
         
@@ -484,7 +484,7 @@ test.describe('Navigator Quarterly Update - Custom Report Builder', () => {
 
         // Step 2: Navigate to report-builder
         console.log('Step 2: Navigating to report-builder...');
-        await page.goto('https://platform.dev-simmons.com/navigator/');
+        await page.goto('https://platform.test-simmons.com/navigator/');
         await page.waitForLoadState('networkidle');
         await page.waitForTimeout(2000);
         
@@ -563,7 +563,7 @@ test.describe('Navigator Quarterly Update - Custom Report Builder', () => {
 
         // Step 2: Navigate to report-builder
         console.log('Step 2: Navigating to report-builder...');
-        await page.goto('https://platform.dev-simmons.com/navigator/');
+        await page.goto('https://platform.test-simmons.com/navigator/');
         await page.waitForLoadState('networkidle');
         await page.waitForTimeout(2000);
         
@@ -654,7 +654,7 @@ test.describe('Navigator Quarterly Update - Custom Report Builder', () => {
     });
 
     test('Generate report with all filters selected', async ({ page }) => {
-        test.setTimeout(180000); // 3 minutes timeout for report generation
+        test.setTimeout(360000); // 6 minutes timeout for TEST environment
         
         const quarterlyUpdate = new NavigatorQuarterlyUpdate(page);
 
@@ -668,7 +668,7 @@ test.describe('Navigator Quarterly Update - Custom Report Builder', () => {
 
         // Step 2: Navigate to report-builder
         console.log('Step 2: Navigating to report-builder...');
-        await page.goto('https://platform.dev-simmons.com/navigator/');
+        await page.goto('https://platform.test-simmons.com/navigator/');
         await page.waitForLoadState('networkidle');
         await page.waitForTimeout(2000);
         
@@ -711,16 +711,29 @@ test.describe('Navigator Quarterly Update - Custom Report Builder', () => {
         await newPage.waitForTimeout(500);
         console.log('✓ All jurisdictions selected');
         
-        // Close dropdown
-        await newPage.keyboard.press('Escape');
-        await newPage.waitForTimeout(500);
+        // Close dropdown by clicking on Jurisdictions title (avoids scrolling)
+        const jurisdictionsTitle = newPage.locator('h3.report-builder-step__title:has-text("Jurisdictions")');
+        await jurisdictionsTitle.click();
+        await newPage.waitForTimeout(2000);
+        console.log('✓ Jurisdictions dropdown closed');
 
         // Step 6: Select all change types
         console.log('Step 6: Selecting all change types...');
-        const changeTypeSelectAll = newPage.locator('button.s-button.ghost:has-text("Select all")').last();
-        await changeTypeSelectAll.scrollIntoViewIfNeeded();
-        await changeTypeSelectAll.click();
+        const changeTypeTitle = newPage.locator('h3.report-builder-step__title:has-text("Change type")');
+        await changeTypeTitle.scrollIntoViewIfNeeded();
         await newPage.waitForTimeout(1000);
+        
+        const changesCard = newPage.locator('div.s-option-card').filter({ hasText: /^Changes$/ });
+        await changesCard.waitFor({ state: 'visible', timeout: 10000 });
+        await changesCard.click({ force: true });
+        await newPage.waitForTimeout(500);
+        console.log('✓ Changes selected');
+        
+        const forthcomingCard = newPage.locator('div.s-option-card').filter({ hasText: 'Forthcoming Changes' });
+        await forthcomingCard.waitFor({ state: 'visible', timeout: 10000 });
+        await forthcomingCard.click({ force: true });
+        await newPage.waitForTimeout(500);
+        console.log('✓ Forthcoming Changes selected');
         console.log('✓ All change types selected');
 
         // Step 7: Click February 2026 timeframe
@@ -802,17 +815,17 @@ test.describe('Navigator Quarterly Update - Custom Report Builder', () => {
         
         // Wait for Cross-referencing jurisdictions to be done
         const crossReferencingDone = newPage.locator('div.s-progress-steps__step--done:has(span.s-progress-steps__label:has-text("Cross-referencing jurisdictions"))');
-        await expect(crossReferencingDone).toBeVisible({ timeout: 30000 });
+        await expect(crossReferencingDone).toBeVisible({ timeout: 60000 });
         console.log('  ✓ Cross-referencing jurisdictions completed');
         
-        // Wait for Drafting narrative to be done
+        // Wait for Drafting narrative to be done (takes longer with many jurisdictions)
         const draftingNarrativeDone = newPage.locator('div.s-progress-steps__step--done:has(span.s-progress-steps__label:has-text("Drafting narrative"))');
-        await expect(draftingNarrativeDone).toBeVisible({ timeout: 60000 });
+        await expect(draftingNarrativeDone).toBeVisible({ timeout: 180000 });
         console.log('  ✓ Drafting narrative completed');
         
         // Wait for Finalising report to be done
         const finalisingReportDone = newPage.locator('div.s-progress-steps__step--done:has(span.s-progress-steps__label:has-text("Finalising report"))');
-        await expect(finalisingReportDone).toBeVisible({ timeout: 30000 });
+        await expect(finalisingReportDone).toBeVisible({ timeout: 90000 });
         console.log('  ✓ Finalising report completed');
         
         console.log('✓ All steps completed and turned green');
@@ -842,7 +855,7 @@ test.describe('Navigator Quarterly Update - Custom Report Builder', () => {
 
         // Step 2: Navigate to report-builder
         console.log('Step 2: Navigating to report-builder...');
-        await page.goto('https://platform.dev-simmons.com/navigator/');
+        await page.goto('https://platform.test-simmons.com/navigator/');
         await page.waitForLoadState('networkidle');
         await page.waitForTimeout(2000);
         
@@ -902,7 +915,7 @@ test.describe('Navigator Quarterly Update - Custom Report Builder', () => {
 
         // Step 6: Wait for report generation to complete (can take 1-2 minutes)
         console.log('Step 6: Waiting for report generation to complete (can take 1-2 minutes)...');
-        await newPage.waitForURL('**/navigator/quarterly-update/report-results', { timeout: 180000 });
+        await newPage.waitForURL('**/navigator/quarterly-update/report-results', { timeout: 360000 });
         expect(newPage.url()).toContain('/navigator/quarterly-update/report-results');
         console.log('✓ Report generated and on report-results page');
         console.log(`  URL: ${newPage.url()}`);
@@ -940,7 +953,7 @@ test.describe('Navigator Quarterly Update - Custom Report Builder', () => {
 
         // Step 2: Navigate to report-builder
         console.log('Step 2: Navigating to report-builder...');
-        await page.goto('https://platform.dev-simmons.com/navigator/');
+        await page.goto('https://platform.test-simmons.com/navigator/');
         await page.waitForLoadState('networkidle');
         await page.waitForTimeout(2000);
         
@@ -1001,7 +1014,7 @@ test.describe('Navigator Quarterly Update - Custom Report Builder', () => {
 
         // Step 6: Wait for report generation to complete
         console.log('Step 6: Waiting for report generation to complete...');
-        await newPage.waitForURL('**/navigator/quarterly-update/report-results', { timeout: 180000 });
+        await newPage.waitForURL('**/navigator/quarterly-update/report-results', { timeout: 360000 });
         expect(newPage.url()).toContain('/navigator/quarterly-update/report-results');
         console.log('✓ Report generated and on report-results page');
 
@@ -1070,7 +1083,7 @@ test.describe('Navigator Quarterly Update - Extract Status Table', () => {
 
         // Step 2: Navigate to Navigator page
         console.log('Step 2: Navigating to Navigator page...');
-        await page.goto('https://platform.dev-simmons.com/navigator/');
+        await page.goto('https://platform.test-simmons.com/navigator/');
         await page.waitForLoadState('networkidle');
         await page.waitForTimeout(2000);
         
@@ -1099,7 +1112,7 @@ test.describe('Navigator Quarterly Update - Extract Status Table', () => {
         console.log('Step 6: Verifying navigation to report-builder...');
         await newPage.waitForLoadState('networkidle');
         await newPage.waitForTimeout(2000);
-        expect(newPage.url()).toBe('https://platform.dev-simmons.com/navigator/quarterly-update/report-builder');
+        expect(newPage.url()).toBe('https://platform.test-simmons.com/navigator/quarterly-update/report-builder');
         console.log('✓ On report-builder page');
 
         // Step 7: Click "Extract Status Tables" option card
@@ -1165,7 +1178,7 @@ test.describe('Navigator Quarterly Update - Extract Status Table', () => {
 
         // Step 14: Wait for URL to change to status-table-results (no progress steps for Extract Status Tables)
         console.log('Step 14: Waiting for status table generation to complete...');
-        await newPage.waitForURL('**/status-table-results', { timeout: 180000 });
+        await newPage.waitForURL('**/status-table-results', { timeout: 360000 });
         console.log('✓ URL changed to status-table-results');
 
         // Step 15: Verify URL contains status-table-results
@@ -1193,7 +1206,7 @@ test.describe('Navigator Quarterly Update - Extract Status Table', () => {
         console.log('✓ Login successful');
 
         console.log('Step 2: Navigating to Navigator page...');
-        await page.goto('https://platform.dev-simmons.com/navigator/');
+        await page.goto('https://platform.test-simmons.com/navigator/');
         await page.waitForLoadState('networkidle');
         await page.waitForTimeout(2000);
         
@@ -1216,7 +1229,7 @@ test.describe('Navigator Quarterly Update - Extract Status Table', () => {
         console.log('Step 6: Verifying navigation to report-builder...');
         await newPage.waitForLoadState('networkidle');
         await newPage.waitForTimeout(2000);
-        expect(newPage.url()).toBe('https://platform.dev-simmons.com/navigator/quarterly-update/report-builder');
+        expect(newPage.url()).toBe('https://platform.test-simmons.com/navigator/quarterly-update/report-builder');
         console.log('✓ On report-builder page');
 
         console.log('Step 7: Selecting Extract Status Tables option...');
@@ -1274,7 +1287,7 @@ test.describe('Navigator Quarterly Update - Extract Status Table', () => {
         console.log('✓ Generate report clicked');
 
         console.log('Step 14: Waiting for status table generation...');
-        await newPage.waitForURL('**/status-table-results', { timeout: 180000 });
+        await newPage.waitForURL('**/status-table-results', { timeout: 360000 });
         await newPage.waitForTimeout(2000);
         console.log('✓ Status table generated');
 

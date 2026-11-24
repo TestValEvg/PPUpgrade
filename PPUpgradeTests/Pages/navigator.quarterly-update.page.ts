@@ -9,8 +9,8 @@ import { NAVIGATOR_SELECTORS } from '../Utilits/navigator.selectors';
  */
 export class NavigatorQuarterlyUpdate {
     private page: Page;
-    // Using dev environment for now, will switch to test in future
-    private baseUrl = 'https://platform.dev-simmons.com';
+    // Using test environment
+    private baseUrl = 'https://platform.test-simmons.com';
 
     constructor(page: Page) {
         this.page = page;

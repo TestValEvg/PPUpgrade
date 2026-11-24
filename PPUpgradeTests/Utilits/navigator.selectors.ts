@@ -55,4 +55,38 @@ export const NAVIGATOR_SELECTORS = {
     
     // Clear button
     clearButton: 'span.button-text:has-text("Clear")',
+    
+    // Quarterly Update
+    navigatorSidebarIcon: 'a[href="/navigator"]',
+    navigatorProductLink: 'a[href="/navigator"]',
+    quarterlyUpdateLink: 'a.app-header__nav-link[href="/navigator/quarterly-update"]',
+    navigatorIconFromQuarterly: 'a.menu-icon-link[href="/navigator/compare"]',
+    
+    // Quarterly Update - Dashboard Stats
+    quarterlyUpdateStatsContainer: 'div.quarterly-update__stats',
+    quarterlyUpdateStatCard: 'div.quarterly-update__stat-card',
+    statValue: 'span.s-stat__value',
+    statLabel: 'span.s-stat__label',
+    
+    // Quarterly Update - Custom Report Builder
+    buildCustomReportButton: 'button:has(span.button-text[data-v-56dea316])',
+    generateReportButton: 'button:has(span.button-text:has-text("Generate report"))',
+    
+    // Report Builder - Option Cards
+    optionCard: 'div.s-option-card',
+    optionCardSelected: 'div.s-option-card.s-option-card--selected',
+    optionCardLabel: 'span.s-option-card__label',
+    optionCardMeta: 'span.s-option-card__meta',
+    optionCardCheckbox: 'span.s-option-card__checkbox',
+    
+    // Report Builder - Jurisdictions Dropdown
+    jurisdictionsDropdownLabel: 'span.s-checkbox-select-dropdown__label',
+    jurisdictionsDropdownOption: 'span.s-checkbox-select-dropdown__option-label',
+    
+    // Report Builder - Select/Deselect All Buttons
+    selectAllButton: 'button:has(span.button-text:has-text("Select all"))',
+    deselectAllButton: 'button:has(span.button-text:has-text("Deselect all"))',
+    
+    // Report Type Selection
+    extractStatusTablesCard: 'span.s-option-card__label:has-text("Extract Status Tables")',
 };

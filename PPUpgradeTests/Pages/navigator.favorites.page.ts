@@ -31,7 +31,7 @@ export class NavigatorFavorites {
         'South Africa', 'South Korea', 'Spain', 'Sri Lanka', 'Suriname', 
         'Sweden', 'Switzerland', 'Taiwan', 'Tanzania', 'Thailand', 'Togo', 
         'Trinidad and Tobago', 'Turkey', 'Turks and Caicos Islands', 'Uganda', 
-        'United Kingdom', 'Ukraine', 'Uruguay', 'USA', 
+        'UK', 'Ukraine', 'Uruguay', 'USA', 
         'Venezuela', 'Vietnam', 'Zambia', 'Zimbabwe'
     ];
 
@@ -687,17 +687,21 @@ export class NavigatorFavorites {
         // Wait for page to stabilize after loading favorite
         await this.page.waitForTimeout(1800);
         
-        // Get selected jurisdiction from the first filter button
-        const jurisdictionLocator = this.page.locator('div:nth-of-type(2) > .small span:nth-of-type(2)').first();
-        await jurisdictionLocator.waitFor({ state: 'visible', timeout: 10000 }).catch(() => console.log('Jurisdiction filter not found'));
-        const jurisdictionText = await jurisdictionLocator.textContent().catch(() => '');
-        const selectedJurisdiction = jurisdictionText?.trim() || '';
+        // Get selected jurisdiction - look for the filter button with "Jurisdiction" text
+        const jurisdictionButton = this.page.locator('button').filter({ hasText: 'Jurisdiction' });
+        await jurisdictionButton.waitFor({ state: 'visible', timeout: 10000 }).catch(() => console.log('Jurisdiction filter button not found'));
+        const jurisdictionText = await jurisdictionButton.textContent().catch(() => '');
+        // Extract just the jurisdiction name (remove "Jurisdiction" label and count)
+        const jurisdictionMatch = jurisdictionText?.match(/Jurisdiction\s*\(?\d*\)?\s*(.+)/);
+        const selectedJurisdiction = jurisdictionMatch ? jurisdictionMatch[1].trim() : '';
         
-        // Get selected service from the second filter button
-        const serviceLocator = this.page.locator('div:nth-of-type(2) > .small button > span').nth(1);
-        await serviceLocator.waitFor({ state: 'visible', timeout: 10000 }).catch(() => console.log('Service filter not found'));
-        const serviceText = await serviceLocator.textContent().catch(() => '');
-        const selectedService = serviceText?.trim() || '';
+        // Get selected service - look for the filter button with "Service" text
+        const serviceButton = this.page.locator('button').filter({ hasText: 'Service' });
+        await serviceButton.waitFor({ state: 'visible', timeout: 10000 }).catch(() => console.log('Service filter button not found'));
+        const serviceText = await serviceButton.textContent().catch(() => '');
+        // Extract just the service name (remove "Service" label and count)
+        const serviceMatch = serviceText?.match(/Service\s*\(?\d*\)?\s*(.+)/);
+        const selectedService = serviceMatch ? serviceMatch[1].trim() : '';
         
         console.log(`Filters applied - Jurisdiction: ${selectedJurisdiction}, Service: ${selectedService}`);
         
